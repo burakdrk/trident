@@ -8,9 +8,9 @@
 import Foundation
 
 extension Task where Success == Never, Failure == Never {
-    static private func race<T>(
-        _ lhs: sending @escaping () async throws -> T,
-        _ rhs: sending @escaping () async throws -> T
+    private static func race<T: Sendable>(
+        _ lhs: @Sendable @escaping () async throws -> T,
+        _ rhs: @Sendable @escaping () async throws -> T
     ) async throws -> T {
         return try await withThrowingTaskGroup(of: T.self) { group in
             group.addTask { try await lhs() }
@@ -22,9 +22,9 @@ extension Task where Success == Never, Failure == Never {
         }
     }
 
-    static func performWithTimeout<T>(
+    static func performWithTimeout<T: Sendable>(
         of timeout: Duration,
-        _ work: sending @escaping () async throws -> T
+        _ work: @Sendable @escaping () async throws -> T
     ) async throws -> T {
         return try await race(
             work,

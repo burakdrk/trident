@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		EC1A251C2E3B2AF900B8CF5D /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = EC1A251B2E3B2AF900B8CF5D /* SDWebImageSwiftUI */; };
 		EC1A25222E3B2D0D00B8CF5D /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = EC1A25212E3B2D0D00B8CF5D /* OrderedCollections */; };
+		EC72B6D32E3F18200011F8E0 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6CF2E3F18200011F8E0 /* OrderedCollections */; };
+		EC72B6D42E3F18200011F8E0 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6CD2E3F18200011F8E0 /* SDWebImageSwiftUI */; };
+		EC72B6D52E3F18200011F8E0 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6CB2E3F18200011F8E0 /* SimpleKeychain */; };
+		EC72B6D62E3F18200011F8E0 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C92E3F18200011F8E0 /* Supabase */; };
+		EC72B6D72E3F18200011F8E0 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C72E3F18200011F8E0 /* Apollo */; };
 		ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC352E36016300CF0AFE /* Apollo */; };
 		ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC3C2E37006300CF0AFE /* Supabase */; };
 		ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = ECEA81E22E388945002AA253 /* SimpleKeychain */; };
@@ -32,12 +37,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EC72B6DC2E3F18200011F8E0 /* TridentPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TridentPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC7631D02E30B41A00A86ABD /* Trident.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trident.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC7631DD2E30B41B00A86ABD /* TridentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TridentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC7631E72E30B41B00A86ABD /* TridentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TridentUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		EC72B6E02E3F1E760011F8E0 /* TridentPlus */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TridentPlus;
+			sourceTree = "<group>";
+		};
 		EC7631D22E30B41A00A86ABD /* Trident */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Trident;
@@ -56,6 +67,18 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		EC72B6D22E3F18200011F8E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC72B6D32E3F18200011F8E0 /* OrderedCollections in Frameworks */,
+				EC72B6D42E3F18200011F8E0 /* SDWebImageSwiftUI in Frameworks */,
+				EC72B6D52E3F18200011F8E0 /* SimpleKeychain in Frameworks */,
+				EC72B6D62E3F18200011F8E0 /* Supabase in Frameworks */,
+				EC72B6D72E3F18200011F8E0 /* Apollo in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EC7631CD2E30B41A00A86ABD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -88,6 +111,7 @@
 		EC7631C72E30B41A00A86ABD = {
 			isa = PBXGroup;
 			children = (
+				EC72B6E02E3F1E760011F8E0 /* TridentPlus */,
 				EC7631D22E30B41A00A86ABD /* Trident */,
 				EC7631E02E30B41B00A86ABD /* TridentTests */,
 				EC7631EA2E30B41B00A86ABD /* TridentUITests */,
@@ -101,6 +125,7 @@
 				EC7631D02E30B41A00A86ABD /* Trident.app */,
 				EC7631DD2E30B41B00A86ABD /* TridentTests.xctest */,
 				EC7631E72E30B41B00A86ABD /* TridentUITests.xctest */,
+				EC72B6DC2E3F18200011F8E0 /* TridentPlus.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,6 +133,34 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		EC72B6C62E3F18200011F8E0 /* TridentPlus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EC72B6D92E3F18200011F8E0 /* Build configuration list for PBXNativeTarget "TridentPlus" */;
+			buildPhases = (
+				EC72B6D12E3F18200011F8E0 /* Sources */,
+				EC72B6D22E3F18200011F8E0 /* Frameworks */,
+				EC72B6D82E3F18200011F8E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				EC72B6E02E3F1E760011F8E0 /* TridentPlus */,
+				EC7631D22E30B41A00A86ABD /* Trident */,
+			);
+			name = TridentPlus;
+			packageProductDependencies = (
+				EC72B6C72E3F18200011F8E0 /* Apollo */,
+				EC72B6C92E3F18200011F8E0 /* Supabase */,
+				EC72B6CB2E3F18200011F8E0 /* SimpleKeychain */,
+				EC72B6CD2E3F18200011F8E0 /* SDWebImageSwiftUI */,
+				EC72B6CF2E3F18200011F8E0 /* OrderedCollections */,
+			);
+			productName = Trident;
+			productReference = EC72B6DC2E3F18200011F8E0 /* TridentPlus.app */;
+			productType = "com.apple.product-type.application";
+		};
 		EC7631CF2E30B41A00A86ABD /* Trident */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EC7631F12E30B41B00A86ABD /* Build configuration list for PBXNativeTarget "Trident" */;
@@ -226,6 +279,7 @@
 			projectRoot = "";
 			targets = (
 				EC7631CF2E30B41A00A86ABD /* Trident */,
+				EC72B6C62E3F18200011F8E0 /* TridentPlus */,
 				EC7631DC2E30B41B00A86ABD /* TridentTests */,
 				EC7631E62E30B41B00A86ABD /* TridentUITests */,
 			);
@@ -233,6 +287,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		EC72B6D82E3F18200011F8E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EC7631CE2E30B41A00A86ABD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -257,6 +318,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		EC72B6D12E3F18200011F8E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EC7631CC2E30B41A00A86ABD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -294,6 +362,80 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		EC72B6DA2E3F18200011F8E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P8P545YJ97;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Trident+";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				OTHER_SWIFT_FLAGS = "-DPLUS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.burakduruk.TridentPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EC72B6DB2E3F18200011F8E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P8P545YJ97;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Trident+";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				OTHER_SWIFT_FLAGS = "-DPLUS";
+				PRODUCT_BUNDLE_IDENTIFIER = com.burakduruk.TridentPlus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		EC7631EF2E30B41B00A86ABD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -425,7 +567,7 @@
 				DEVELOPMENT_TEAM = P8P545YJ97;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Trident for Twitch";
+				INFOPLIST_KEY_CFBundleDisplayName = Trident;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -446,7 +588,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -461,7 +603,7 @@
 				DEVELOPMENT_TEAM = P8P545YJ97;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Trident for Twitch";
+				INFOPLIST_KEY_CFBundleDisplayName = Trident;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -482,7 +624,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -504,7 +646,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Trident.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Trident";
 			};
@@ -527,7 +669,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Trident.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Trident";
 			};
@@ -548,7 +690,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Trident;
 			};
@@ -569,7 +711,7 @@
 				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Trident;
 			};
@@ -578,6 +720,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		EC72B6D92E3F18200011F8E0 /* Build configuration list for PBXNativeTarget "TridentPlus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EC72B6DA2E3F18200011F8E0 /* Debug */,
+				EC72B6DB2E3F18200011F8E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EC7631CB2E30B41A00A86ABD /* Build configuration list for PBXProject "Trident" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -633,6 +784,46 @@
 				minimumVersion = 1.2.1;
 			};
 		};
+		EC72B6C82E3F18200011F8E0 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.23.0;
+			};
+		};
+		EC72B6CA2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+		EC72B6CC2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "SimpleKeychain" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/SimpleKeychain";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
+		EC72B6CE2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
+		EC72B6D02E3F18200011F8E0 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
 		ECE8DC342E36016300CF0AFE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -668,6 +859,31 @@
 		EC1A25212E3B2D0D00B8CF5D /* OrderedCollections */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EC1A25202E3B2D0D00B8CF5D /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+		EC72B6C72E3F18200011F8E0 /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC72B6C82E3F18200011F8E0 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+		EC72B6C92E3F18200011F8E0 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC72B6CA2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		EC72B6CB2E3F18200011F8E0 /* SimpleKeychain */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC72B6CC2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "SimpleKeychain" */;
+			productName = SimpleKeychain;
+		};
+		EC72B6CD2E3F18200011F8E0 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC72B6CE2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		EC72B6CF2E3F18200011F8E0 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC72B6D02E3F18200011F8E0 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = OrderedCollections;
 		};
 		ECE8DC352E36016300CF0AFE /* Apollo */ = {

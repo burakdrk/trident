@@ -1,25 +1,23 @@
 //
 //  GQLTokenManager.swift
-//  Trident
+//  TridentPlus
 //
 //  Created by Burak Duruk on 2025-07-28.
 //
 
 import Foundation
-import SwiftUI
 
-final class GQLTokenManager: TokenManager {
-    private var window: UIWindow?
+@MainActor
+@Observable final class GQLTokenManager: TokenManager {
     private var token: AuthToken?
+    private var fetcher: TwitchIntegrityFetcher?
     private let fetchTimeout: TimeInterval
     private let storage: TokenStorageService
 
     init(fetchTimeout: TimeInterval = 30.0, storage: TokenStorageService) {
         self.fetchTimeout = fetchTimeout
         self.storage = storage
-        self.token = storage.load(
-            key: .GQL_ACCESS_TOKEN
-        )
+        self.token = storage.load(key: .GQL_ACCESS_TOKEN)
     }
 
     func getToken() async throws -> AuthToken {
@@ -31,12 +29,9 @@ final class GQLTokenManager: TokenManager {
     }
 
     func fetchToken() async throws -> AuthToken {
-        try await Task.performWithTimeout(of: .seconds(fetchTimeout)) {
-            @MainActor in
+        try await Task.performWithTimeout(of: .seconds(fetchTimeout)) { @MainActor in
             try await withCheckedThrowingContinuation { continuation in
-                let view = TwitchIntegrityWebView { [weak self] result in
-                    self?.destroyWebView()
-
+                self.fetcher = TwitchIntegrityFetcher { [weak self] result in
                     switch result {
                     case .success(let tokenRes):
                         let newToken = AuthToken(
@@ -60,30 +55,12 @@ final class GQLTokenManager: TokenManager {
                         continuation.resume(throwing: err)
                     }
                 }
-                .frame(width: 0, height: 0)
-
-                let hostingVC = UIHostingController(rootView: view)
-                let window = UIWindow(
-                    frame: .init(x: 0, y: 0, width: 1, height: 1)
-                )
-                window.rootViewController = hostingVC
-                window.windowLevel = .alert + 1
-                window.isHidden = false
-                window.makeKeyAndVisible()
-
-                self.window = window
+                self.fetcher?.start()
             }
         }
     }
 
     func validateToken() async -> Bool {
-        return true  // NOT IMPLEMENTED YET
-    }
-
-    // MARK: - Private Helpers
-    private func destroyWebView() {
-        window?.isHidden = true
-        window?.rootViewController = nil
-        window = nil
+        return true // NOT IMPLEMENTED YET
     }
 }
