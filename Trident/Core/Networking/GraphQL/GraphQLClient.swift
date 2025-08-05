@@ -5,14 +5,14 @@
 //  Created by Burak Duruk on 2025-07-27.
 //
 
-import Foundation
 import Apollo
+import Foundation
 
-class GraphQLClient {
+actor GraphQLClient {
     private let apollo: ApolloClient
-    
+
     init() {
         let url = URL(string: "https://gql.twitch.tv/gql")!
-        self.apollo = ApolloClient(url: url)
+        apollo = ApolloClient(url: url)
     }
 }

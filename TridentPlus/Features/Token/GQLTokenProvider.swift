@@ -1,5 +1,5 @@
 //
-//  GQLTokenManager.swift
+//  GQLTokenProvider.swift
 //  TridentPlus
 //
 //  Created by Burak Duruk on 2025-07-28.
@@ -8,13 +8,13 @@
 import Foundation
 
 @MainActor
-@Observable final class GQLTokenManager: TokenManager {
+final class GQLTokenProvider: TokenProvider {
     private var token: AuthToken?
     private var fetcher: TwitchIntegrityFetcher?
     private let fetchTimeout: TimeInterval
-    private let storage: TokenStorageService
+    private let storage: TokenStore
 
-    init(fetchTimeout: TimeInterval = 30.0, storage: TokenStorageService) {
+    init(fetchTimeout: TimeInterval = 30.0, storage: TokenStore) {
         self.fetchTimeout = fetchTimeout
         self.storage = storage
         self.token = storage.load(key: .GQL_ACCESS_TOKEN)

@@ -1,5 +1,5 @@
 //
-//  TokenStorageService.swift
+//  TokenStore.swift
 //  Trident
 //
 //  Created by Burak Duruk on 2025-07-30.
@@ -8,7 +8,7 @@
 import Foundation
 import SimpleKeychain
 
-struct TokenStorageService {
+struct TokenStore {
     private let keychain: SimpleKeychain
 
     init(service: String = Bundle.main.bundleIdentifier!) {

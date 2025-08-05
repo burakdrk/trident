@@ -1,5 +1,5 @@
 {
-  "originHash" : "d3379fa12dbdcef59f5752f486291e2827fe1c287778199505bbfb222c6136e4",
+  "originHash" : "64e832d42f36754dbb2b2c347ec0c58260b4bcf04f53847f14e2634a029c0870",
   "pins" : [
     {
       "identity" : "apollo-ios",
@@ -98,6 +98,15 @@
       "state" : {
         "revision" : "a0a57e949a8903563aba4615869310c0ebf14c03",
         "version" : "1.4.0"
+      }
+    },
+    {
+      "identity" : "twitchirc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MahdiBM/TwitchIRC",
+      "state" : {
+        "revision" : "036f70385fe4f6d30ad2634699eb1e8e00b52087",
+        "version" : "1.6.0"
       }
     },
     {
