@@ -13,7 +13,7 @@ extension URLSession {
             throw URLError(.badURL)
         }
 
-        var urlReq = URLRequest(url: url)
+        var urlReq = URLRequest(url: url, timeoutInterval: req.timeoutInterval)
         urlReq.httpMethod = req.method.rawValue
         req.headers.forEach { urlReq.setValue($1, forHTTPHeaderField: $0) }
         urlReq.httpBody = req.body

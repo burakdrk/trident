@@ -9,14 +9,18 @@ import Collections
 import Foundation
 
 actor MessageBuffer {
-    private(set) var buffer: [Message] = []
-    private(set) var pauseBuffer: Deque<Message> = []
+    private var buffer: [Message] = []
+    private var pauseBuffer: Deque<Message> = []
     private var messages: [Message] = []
 
     private let max: Int
     private let pauseMax: Int
 
-    init(max: Int = 50, pauseMax: Int = 150) {
+    var pendingMessages: Int {
+        buffer.count + pauseBuffer.count
+    }
+
+    init(max: Int = 1500, pauseMax: Int = 1500) {
         self.max = max
         self.pauseMax = pauseMax
     }

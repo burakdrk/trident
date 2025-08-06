@@ -14,7 +14,7 @@ actor ThirdPartyEmoteClient {
 
     /// Creates an instance of the emote aggregator
     /// - Parameters:
-    ///   - channelID: The ID of the channel for which to fetch emote
+    ///   - channelID: The ID of the channel for which to fetch emote (not name)
     ///   - services: An array of emote services. **Order matters**: Emotes from services
     ///     later in the array will overwrite those from earlier services.
     init(channelID: String, services: [any ThirdPartyEmoteService]) {
@@ -54,7 +54,7 @@ actor ThirdPartyEmoteClient {
                         let emotes = try await fetcher(service)
                         return (index, emotes)
                     } catch {
-                        print("Warning: A service failed to fetch emotes: \(error.localizedDescription)")
+                        print("Warning: Service \(index) failed to fetch emotes: \(error.localizedDescription)")
                         return (index, [])
                     }
                 }

@@ -12,7 +12,7 @@ struct Message: Equatable, Identifiable, Sendable {
     let id: String
     let color: String
     let displayName: String
-    let emotes: [Emote]
+    let emotes: [TwitchIRC.Emote]
     let badges: [String]
     let timestamp: Date
     let body: String
@@ -20,9 +20,9 @@ struct Message: Equatable, Identifiable, Sendable {
     static func fromPrivateMessage(pm: PrivateMessage) -> Message {
         .init(
             id: pm.id,
-            color: pm.color,
+            color: pm.color.isEmpty ? "#808080" : pm.color,
             displayName: pm.displayName,
-            emotes: [],
+            emotes: pm.parseEmotes(),
             badges: pm.badges,
             timestamp: Date(timeIntervalSince1970: Double(pm.tmiSentTs) / 1000),
             body: pm.message
@@ -31,5 +31,35 @@ struct Message: Equatable, Identifiable, Sendable {
 
     static func == (lhs: Message, rhs: Message) -> Bool {
         lhs.id == rhs.id
+    }
+}
+
+struct MessageChunk: Identifiable {
+    let id: String
+    let type: MessageChunkType
+    let text: String // Alt-text if emote
+    var emote: Emote?
+}
+
+enum MessageChunkType {
+    case emote
+    case body
+    case displayName
+    case timestamp
+}
+
+struct RenderableMessage: Identifiable, Equatable {
+    let id: String
+    let details: Message
+    let chunks: [MessageChunk]
+
+    init(details: Message, chunks: [MessageChunk]) {
+        self.details = details
+        self.chunks = chunks
+        self.id = details.id
+    }
+
+    static func == (lhs: RenderableMessage, rhs: RenderableMessage) -> Bool {
+        lhs.details == rhs.details
     }
 }

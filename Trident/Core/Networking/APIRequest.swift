@@ -14,19 +14,22 @@ struct APIRequest<Response: Decodable> {
     let headers: [String: String]
     let decoder: JSONDecoder = .init()
     let token: AuthToken?
+    let timeoutInterval: TimeInterval
 
     init(
         url: String,
         method: HTTPMethod = .GET,
         body: Data? = nil,
         headers: [String: String] = ["Content-Type": "application/json"],
-        token: AuthToken? = nil
+        token: AuthToken? = nil,
+        timeoutInterval: TimeInterval = 60.0
     ) {
         self.url = url
         self.method = method
         self.body = body
         self.headers = headers
         self.token = token
+        self.timeoutInterval = timeoutInterval
     }
 
     /// convenience initializer for Encodable bodies
@@ -36,13 +39,15 @@ struct APIRequest<Response: Decodable> {
         payload: Payload,
         encoder: JSONEncoder = .init(),
         headers: [String: String] = ["Content-Type": "application/json"],
-        token: AuthToken? = nil
+        token: AuthToken? = nil,
+        timeoutInterval: TimeInterval = 60.0
     ) throws {
         self.url = url
         self.method = method
         self.body = try encoder.encode(payload)
         self.headers = headers
         self.token = token
+        self.timeoutInterval = timeoutInterval
     }
 }
 

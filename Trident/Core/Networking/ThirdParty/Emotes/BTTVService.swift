@@ -15,7 +15,7 @@ struct BTTVService: ThirdPartyEmoteService {
 
     func channelEmotes(for channelID: String) async throws -> [Emote] {
         let urlString = "\(baseAPIURL)/cached/users/twitch/\(channelID)"
-        let response: BTTVChannelEmoteResponse = try await URLSession.perform(.init(url: urlString))
+        let response: BTTVChannelEmoteResponse = try await URLSession.perform(.init(url: urlString, timeoutInterval: requestTimeout))
 
         // Use a dictionary to merge emotes. This ensures channel emotes overwrite
         // shared emotes if they have the same name, matching the original logic.
@@ -23,24 +23,20 @@ struct BTTVService: ThirdPartyEmoteService {
         response.sharedEmotes.forEach { uniqueEmotes[$0.code] = $0 }
         response.channelEmotes.forEach { uniqueEmotes[$0.code] = $0 }
 
-        return uniqueEmotes.values.compactMap { mapToEmote($0) }
+        return uniqueEmotes.values.compactMap { mapToEmote($0, .Channel) }
     }
 
     func globalEmotes() async throws -> [Emote] {
         let urlString = "\(baseAPIURL)/cached/emotes/global"
-        let bttvEmotes: [BTTVEmote] = try await URLSession.perform(.init(url: urlString))
+        let bttvEmotes: [BTTVEmote] = try await URLSession.perform(.init(url: urlString, timeoutInterval: requestTimeout))
 
-        return bttvEmotes.compactMap { mapToEmote($0) }
+        return bttvEmotes.compactMap { mapToEmote($0, .Global) }
     }
 
     // MARK: - Private Helpers
 
-    private func mapToEmote(_ bttvEmote: BTTVEmote) -> Emote? {
-        guard let emoteURL = URL(string: "\(baseCDNURL)/\(bttvEmote.id)/1x") else {
-            return nil
-        }
-
-        return Emote(name: bttvEmote.code, url: emoteURL, type: .BTTV)
+    private func mapToEmote(_ bttvEmote: BTTVEmote, _ type: EmoteType) -> Emote? {
+        Emote(name: bttvEmote.code, id: bttvEmote.id, type: type, source: .BTTV)
     }
 }
 
@@ -48,7 +44,7 @@ struct BTTVService: ThirdPartyEmoteService {
 
 private struct BTTVEmote: Decodable {
     let id: String
-    let code: String // This is the emote's name
+    let code: String // This is the emote's unique name
 }
 
 private struct BTTVChannelEmoteResponse: Decodable {

@@ -39,8 +39,10 @@ actor IRCClient {
                                 try await websocket.sendMsg(.pong)
                             case .join(let join):
                                 joinedChannels.insert(join.channel)
+                                continuation.yield(msg)
                             case .part(let part):
                                 joinedChannels.remove(part.channel)
+                                continuation.yield(msg)
                             default:
                                 continuation.yield(msg)
                             }

@@ -1,5 +1,5 @@
 //
-//  Array+Drain.swift
+//  Array+drain.swift
 //  Trident
 //
 //  Created by Burak Duruk on 2025-08-04.

@@ -15,7 +15,10 @@ struct ScrollButtonView: View {
         Button(action: action) {
             HStack {
                 Image(systemName: "arrow.down.circle.fill")
-                Text("\(newMessageCount > 100 ? "100+" : String(newMessageCount)) new messages")
+
+                newMessageCount != 0 ?
+                    Text("\(String(newMessageCount)) new message\(newMessageCount == 1 ? "" : "s")")
+                    : Text("Auto-scroll")
             }
             .font(.callout.bold())
             .padding(10)
