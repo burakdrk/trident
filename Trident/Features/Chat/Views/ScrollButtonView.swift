@@ -9,28 +9,29 @@ import SwiftUI
 
 struct ScrollButtonView: View {
     let action: () -> Void
-    let newMessageCount: Int
+    let vm: ScrollButtonViewModel
 
     var body: some View {
         Button(action: action) {
             HStack {
                 Image(systemName: "arrow.down.circle.fill")
 
-                newMessageCount != 0 ?
-                    Text("\(String(newMessageCount)) new message\(newMessageCount == 1 ? "" : "s")")
+                vm.newMessageCount != 0 ?
+                    Text("\(String(vm.newMessageCount)) new message\(vm.newMessageCount == 1 ? "" : "s")")
                     : Text("Auto-scroll")
             }
             .font(.callout.bold())
-            .padding(10)
+            .padding(12)
             .background(Color.accentColor)
             .foregroundColor(.white)
             .clipShape(Capsule())
         }
-        .padding(.bottom, 10)
-        .transition(.scale.combined(with: .opacity))
+        .allowsHitTesting(vm.isShown)
+        .opacity(vm.isShown ? 1 : 0)
+        .buttonStyle(.scale())
     }
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    ScrollButtonView(action: {}, newMessageCount: 1000)
+    ScrollButtonView(action: {}, vm: ScrollButtonViewModel())
 }

@@ -36,7 +36,7 @@ struct BTTVService: ThirdPartyEmoteService {
     // MARK: - Private Helpers
 
     private func mapToEmote(_ bttvEmote: BTTVEmote, _ type: EmoteType) -> Emote? {
-        Emote(name: bttvEmote.code, id: bttvEmote.id, type: type, source: .BTTV)
+        Emote(name: bttvEmote.code, id: bttvEmote.id, type: type, source: .BTTV, width: bttvEmote.width ?? 28, height: bttvEmote.height ?? 28)
     }
 }
 
@@ -45,6 +45,8 @@ struct BTTVService: ThirdPartyEmoteService {
 private struct BTTVEmote: Decodable {
     let id: String
     let code: String // This is the emote's unique name
+    let width: Int?
+    let height: Int?
 }
 
 private struct BTTVChannelEmoteResponse: Decodable {

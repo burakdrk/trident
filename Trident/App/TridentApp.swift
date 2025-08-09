@@ -12,6 +12,7 @@ struct TridentApp: App {
     var body: some Scene {
         WindowGroup {
             ChatView()
+                .edgesIgnoringSafeArea(.all)
         }
     }
 }

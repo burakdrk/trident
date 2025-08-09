@@ -1,5 +1,5 @@
 {
-  "originHash" : "e66e078f264c235cb1e6cfe39e2c13abdbcb8dcb3cfc733b6c79a28288dd5d24",
+  "originHash" : "02db8b9d39ecd4427e431bc2142eff0bf1556b8ee950dc4bd425c3b2a98d7908",
   "pins" : [
     {
       "identity" : "apollo-ios",
@@ -98,15 +98,6 @@
       "state" : {
         "revision" : "a0a57e949a8903563aba4615869310c0ebf14c03",
         "version" : "1.4.0"
-      }
-    },
-    {
-      "identity" : "swiftui-wrapping-stack",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/diniska/swiftui-wrapping-stack",
-      "state" : {
-        "revision" : "1e6b0fffe902cf3ffc102af5e7c0c4767cbc09e0",
-        "version" : "1.1.0"
       }
     },
     {

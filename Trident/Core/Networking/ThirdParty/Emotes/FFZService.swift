@@ -20,7 +20,7 @@ struct FFZService: ThirdPartyEmoteService {
             throw APIError.invalidResponse
         }
 
-        return emotes.compactMap { Emote(name: $0.name, id: String($0.id), type: .Channel, source: .FFZ) }
+        return emotes.compactMap { Emote(name: $0.name, id: String($0.id), type: .Channel, source: .FFZ, width: $0.width, height: $0.height) }
     }
 
     func globalEmotes() async throws -> [Emote] {
@@ -31,7 +31,7 @@ struct FFZService: ThirdPartyEmoteService {
             throw APIError.invalidResponse
         }
 
-        return emotes.compactMap { Emote(name: $0.name, id: String($0.id), type: .Global, source: .FFZ) }
+        return emotes.compactMap { Emote(name: $0.name, id: String($0.id), type: .Global, source: .FFZ, width: $0.width, height: $0.height) }
     }
 }
 
@@ -43,7 +43,7 @@ private struct FFZChannelEmoteResponse: Codable {
 }
 
 private struct FFZGlobalEmoteResponse: Codable {
-    let defaultSets: [String]
+    let defaultSets: [Int]
     let sets: [String: Set]
 
     enum CodingKeys: String, CodingKey {

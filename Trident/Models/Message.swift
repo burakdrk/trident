@@ -18,9 +18,14 @@ struct Message: Equatable, Identifiable, Sendable {
     let body: String
 
     static func fromPrivateMessage(pm: PrivateMessage) -> Message {
-        .init(
+        var color = pm.color
+        if pm.color == "#000000" || pm.color.isEmpty {
+            color = "#808080"
+        }
+
+        return .init(
             id: pm.id,
-            color: pm.color.isEmpty ? "#808080" : pm.color,
+            color: color,
             displayName: pm.displayName,
             emotes: pm.parseEmotes(),
             badges: pm.badges,

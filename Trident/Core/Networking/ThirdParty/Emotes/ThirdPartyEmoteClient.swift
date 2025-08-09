@@ -54,7 +54,9 @@ actor ThirdPartyEmoteClient {
                         let emotes = try await fetcher(service)
                         return (index, emotes)
                     } catch {
+                        #if DEBUG
                         print("Warning: Service \(index) failed to fetch emotes: \(error.localizedDescription)")
+                        #endif
                         return (index, [])
                     }
                 }

@@ -1,30 +1,32 @@
 //
-//  LiveChatViewModel.swift
+//  ChatViewModel.swift
 //  Trident
 //
 //  Created by Burak Duruk on 2025-08-04.
 //
 
+import Collections
 import Foundation
-import SwiftUI
 
 @MainActor
-@Observable final class LiveChatViewModel {
+final class ChatViewModel {
     private let client: IRCClient
     private let emoteClient: ThirdPartyEmoteClient
     private let buffer: MessageBuffer
 
-    private var consumeTask: Task<Void, Never>?
-    private var flushTask: Task<Void, Never>?
+    private var bufferTask: Task<Void, Never>?
+    private var renderTask: Task<Void, Never>?
 
-    private(set) var messages: [RenderableMessage] = []
     private(set) var thirdPartyEmotes: [String: Emote] = [:]
 
-    var position: ScrollPosition = .init(edge: .bottom)
-    var isPaused: Bool { position.isPositionedByUser }
-    var newMessageCount: Int = 0
+    let maxMessages: Int
 
-    init(buffer: MessageBuffer = .init()) {
+    var messages: Deque<RenderableMessage> = []
+    var isPaused: Bool = false
+    var setNewMessageCount: ((Int) -> Void)?
+    var onBatchFlush: (([RenderableMessage]) -> Void)?
+
+    init() {
         self.client = .init()
         self.emoteClient = .init(channelID: "517475551", services: [
             FFZService(),
@@ -32,7 +34,8 @@ import SwiftUI
             SevenTVService()
         ])
 
-        self.buffer = buffer
+        self.maxMessages = 1000
+        self.buffer = .init(pauseMax: maxMessages)
     }
 
     func beginConsumingMessageStream() async throws {
@@ -40,7 +43,7 @@ import SwiftUI
         try await client.join(to: "extraemily")
         thirdPartyEmotes = await emoteClient.emotes()
 
-        consumeTask = Task.detached(priority: .background) { [weak self, buffer] in
+        bufferTask = Task.detached(priority: .background) { [weak self, buffer] in
             do {
                 for try await message in messageStream {
                     guard let self = self else { break }
@@ -58,25 +61,25 @@ import SwiftUI
             } catch {}
         }
 
-        flushTask = Task { @MainActor [weak self, buffer] in
+        renderTask = Task { @MainActor [weak self, buffer] in
             do {
                 while !Task.isCancelled {
                     guard let self = self else { break }
                     try await Task.sleep(nanoseconds: 100_000_000)
-                    self.newMessageCount = await buffer.pendingMessages
+                    self.setNewMessageCount?(await buffer.pendingMessages)
 
                     guard !self.isPaused else { continue }
-                    let renderMessages = await buffer.renderList
+                    let newMessages = await buffer.newMessages
 
-                    let parser = MessageParser(messages: renderMessages, thirdPartyEmotes: self.thirdPartyEmotes)
-                    self.messages = await parser.renderStream
+                    let parser = MessageParser(messages: newMessages, thirdPartyEmotes: self.thirdPartyEmotes)
+                    self.onBatchFlush?(await parser.renderStream)
                 }
             } catch {}
         }
     }
 
     func stopConsuming() {
-        consumeTask?.cancel()
-        flushTask?.cancel()
+        bufferTask?.cancel()
+        renderTask?.cancel()
     }
 }

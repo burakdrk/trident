@@ -11,17 +11,14 @@ import Foundation
 actor MessageBuffer {
     private var buffer: [Message] = []
     private var pauseBuffer: Deque<Message> = []
-    private var messages: [Message] = []
 
-    private let max: Int
     private let pauseMax: Int
 
     var pendingMessages: Int {
         buffer.count + pauseBuffer.count
     }
 
-    init(max: Int = 1500, pauseMax: Int = 1500) {
-        self.max = max
+    init(pauseMax: Int) {
         self.pauseMax = pauseMax
     }
 
@@ -36,16 +33,10 @@ actor MessageBuffer {
         }
     }
 
-    var renderList: [Message] {
+    var newMessages: [Message] {
         let batch = buffer.drain()
         let pauseBatch = pauseBuffer.drain()
 
-        messages.append(contentsOf: pauseBatch)
-        messages.append(contentsOf: batch)
-        if messages.count > max {
-            messages.removeFirst(messages.count - max)
-        }
-
-        return messages
+        return pauseBatch + batch
     }
 }

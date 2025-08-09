@@ -26,8 +26,8 @@ struct SevenTVService: ThirdPartyEmoteService {
                 id: $0.id,
                 type: .Channel,
                 source: .SevenTV,
-                width: $0.data.host.files.first?.width,
-                height: $0.data.host.files.first?.height
+                width: $0.data.host.files.first?.width ?? 28,
+                height: $0.data.host.files.first?.height ?? 28
             )
         }
     }
@@ -44,8 +44,8 @@ struct SevenTVService: ThirdPartyEmoteService {
                 id: $0.id,
                 type: .Global,
                 source: .SevenTV,
-                width: $0.data.host.files.first?.width,
-                height: $0.data.host.files.first?.height
+                width: $0.data.host.files.first?.width ?? 28,
+                height: $0.data.host.files.first?.height ?? 28
             )
         }
     }

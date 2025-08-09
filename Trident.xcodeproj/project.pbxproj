@@ -19,7 +19,6 @@
 		EC72B6D52E3F18200011F8E0 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6CB2E3F18200011F8E0 /* SimpleKeychain */; };
 		EC72B6D62E3F18200011F8E0 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C92E3F18200011F8E0 /* Supabase */; };
 		EC72B6D72E3F18200011F8E0 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C72E3F18200011F8E0 /* Apollo */; };
-		ECE6EE562E42F770009E857C /* WrappingStack in Frameworks */ = {isa = PBXBuildFile; productRef = ECE6EE552E42F770009E857C /* WrappingStack */; };
 		ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC352E36016300CF0AFE /* Apollo */; };
 		ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC3C2E37006300CF0AFE /* Supabase */; };
 		ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = ECEA81E22E388945002AA253 /* SimpleKeychain */; };
@@ -95,7 +94,6 @@
 				EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */,
 				EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */,
 				EC1A251C2E3B2AF900B8CF5D /* SDWebImageSwiftUI in Frameworks */,
-				ECE6EE562E42F770009E857C /* WrappingStack in Frameworks */,
 				EC6D606D2E410B98007DA5D9 /* DequeModule in Frameworks */,
 				ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */,
 				ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */,
@@ -208,7 +206,6 @@
 				EC6D60542E407FBD007DA5D9 /* TwitchIRC */,
 				EC6D606A2E410B98007DA5D9 /* Collections */,
 				EC6D606C2E410B98007DA5D9 /* DequeModule */,
-				ECE6EE552E42F770009E857C /* WrappingStack */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -299,7 +296,6 @@
 				EC1A251A2E3B2AF900B8CF5D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				EC6D60532E407FBD007DA5D9 /* XCRemoteSwiftPackageReference "TwitchIRC" */,
 				EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				ECE6EE542E42F770009E857C /* XCRemoteSwiftPackageReference "swiftui-wrapping-stack" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EC7631D12E30B41A00A86ABD /* Products */;
@@ -860,14 +856,6 @@
 				minimumVersion = 1.2.1;
 			};
 		};
-		ECE6EE542E42F770009E857C /* XCRemoteSwiftPackageReference "swiftui-wrapping-stack" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/diniska/swiftui-wrapping-stack";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
-			};
-		};
 		ECE8DC342E36016300CF0AFE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -954,11 +942,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC72B6D02E3F18200011F8E0 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = OrderedCollections;
-		};
-		ECE6EE552E42F770009E857C /* WrappingStack */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ECE6EE542E42F770009E857C /* XCRemoteSwiftPackageReference "swiftui-wrapping-stack" */;
-			productName = WrappingStack;
 		};
 		ECE8DC352E36016300CF0AFE /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;
