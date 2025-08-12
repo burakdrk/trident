@@ -6,6 +6,6 @@
 //
 
 enum KeychainKeys: String {
-    case GQL_ACCESS_TOKEN = "GQL_ACCESS_TOKEN"
-    case HELIX_ACCESS_TOKEN = "HELIX_ACCESS_TOKEN"
+  case gqlAccessToken
+  case helixAcessToken
 }

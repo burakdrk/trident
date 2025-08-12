@@ -12,7 +12,7 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
         guard let textAttachment = textAttachment as? EmoteAttachment else { return }
         let emote = textAttachment.emote
 
-        view = MainActor.assumeIsolated { [emote] in
+        view = MainActor.assumeIsolated {
             let attachmentView = EmoteAttachmentView()
             attachmentView.emote = emote
             return attachmentView

@@ -8,12 +8,12 @@
 import Foundation
 
 enum IRCError: LocalizedError {
-    case failedToConnect
+  case failedToConnect
 
-    var errorDescription: String? {
-        switch self {
-        case .failedToConnect:
-            return "Failed to connect to the chat"
-        }
+  var errorDescription: String? {
+    switch self {
+    case .failedToConnect:
+      return "Failed to connect to the chat"
     }
+  }
 }

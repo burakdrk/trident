@@ -8,30 +8,34 @@
 import SwiftUI
 
 struct ScrollButtonView: View {
-    let action: () -> Void
-    let vm: ScrollButtonViewModel
+  let action: () -> Void
+  let viewModel: ScrollButtonViewModel
 
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Image(systemName: "arrow.down.circle.fill")
+  var body: some View {
+    Button(action: action) {
+      HStack {
+        Image(systemName: "arrow.down.circle.fill")
 
-                vm.newMessageCount != 0 ?
-                    Text("\(String(vm.newMessageCount)) new message\(vm.newMessageCount == 1 ? "" : "s")")
-                    : Text("Auto-scroll")
-            }
-            .font(.callout.bold())
-            .padding(12)
-            .background(Color.accentColor)
-            .foregroundColor(.white)
-            .clipShape(Capsule())
+        if viewModel.newMessageCount != 0 {
+          Text(
+            "\(String(viewModel.newMessageCount)) new message\(viewModel.newMessageCount == 1 ? "" : "s")"
+          )
+        } else {
+          Text("Auto-scroll")
         }
-        .allowsHitTesting(vm.isShown)
-        .opacity(vm.isShown ? 1 : 0)
-        .buttonStyle(.scale())
+      }
+      .font(.callout.bold())
+      .padding(12)
+      .background(Color.accentColor)
+      .foregroundColor(.white)
+      .clipShape(Capsule())
     }
+    .allowsHitTesting(viewModel.isShown)
+    .opacity(viewModel.isShown ? 1 : 0)
+    .buttonStyle(.scale())
+  }
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    ScrollButtonView(action: {}, vm: ScrollButtonViewModel())
+  ScrollButtonView(action: {}, viewModel: ScrollButtonViewModel())
 }

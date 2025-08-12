@@ -30,8 +30,8 @@ actor MessageParser {
         for item in message.emotes.unique(by: \.id) {
             uniqueTwitchEmotes[item.name] = Emote(name: item.name,
                                                   id: item.id,
-                                                  type: .Unknown,
-                                                  source: .Twitch)
+                                                  type: .unknown,
+                                                  source: .twitch)
         }
 
         var chunks: [MessageChunk] = []
