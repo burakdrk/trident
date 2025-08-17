@@ -18,6 +18,7 @@ extension Task where Success == Never, Failure == Never {
 
       defer { group.cancelAll() }
 
+      // swiftlint:disable:next force_unwrapping
       return try await group.next()!
     }
   }

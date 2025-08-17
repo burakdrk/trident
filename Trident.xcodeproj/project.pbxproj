@@ -11,7 +11,6 @@
 		EC506AFB2E41477700204C7E /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6CF2E3F18200011F8E0 /* OrderedCollections */; };
 		EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D60542E407FBD007DA5D9 /* TwitchIRC */; };
 		EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D606A2E410B98007DA5D9 /* Collections */; };
-		EC6D606D2E410B98007DA5D9 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D606C2E410B98007DA5D9 /* DequeModule */; };
 		EC6D60702E410BE9007DA5D9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D606F2E410BE9007DA5D9 /* Collections */; };
 		EC6D60722E410BE9007DA5D9 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D60712E410BE9007DA5D9 /* DequeModule */; };
 		EC6D60742E410BF4007DA5D9 /* TwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D60732E410BF4007DA5D9 /* TwitchIRC */; };
@@ -21,6 +20,8 @@
 		EC72B6D72E3F18200011F8E0 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C72E3F18200011F8E0 /* Apollo */; };
 		EC75289B2E4AD45200065981 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = EC75289A2E4AD45200065981 /* Dependencies */; };
 		EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EC75289D2E4AD8E600065981 /* Alamofire */; };
+		EC7874E42E4EB96D001452E5 /* DependenciesMacros in Frameworks */ = {isa = PBXBuildFile; productRef = EC7874E32E4EB96D001452E5 /* DependenciesMacros */; };
+		EC7874E62E4EB976001452E5 /* DependenciesMacros in Frameworks */ = {isa = PBXBuildFile; productRef = EC7874E52E4EB976001452E5 /* DependenciesMacros */; };
 		ECBA79822E4AE1E20079A562 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ECBA79812E4AE1E20079A562 /* Alamofire */; };
 		ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC352E36016300CF0AFE /* Apollo */; };
 		ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC3C2E37006300CF0AFE /* Supabase */; };
@@ -68,6 +69,7 @@
 			files = (
 				ECBA79822E4AE1E20079A562 /* Alamofire in Frameworks */,
 				EC506AFB2E41477700204C7E /* OrderedCollections in Frameworks */,
+				EC7874E62E4EB976001452E5 /* DependenciesMacros in Frameworks */,
 				EC6D60702E410BE9007DA5D9 /* Collections in Frameworks */,
 				EC72B6D42E3F18200011F8E0 /* SDWebImageSwiftUI in Frameworks */,
 				EC6D60722E410BE9007DA5D9 /* DequeModule in Frameworks */,
@@ -84,10 +86,10 @@
 			files = (
 				EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */,
 				EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */,
+				EC7874E42E4EB96D001452E5 /* DependenciesMacros in Frameworks */,
 				EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */,
 				EC1A251C2E3B2AF900B8CF5D /* SDWebImageSwiftUI in Frameworks */,
 				EC75289B2E4AD45200065981 /* Dependencies in Frameworks */,
-				EC6D606D2E410B98007DA5D9 /* DequeModule in Frameworks */,
 				ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */,
 				ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */,
 				ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */,
@@ -146,7 +148,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				ECBA797F2E4AE15B0079A562 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				EC72B6E02E3F1E760011F8E0 /* TridentPlus */,
@@ -163,6 +164,7 @@
 				EC6D60712E410BE9007DA5D9 /* DequeModule */,
 				EC6D60732E410BF4007DA5D9 /* TwitchIRC */,
 				ECBA79812E4AE1E20079A562 /* Alamofire */,
+				EC7874E52E4EB976001452E5 /* DependenciesMacros */,
 			);
 			productName = Trident;
 			productReference = EC72B6DC2E3F18200011F8E0 /* TridentPlus.app */;
@@ -173,13 +175,13 @@
 			buildConfigurationList = EC7631F12E30B41B00A86ABD /* Build configuration list for PBXNativeTarget "Trident" */;
 			buildPhases = (
 				EC7631CC2E30B41A00A86ABD /* Sources */,
+				EC7874D42E4DA2D1001452E5 /* ShellScript */,
 				EC7631CD2E30B41A00A86ABD /* Frameworks */,
 				EC7631CE2E30B41A00A86ABD /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				ECBA797D2E4AE1560079A562 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				EC7631D22E30B41A00A86ABD /* Trident */,
@@ -192,9 +194,9 @@
 				EC1A251B2E3B2AF900B8CF5D /* SDWebImageSwiftUI */,
 				EC6D60542E407FBD007DA5D9 /* TwitchIRC */,
 				EC6D606A2E410B98007DA5D9 /* Collections */,
-				EC6D606C2E410B98007DA5D9 /* DequeModule */,
 				EC75289A2E4AD45200065981 /* Dependencies */,
 				EC75289D2E4AD8E600065981 /* Alamofire */,
+				EC7874E32E4EB96D001452E5 /* DependenciesMacros */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -260,7 +262,6 @@
 				EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				EC7528992E4AD45200065981 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 				EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */,
-				ECBA797B2E4AE1270079A562 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EC7631D12E30B41A00A86ABD /* Products */;
@@ -298,6 +299,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		EC7874D42E4DA2D1001452E5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [[ \"$(uname -m)\" == arm64 ]]\nthen\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		EC72B6D12E3F18200011F8E0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -328,14 +350,6 @@
 			target = EC7631CF2E30B41A00A86ABD /* Trident */;
 			targetProxy = EC7631DE2E30B41B00A86ABD /* PBXContainerItemProxy */;
 		};
-		ECBA797D2E4AE1560079A562 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = ECBA797C2E4AE1560079A562 /* SwiftLintBuildToolPlugin */;
-		};
-		ECBA797F2E4AE15B0079A562 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = ECBA797E2E4AE15B0079A562 /* SwiftLintBuildToolPlugin */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -348,6 +362,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8P545YJ97;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Trident+";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -385,6 +400,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8P545YJ97;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Trident+";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -451,7 +467,7 @@
 				DEVELOPMENT_TEAM = P8P545YJ97;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -515,7 +531,7 @@
 				DEVELOPMENT_TEAM = P8P545YJ97;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -543,6 +559,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8P545YJ97;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Trident;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -579,6 +596,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8P545YJ97;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Trident;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
@@ -774,14 +792,6 @@
 				minimumVersion = 5.10.2;
 			};
 		};
-		ECBA797B2E4AE1270079A562 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.59.1;
-			};
-		};
 		ECE8DC342E36016300CF0AFE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
@@ -823,11 +833,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = Collections;
-		};
-		EC6D606C2E410B98007DA5D9 /* DequeModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = DequeModule;
 		};
 		EC6D606F2E410BE9007DA5D9 /* Collections */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -879,15 +884,15 @@
 			package = EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		ECBA797C2E4AE1560079A562 /* SwiftLintBuildToolPlugin */ = {
+		EC7874E32E4EB96D001452E5 /* DependenciesMacros */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = ECBA797B2E4AE1270079A562 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
-			productName = "plugin:SwiftLintBuildToolPlugin";
+			package = EC7528992E4AD45200065981 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
+			productName = DependenciesMacros;
 		};
-		ECBA797E2E4AE15B0079A562 /* SwiftLintBuildToolPlugin */ = {
+		EC7874E52E4EB976001452E5 /* DependenciesMacros */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = ECBA797B2E4AE1270079A562 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
-			productName = "plugin:SwiftLintBuildToolPlugin";
+			package = EC7528992E4AD45200065981 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
+			productName = DependenciesMacros;
 		};
 		ECBA79812E4AE1E20079A562 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;

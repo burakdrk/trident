@@ -5,27 +5,28 @@
 //  Created by Burak Duruk on 2025-08-05.
 //
 
+import Alamofire
 import Foundation
 
 /// A service that fetches emotes from the SevenTV (7TV) API.
 struct SevenTVService: ThirdPartyEmoteService {
   private let baseAPIURL = "https://7tv.io/v3"
-  private let cdnExt = "1x.webp"
   private let requestTimeout: TimeInterval = 5.0
 
   func channelEmotes(for channelID: String) async throws -> [Emote] {
     let urlString = "\(baseAPIURL)/users/twitch/\(channelID)"
-    let response: SevenTVChannelEmoteResponse =
-      try await URLSession.perform(
-        .init(url: urlString, timeoutInterval: requestTimeout)
-      )
+    let response = try await AF
+      .request(urlString, requestModifier: { $0.timeoutInterval = requestTimeout })
+      .serializingDecodable(SevenTVChannelEmoteResponse.self)
+      .value
 
     return response.emoteSet.emotes.compactMap {
       Emote(
         name: $0.name,
         id: $0.id,
-        type: .channel,
+        category: .channel,
         source: .seventv,
+        overlay: $0.data.flags == (1 << 8),
         width: $0.data.host.files.first?.width ?? 28,
         height: $0.data.host.files.first?.height ?? 28
       )
@@ -34,16 +35,18 @@ struct SevenTVService: ThirdPartyEmoteService {
 
   func globalEmotes() async throws -> [Emote] {
     let urlString = "\(baseAPIURL)/emote-sets/global"
-    let response: SevenTVEmoteResponse = try await URLSession.perform(
-      .init(url: urlString, timeoutInterval: requestTimeout)
-    )
+    let response = try await AF
+      .request(urlString, requestModifier: { $0.timeoutInterval = requestTimeout })
+      .serializingDecodable(SevenTVEmoteResponse.self)
+      .value
 
     return response.emotes.compactMap {
       Emote(
         name: $0.name,
         id: $0.id,
-        type: .global,
+        category: .global,
         source: .seventv,
+        overlay: $0.data.flags == (1 << 8),
         width: $0.data.host.files.first?.width ?? 28,
         height: $0.data.host.files.first?.height ?? 28
       )
@@ -73,6 +76,7 @@ private struct SevenTVEmote: Codable {
 
 private struct SevenTVData: Codable {
   let host: SevenTVHost
+  let flags: Int
 }
 
 private struct SevenTVHost: Codable {

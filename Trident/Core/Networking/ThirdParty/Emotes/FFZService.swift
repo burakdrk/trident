@@ -5,6 +5,7 @@
 //  Created by Burak Duruk on 2025-08-05.
 //
 
+import Alamofire
 import Foundation
 
 /// A service that fetches emotes from the FrankerFaceZ (FFZ) API.
@@ -14,20 +15,21 @@ struct FFZService: ThirdPartyEmoteService {
 
   func channelEmotes(for channelID: String) async throws -> [Emote] {
     let urlString = "\(baseAPIURL)/room/id/\(channelID)"
-    let response: FFZChannelEmoteResponse = try await URLSession.perform(.init(
-      url: urlString,
-      timeoutInterval: requestTimeout
-    ))
+    let response = try await AF
+      .request(urlString, requestModifier: { $0.timeoutInterval = requestTimeout })
+      .serializingDecodable(FFZChannelEmoteResponse.self)
+      .value
 
     guard let emotes = response.sets[String(response.room.roomSet)]?.emoticons else {
-      throw APIError.invalidResponse
+      throw URLError(.badServerResponse)
     }
 
     return emotes.compactMap { Emote(
       name: $0.name,
       id: String($0.id),
-      type: .channel,
+      category: .channel,
       source: .ffz,
+      overlay: false,
       width: $0.width,
       height: $0.height
     ) }
@@ -35,20 +37,21 @@ struct FFZService: ThirdPartyEmoteService {
 
   func globalEmotes() async throws -> [Emote] {
     let urlString = "\(baseAPIURL)/set/global"
-    let response: FFZGlobalEmoteResponse = try await URLSession.perform(.init(
-      url: urlString,
-      timeoutInterval: requestTimeout
-    ))
+    let response: FFZGlobalEmoteResponse = try await AF
+      .request(urlString, requestModifier: { $0.timeoutInterval = requestTimeout })
+      .serializingDecodable(FFZGlobalEmoteResponse.self)
+      .value
 
     guard let emotes = response.sets[String(response.defaultSets[0])]?.emoticons else {
-      throw APIError.invalidResponse
+      throw URLError(.badServerResponse)
     }
 
     return emotes.compactMap { Emote(
       name: $0.name,
       id: String($0.id),
-      type: .global,
+      category: .global,
       source: .ffz,
+      overlay: false,
       width: $0.width,
       height: $0.height
     ) }

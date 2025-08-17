@@ -9,10 +9,12 @@ import Apollo
 import Foundation
 
 actor GraphQLClient {
-    private let apollo: ApolloClient
+  private let apollo: ApolloClient
 
-    init() {
-        let url = URL(string: "https://gql.twitch.tv/gql")!
-        apollo = ApolloClient(url: url)
+  init() {
+    guard let url = URL(string: "https://gql.twitch.tv/gql") else {
+      fatalError("Invalid GraphQL URL")
     }
+    apollo = ApolloClient(url: url)
+  }
 }

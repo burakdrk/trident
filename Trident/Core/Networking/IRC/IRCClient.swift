@@ -5,6 +5,7 @@
 //  Created by Burak Duruk on 2025-08-04.
 //
 
+import Dependencies
 import Foundation
 import TwitchIRC
 
@@ -14,8 +15,14 @@ actor IRCClient {
 
   typealias IRCMessageStream = AsyncThrowingStream<IncomingMessage, Error>
 
-  init(urlSession: URLSession = URLSession(configuration: .default)) {
-    let url = URL(string: "wss://irc-ws.chat.twitch.tv:443")!
+  private var stream: IRCMessageStream?
+
+  init() {
+    guard let url = URL(string: "wss://irc-ws.chat.twitch.tv:443") else {
+      fatalError("Invalid IRC WebSocket URL")
+    }
+
+    @Dependency(\.urlSession) var urlSession
     websocket = urlSession.webSocketTask(with: url)
   }
 
@@ -24,6 +31,15 @@ actor IRCClient {
   }
 
   func connect(joinTo channel: String? = nil) async throws -> IRCMessageStream {
+    if let existingStream = stream {
+      try await partAll()
+      if let channel = channel {
+        try await join(to: channel)
+      }
+
+      return existingStream
+    }
+
     websocket.resume()
     try await requestCapabilities()
     try await authenticate()
@@ -32,7 +48,7 @@ actor IRCClient {
       try await join(to: channel)
     }
 
-    return AsyncThrowingStream { continuation in
+    let newStream = AsyncThrowingStream { continuation in
       Task {
         do {
           while true {
@@ -41,10 +57,10 @@ actor IRCClient {
               switch msg {
               case .ping:
                 try await self.sendMsg(.pong)
-              case .join(let join):
+              case let .join(join):
                 joinedChannels.insert(join.channel)
                 continuation.yield(msg)
-              case .part(let part):
+              case let .part(part):
                 joinedChannels.remove(part.channel)
                 continuation.yield(msg)
               default:
@@ -58,6 +74,9 @@ actor IRCClient {
         }
       }
     }
+
+    stream = newStream
+    return newStream
   }
 
   func disconnect() {
@@ -66,12 +85,12 @@ actor IRCClient {
   }
 
   func join(to channel: String) async throws {
-    try await self.sendMsg(.join(to: channel))
+    try await sendMsg(.join(to: channel))
   }
 
   func part(from channel: String) async throws {
     guard joinedChannels.contains(channel) else { return }
-    try await self.sendMsg(.part(from: channel))
+    try await sendMsg(.part(from: channel))
   }
 
   func partAll() async throws {
@@ -85,9 +104,9 @@ actor IRCClient {
 
 extension IRCClient {
   private func requestCapabilities() async throws {
-    try await self.sendMsg(.capabilities([.tags, .commands]))
+    try await sendMsg(.capabilities([.tags, .commands]))
 
-    let success = try await self.receiveMsg().contains(where: {
+    let success = try await receiveMsg().contains(where: {
       if case .capabilities = $0 { true } else { false }
     })
 
@@ -97,10 +116,10 @@ extension IRCClient {
   }
 
   private func authenticate() async throws {
-    try await self.sendMsg(.pass(pass: "SCHMOOPIIE"))
-    try await self.sendMsg(.nick(name: "justinfan28264"))
+    try await sendMsg(.pass(pass: "SCHMOOPIIE"))
+    try await sendMsg(.nick(name: "justinfan28264"))
 
-    let success = try await self.receiveMsg().contains(where: {
+    let success = try await receiveMsg().contains(where: {
       if case .connectionNotice = $0 { true } else { false }
     })
 
@@ -115,7 +134,7 @@ extension IRCClient {
 
   private func receiveMsg() async throws -> [IncomingMessage] {
     let result = try await websocket.receive()
-    if case .string(let msgStr) = result {
+    if case let .string(msgStr) = result {
       return IncomingMessage.parse(ircOutput: msgStr).compactMap(\.message)
     } else {
       return []

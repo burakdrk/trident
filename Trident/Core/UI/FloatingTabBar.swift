@@ -23,6 +23,7 @@ struct FloatingTabBar: View {
             .font(.system(size: 20, weight: .semibold))
             .foregroundColor(selectedIndex == index ? .accent : .gray)
             .frame(width: 36.0, height: 36)
+            .accessibilityLabel(icons[index])
             .background(
               Circle()
                 .fill(

@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 
 @MainActor
-private struct HapticFeedbackGenerator {
+private enum HapticFeedbackGenerator {
   static let impactLightFeedbackGenerator = UIImpactFeedbackGenerator(
     style: .light
   )

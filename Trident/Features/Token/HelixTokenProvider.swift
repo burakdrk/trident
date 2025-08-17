@@ -8,21 +8,21 @@
 import Foundation
 
 actor HelixTokenProvider: TokenProvider {
-    private let storage: TokenStore
+  private let storage: SecureStorage
 
-    init(storage: TokenStore) {
-        self.storage = storage
-    }
+  init(storage: SecureStorage) {
+    self.storage = storage
+  }
 
-    func getToken() async throws -> AuthToken {
-        AuthToken(value: "Test", expiresAt: Date.now)
-    }
+  func getToken() async throws -> AuthToken {
+    AuthToken(value: "Test", expiresAt: Date.now)
+  }
 
-    func fetchToken() async throws -> AuthToken {
-        AuthToken(value: "Test", expiresAt: Date.now)
-    }
+  func fetchToken() async throws -> AuthToken {
+    AuthToken(value: "Test", expiresAt: Date.now)
+  }
 
-    func validateToken() async -> Bool {
-        true
-    }
+  func validateToken() async -> Bool {
+    true
+  }
 }

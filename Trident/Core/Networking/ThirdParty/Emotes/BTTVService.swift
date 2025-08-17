@@ -5,6 +5,7 @@
 //  Created by Burak Duruk on 2025-08-05.
 //
 
+import Alamofire
 import Foundation
 
 /// A service that fetches emotes from the BetterTTV (BTTV) API.
@@ -15,10 +16,11 @@ struct BTTVService: ThirdPartyEmoteService {
 
   func channelEmotes(for channelID: String) async throws -> [Emote] {
     let urlString = "\(baseAPIURL)/cached/users/twitch/\(channelID)"
-    let response: BTTVChannelEmoteResponse = try await URLSession.perform(.init(
-      url: urlString,
-      timeoutInterval: requestTimeout
-    ))
+
+    let response = try await AF
+      .request(urlString, requestModifier: { $0.timeoutInterval = requestTimeout })
+      .serializingDecodable(BTTVChannelEmoteResponse.self)
+      .value
 
     // Use a dictionary to merge emotes. This ensures channel emotes overwrite
     // shared emotes if they have the same name, matching the original logic.
@@ -31,22 +33,23 @@ struct BTTVService: ThirdPartyEmoteService {
 
   func globalEmotes() async throws -> [Emote] {
     let urlString = "\(baseAPIURL)/cached/emotes/global"
-    let bttvEmotes: [BTTVEmote] = try await URLSession.perform(.init(
-      url: urlString,
-      timeoutInterval: requestTimeout
-    ))
+    let bttvEmotes = try await AF
+      .request(urlString, requestModifier: { $0.timeoutInterval = requestTimeout })
+      .serializingDecodable([BTTVEmote].self)
+      .value
 
     return bttvEmotes.compactMap { mapToEmote($0, .global) }
   }
 
   // MARK: - Private Helpers
 
-  private func mapToEmote(_ bttvEmote: BTTVEmote, _ type: EmoteType) -> Emote? {
+  private func mapToEmote(_ bttvEmote: BTTVEmote, _ type: Emote.Category) -> Emote? {
     Emote(
       name: bttvEmote.code,
       id: bttvEmote.id,
-      type: type,
+      category: type,
       source: .bttv,
+      overlay: false,
       width: bttvEmote.width ?? 28,
       height: bttvEmote.height ?? 28
     )

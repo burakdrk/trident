@@ -6,19 +6,24 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct ScrollButtonView: View {
+  let newMessageCount: Int
+  let isShown: Bool
   let action: () -> Void
-  let viewModel: ScrollButtonViewModel
 
   var body: some View {
-    Button(action: action) {
+    Button {
+      haptics.generate(.impactLight)
+      action()
+    } label: {
       HStack {
         Image(systemName: "arrow.down.circle.fill")
 
-        if viewModel.newMessageCount != 0 {
+        if newMessageCount != 0 {
           Text(
-            "\(String(viewModel.newMessageCount)) new message\(viewModel.newMessageCount == 1 ? "" : "s")"
+            "\(String(newMessageCount)) new message\(newMessageCount == 1 ? "" : "s")"
           )
         } else {
           Text("Auto-scroll")
@@ -26,16 +31,17 @@ struct ScrollButtonView: View {
       }
       .font(.callout.bold())
       .padding(12)
+      .accessibilityLabel("Scroll to new messages")
       .background(Color.accentColor)
       .foregroundColor(.white)
       .clipShape(Capsule())
     }
-    .allowsHitTesting(viewModel.isShown)
-    .opacity(viewModel.isShown ? 1 : 0)
+    .allowsHitTesting(isShown)
+    .opacity(isShown ? 1 : 0)
     .buttonStyle(.scale())
   }
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-  ScrollButtonView(action: {}, viewModel: ScrollButtonViewModel())
+  ScrollButtonView(newMessageCount: 0, isShown: true) {}
 }

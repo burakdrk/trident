@@ -1,0 +1,36 @@
+//
+//  Event.swift
+//  Trident
+//
+//  Created by Burak Duruk on 2025-08-14.
+//
+
+import Foundation
+
+@propertyWrapper
+struct EventChannel<Event: Sendable> {
+  let stream: AsyncStream<Event>
+  let yield: @Sendable (Event) -> Void
+  let finish: @Sendable () -> Void
+
+  init(_: Event.Type, buffering: AsyncStream<Event>.Continuation.BufferingPolicy = .unbounded) {
+    let (stream, continuation) = AsyncStream<Event>.makeStream(bufferingPolicy: buffering)
+    self.stream = stream
+    yield = { continuation.yield($0) }
+    finish = { continuation.finish() }
+  }
+
+  var wrappedValue: EventChannel<Event> { self }
+}
+
+@MainActor
+protocol EventEmitting {
+  associatedtype Event: Sendable, Equatable
+  var eventChannel: EventChannel<Event> { get }
+}
+
+extension EventEmitting {
+  var events: AsyncStream<Event> { eventChannel.stream }
+  func emit(_ event: Event) { eventChannel.yield(event) }
+  func finishEvents() { eventChannel.finish() }
+}
