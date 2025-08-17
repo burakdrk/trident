@@ -17,7 +17,7 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
 
   enum Inline: Hashable, Sendable {
     case text(String)
-    case emote(Emote)
+    case emote([Emote]) // Array for overlay emotes
   }
 
   let id: String
@@ -35,7 +35,7 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
     rawText = pm.message
     inlines = ChatMessage.tokenize(
       body: pm.message,
-      twitchEmotes: pm.parseEmotes(),
+      twitchEmotes: pm.parseEmotesToDict(),
       thirdPartyEmotes: thirdPartyEmotes
     )
   }
@@ -48,53 +48,35 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
 extension ChatMessage {
   private static func tokenize(
     body: String,
-    twitchEmotes: [TwitchIRC.Emote],
+    twitchEmotes: [String: Emote],
     thirdPartyEmotes: [String: Emote]
   ) -> [Inline] {
-    var uniqueTwitchEmotes: [String: Emote] = [:]
+    let chunks = body.split(whereSeparator: { $0.isWhitespace })
+    var inlines: [Inline] = []
 
-    for item in twitchEmotes.unique(by: \.id) {
-      uniqueTwitchEmotes[item.name] = Emote(
-        name: item.name,
-        id: item.id,
-        category: .unknown,
-        source: .twitch,
-        overlay: false
-      )
-    }
+    for chunk in chunks {
+      let part = String(chunk)
+      let emote = twitchEmotes[part] ?? thirdPartyEmotes[part]
 
-    var inlines = body
-      .split(whereSeparator: { $0.isWhitespace })
-      .map(String.init)
-      .map { part in
-        let emote = uniqueTwitchEmotes[part] ?? thirdPartyEmotes[part]
-
-        if let emote = emote {
-          return Inline.emote(emote)
+      if let emote = emote {
+        if emote.overlay, !inlines.isEmpty, case let .emote(lastEmotes) = inlines.last {
+          inlines[inlines.count - 1] = .emote(lastEmotes + [emote])
+        } else {
+          inlines.append(.emote([emote]))
         }
-
-        return Inline.text(part)
-      }
-      .flatMap { [$0, Inline.text(" ")] }
-
-    // Remove trailing space added by flatMap
-    inlines.removeLast()
-
-    return regroupText(inlines)
-  }
-
-  private static func regroupText(_ inlines: [Inline]) -> [Inline] {
-    var result: [Inline] = []
-
-    for item in inlines {
-      if case let .text(text) = item, let last = result.last, case let .text(lastText) = last {
-        result[result.count - 1] = .text(lastText + text)
       } else {
-        result.append(item)
+        if !inlines.isEmpty, case let .text(lastText) = inlines.last {
+          inlines[inlines.count - 1] = .text(lastText + part)
+        } else {
+          inlines.append(.text(part))
+        }
       }
     }
 
-    return result
+    inlines = inlines.flatMap { [$0, Inline.text(" ")] }
+    inlines.removeLast() // Remove the last space
+
+    return inlines
   }
 }
 

@@ -86,27 +86,10 @@ extension MessageCell {
     out.append(NSAttributedString(string: ": ", attributes: attrs))
 
     // Message body
-    var excludeIndices: Set<Int> = []
-
-    for (index, chunk) in message.inlines.enumerated() {
-      if excludeIndices.contains(index) {
-        continue // Skip already processed chunks
-      }
-
-      switch chunk {
+    for inline in message.inlines {
+      switch inline {
       case let .emote(emote):
-        // Overlay extraction
-        var overlays: [Emote] = []
-        for i in (index + 1) ..< message.inlines.count {
-          if case let .emote(nextEmote) = message.inlines[i], nextEmote.overlay {
-            overlays.append(nextEmote)
-            excludeIndices.insert(i)
-          } else {
-            break
-          }
-        }
-
-        let att = EmoteAttachment(emote, overlays: overlays)
+        let att = EmoteAttachment(emote)
         out.append(NSAttributedString(attachment: att))
       case let .text(text):
         out.append(NSAttributedString(string: text, attributes: attrs))

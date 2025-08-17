@@ -24,7 +24,7 @@ struct ChatView: View {
 
       ScrollButtonView(
         newMessageCount: store.state.newMessageCount,
-        isShown: store.state.isPaused
+        isVisible: store.state.isPaused
       ) {
         store.dispatch(.togglePause(false))
       }

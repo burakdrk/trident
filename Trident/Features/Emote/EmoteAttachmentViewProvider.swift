@@ -11,14 +11,13 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
   override func loadView() {
     guard let textAttachment = textAttachment as? EmoteAttachment else { return }
     let emote = textAttachment.emote
-    let overlays = textAttachment.overlays
 
     view = MainActor.assumeIsolated {
       // MARK: - Single Emote Renderer
 
-      if overlays.isEmpty {
+      if emote.count == 1 {
         let attachmentView = EmoteAttachmentView()
-        attachmentView.emote = emote
+        attachmentView.emote = emote[0]
         return attachmentView
       }
 
@@ -33,15 +32,16 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
 
       // Overlays
       var overlayViews: [EmoteAttachmentView] = []
-      for _ in overlays {
+      for _ in emote {
         let v = EmoteAttachmentView()
         container.addAndFillSubview(v)
         overlayViews.append(v)
       }
 
       // Load images
-      baseView.emote = emote
-      for (i, e) in overlays.enumerated() {
+      baseView.emote = emote[0]
+      for (i, e) in emote.enumerated() {
+        if i == 0 { continue }
         overlayViews[i].emote = e
       }
 
@@ -57,7 +57,7 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
     position _: CGPoint
   ) -> CGRect {
     guard let textAttachment = textAttachment as? EmoteAttachment else { return .zero }
-    let emoteSize = textAttachment.emote.size(multiplier: textAttachment.multiplier)
+    let emoteSize = textAttachment.emote[0].size(multiplier: textAttachment.multiplier)
 
     // center the emote vertically within the line fragment
     return CGRect(

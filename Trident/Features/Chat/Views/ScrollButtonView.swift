@@ -10,13 +10,27 @@ import UIKit
 
 struct ScrollButtonView: View {
   let newMessageCount: Int
-  let isShown: Bool
+  let isVisible: Bool
   let action: () -> Void
+
+  @State private var isAnimating = false
+  @State private var frozenMessageCount: Int?
+
+  private var displayedMessageCount: Int {
+    isAnimating ? (frozenMessageCount ?? newMessageCount) : newMessageCount
+  }
 
   var body: some View {
     Button {
       haptics.generate(.impactLight)
-      action()
+      frozenMessageCount = newMessageCount
+      isAnimating = true
+      withAnimation(.easeInOut(duration: 0.2)) {
+        action()
+      } completion: {
+        isAnimating = false
+        frozenMessageCount = nil
+      }
     } label: {
       HStack {
         Image(systemName: "arrow.down.circle.fill")
@@ -36,12 +50,32 @@ struct ScrollButtonView: View {
       .foregroundColor(.white)
       .clipShape(Capsule())
     }
-    .allowsHitTesting(isShown)
-    .opacity(isShown ? 1 : 0)
+    .allowsHitTesting(isVisible)
+    .opacity(isVisible ? 1 : 0)
     .buttonStyle(.scale())
   }
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-  ScrollButtonView(newMessageCount: 0, isShown: true) {}
+  @Previewable @State var isVisible = true
+  @Previewable @State var newMessageCount = 0
+
+  ScrollButtonView(newMessageCount: newMessageCount, isVisible: isVisible) {
+    isVisible = false
+  }
+
+  Button {
+    isVisible = true
+    newMessageCount = 0
+  } label: {
+    Text("Show Scroll Button")
+  }
+  .opacity(isVisible ? 0 : 1)
+  .task {
+    while true {
+      try? await Task.sleep(for: .seconds(0.5))
+      guard isVisible else { continue }
+      newMessageCount += Int.random(in: 0 ... 10)
+    }
+  }
 }

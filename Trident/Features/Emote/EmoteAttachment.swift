@@ -10,13 +10,11 @@ import UIKit
 import UniformTypeIdentifiers
 
 final class EmoteAttachment: NSTextAttachment {
-  let emote: Emote
-  let overlays: [Emote]
+  let emote: [Emote]
   let multiplier: CGFloat
 
-  init(_ emote: Emote, overlays: [Emote], multiplier: CGFloat = 1.0) {
+  init(_ emote: [Emote], multiplier: CGFloat = 1.0) {
     self.emote = emote
-    self.overlays = overlays
     self.multiplier = multiplier
 
     super.init(data: nil, ofType: UTType.image.identifier)

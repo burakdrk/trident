@@ -20,19 +20,13 @@ final class EmoteAttachmentView: UIImageView {
       guard let emote else { return }
       SDWebImageManager.shared.loadImage(
         with: emote.url,
-        // options: [.],
         context: [.animatedImageClass: SDAnimatedImage.self],
         progress: nil,
         completed: { [weak self] image, _, _, _, _, _ in
           guard let self, emote == self.emote else {
             return // Emote has changed
           }
-          if let image = image as? SDAnimatedImage {
-            if !image.sd_isAnimated {
-              self.image = image
-              return
-            }
-
+          if let image = image as? SDAnimatedImage, image.sd_isAnimated {
             EmotePlayer.setAnimatedImage(image, for: emote)
           } else {
             self.image = image
