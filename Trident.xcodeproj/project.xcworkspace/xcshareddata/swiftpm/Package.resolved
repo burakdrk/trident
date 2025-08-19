@@ -1,5 +1,5 @@
 {
-  "originHash" : "b405a111ed527a1c2e866b67ddf088615c8db52a55b1e7cadc5ee503e1f6e986",
+  "originHash" : "f454bc12d92d75f8f6036b28db9d3f6e453cc0d87d39f546e5c4ce4b4913870a",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -139,10 +139,10 @@
     {
       "identity" : "twitchirc",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MahdiBM/TwitchIRC",
+      "location" : "https://github.com/burakdrk/TwitchIRC",
       "state" : {
-        "revision" : "036f70385fe4f6d30ad2634699eb1e8e00b52087",
-        "version" : "1.6.0"
+        "branch" : "main",
+        "revision" : "4596899d8c88b3516e2526ec4f24983b6f9ee5f9"
       }
     },
     {

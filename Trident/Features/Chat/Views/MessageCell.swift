@@ -56,10 +56,11 @@ final class MessageCell: UITableViewCell {
 extension MessageCell {
   func makeMessage(message: ChatMessage, font: UIFont) {
     let out = NSMutableAttributedString()
+    let alpha = message.historical ? 0.5 : 1.0
 
     let attrs: [NSAttributedString.Key: Any] = [
       .font: font,
-      .foregroundColor: UIColor.label
+      .foregroundColor: UIColor.label.withAlphaComponent(alpha)
     ]
 
     // Timestamp
@@ -68,7 +69,7 @@ extension MessageCell {
       string: message.timestamp.formattedTime + " ",
       attributes: [
         .font: smallFont,
-        .foregroundColor: UIColor.secondaryLabel,
+        .foregroundColor: UIColor.secondaryLabel.withAlphaComponent(alpha),
         .baselineOffset: (font.pointSize - smallFont.pointSize) / 2 - 1
       ]
     ))
@@ -79,7 +80,8 @@ extension MessageCell {
         string: message.author.displayName,
         attributes: [
           .font: UIFont.boldSystemFont(ofSize: font.pointSize),
-          .foregroundColor: UIColor(hex: message.author.colorHex) ?? .gray
+          .foregroundColor: (UIColor(hex: message.author.colorHex) ?? .gray)
+            .withAlphaComponent(alpha)
         ]
       )
     )
@@ -89,7 +91,7 @@ extension MessageCell {
     for inline in message.inlines {
       switch inline {
       case let .emote(emote):
-        let att = EmoteAttachment(emote)
+        let att = EmoteAttachment(emote, historical: message.historical)
         out.append(NSAttributedString(attachment: att))
       case let .text(text):
         out.append(NSAttributedString(string: text, attributes: attrs))

@@ -722,10 +722,10 @@
 		};
 		EC6D60532E407FBD007DA5D9 /* XCRemoteSwiftPackageReference "TwitchIRC" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MahdiBM/TwitchIRC";
+			repositoryURL = "https://github.com/burakdrk/TwitchIRC";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.6.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 		EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */ = {

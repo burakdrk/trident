@@ -30,6 +30,7 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
 
   func updateUIViewController(_ vc: UIChatViewController, context: Context) {
     if vc.lastUpdateID == lastUpdateID {
+      context.coordinator.parent = self
       context.coordinator.scrollToBottom(animated: true)
       return
     }
@@ -49,7 +50,6 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
   final class Coordinator: NSObject, UITableViewDelegate {
     var parent: ChatViewController
 
-    var inScrollAnimation = false
     var lastY: CGFloat = .zero
     weak var tableView: UITableView?
 
@@ -61,15 +61,15 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
       lastY = scrollView.contentOffset.y
 
       if !parent.isPaused {
-        setIsPaused(true)
+        parent.togglePause(true)
       }
     }
 
-    func scrollViewDidEndScrollingAnimation(_: UIScrollView) {
-      inScrollAnimation = false
-    }
-
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+      if case .changed = scrollView.panGestureRecognizer.state {
+        return
+      }
+
       let threshold: CGFloat = 20
 
       let bottomY = -scrollView.adjustedContentInset.top
@@ -81,12 +81,12 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
       let nearBottom = y <= bottomY + threshold
 
       if isUserScroll, nearBottom, dy < 0 {
-        setIsPaused(false)
+        parent.togglePause(false)
       }
     }
 
     func scrollToBottom(animated: Bool = false) {
-      guard let tableView = tableView, !inScrollAnimation, !parent.isPaused else {
+      guard let tableView = tableView, !parent.isPaused else {
         return
       }
 
@@ -94,10 +94,6 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
         let indexPath = IndexPath(row: 0, section: 0)
         tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
       }
-    }
-
-    private func setIsPaused(_ val: Bool) {
-      parent.togglePause(val)
     }
   }
 }

@@ -22,7 +22,7 @@ struct ChatView: View {
       }
       .equatable()
 
-      ScrollButtonView(
+      ScrollButton(
         newMessageCount: store.state.newMessageCount,
         isVisible: store.state.isPaused
       ) {

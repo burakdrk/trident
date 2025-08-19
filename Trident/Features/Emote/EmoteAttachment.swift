@@ -12,9 +12,11 @@ import UniformTypeIdentifiers
 final class EmoteAttachment: NSTextAttachment {
   let emote: [Emote]
   let multiplier: CGFloat
+  let historical: Bool
 
-  init(_ emote: [Emote], multiplier: CGFloat = 1.0) {
+  init(_ emote: [Emote], historical: Bool = false, multiplier: CGFloat = 1.0) {
     self.emote = emote
+    self.historical = historical
     self.multiplier = multiplier
 
     super.init(data: nil, ofType: UTType.image.identifier)

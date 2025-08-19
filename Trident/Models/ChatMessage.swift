@@ -25,14 +25,16 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
   let timestamp: Date
   let inlines: [Inline]
   let rawText: String
+  let historical: Bool
 
-  init(pm: PrivateMessage, thirdPartyEmotes: [String: Emote]) {
+  init(pm: PrivateMessage, thirdPartyEmotes: [String: Emote], historical: Bool = false) {
     let normalized = (pm.color.isEmpty || pm.color == "#000000") ? "#808080" : pm.color
 
     id = pm.id
     author = .init(displayName: pm.displayName, colorHex: normalized, badges: pm.badges)
     timestamp = Date(timestamp: Int(pm.tmiSentTs))
     rawText = pm.message
+    self.historical = historical
     inlines = ChatMessage.tokenize(
       body: pm.message,
       twitchEmotes: pm.parseEmotesToDict(),
@@ -66,7 +68,7 @@ extension ChatMessage {
         }
       } else {
         if !inlines.isEmpty, case let .text(lastText) = inlines.last {
-          inlines[inlines.count - 1] = .text(lastText + part)
+          inlines[inlines.count - 1] = .text(lastText + " " + part)
         } else {
           inlines.append(.text(part))
         }

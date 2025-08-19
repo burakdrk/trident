@@ -33,6 +33,10 @@ actor MessageBuffer {
     }
   }
 
+  func addRecents(_ msgs: [ChatMessage]) {
+    buffer.append(contentsOf: msgs)
+  }
+
   func flush() -> [ChatMessage] {
     let batch = buffer.drain()
     let pauseBatch = pauseBuffer.drain()

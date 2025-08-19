@@ -1,5 +1,5 @@
 //
-//  ScrollButtonView.swift
+//  ScrollButton.swift
 //  Trident
 //
 //  Created by Burak Duruk on 2025-08-04.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-struct ScrollButtonView: View {
+struct ScrollButton: View {
   let newMessageCount: Int
   let isVisible: Bool
   let action: () -> Void
@@ -60,7 +60,7 @@ struct ScrollButtonView: View {
   @Previewable @State var isVisible = true
   @Previewable @State var newMessageCount = 0
 
-  ScrollButtonView(newMessageCount: newMessageCount, isVisible: isVisible) {
+  ScrollButton(newMessageCount: newMessageCount, isVisible: isVisible) {
     isVisible = false
   }
 

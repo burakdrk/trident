@@ -11,6 +11,7 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
   override func loadView() {
     guard let textAttachment = textAttachment as? EmoteAttachment else { return }
     let emote = textAttachment.emote
+    let historical = textAttachment.historical
 
     view = MainActor.assumeIsolated {
       // MARK: - Single Emote Renderer
@@ -18,6 +19,7 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
       if emote.count == 1 {
         let attachmentView = EmoteAttachmentView()
         attachmentView.emote = emote[0]
+        if historical { attachmentView.alpha = 0.5 }
         return attachmentView
       }
 
@@ -45,6 +47,7 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
         overlayViews[i].emote = e
       }
 
+      if historical { container.alpha = 0.5 }
       return container
     }
   }
