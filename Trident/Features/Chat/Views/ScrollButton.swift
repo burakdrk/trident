@@ -43,16 +43,11 @@ struct ScrollButton: View {
           Text("Auto-scroll")
         }
       }
-      .font(.callout.bold())
-      .padding(12)
       .accessibilityLabel("Scroll to new messages")
-      .background(Color.accentColor)
-      .foregroundColor(.white)
-      .clipShape(Capsule())
     }
     .allowsHitTesting(isVisible)
     .opacity(isVisible ? 1 : 0)
-    .buttonStyle(.scale())
+    .buttonStyle(.primary(color: nil, shape: .capsule))
   }
 }
 

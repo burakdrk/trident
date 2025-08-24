@@ -12,7 +12,7 @@ import Observation
 @Observable
 final class ChatStore: DataStore {
   struct State: Equatable {
-    var channel = "forsen"
+    var channel: String
     var channelID = "22484632"
     var maxMessages = 1000
     var batchSpeed = 150 // milliseconds
@@ -39,7 +39,7 @@ final class ChatStore: DataStore {
   private(set) var state: State
 
   @ObservationIgnored
-  @Dependency(\.emoteClient) private var emoteClient
+  @Dependency(\.assetClient) private var assetClient
   @ObservationIgnored
   @Dependency(\.liveChatClient) private var chatClient
   @ObservationIgnored
@@ -47,21 +47,23 @@ final class ChatStore: DataStore {
 
   // Workers
   private let buffer: MessageBuffer
+  @ObservationIgnored
   private var consumeTask: Task<Void, Never>?
+  @ObservationIgnored
   private var renderTask: Task<Void, Never>?
 
   private var recentsService = RecentMessagesService()
 
-  init() {
-    let state = State()
+  init(channel: String) {
+    let state = State(channel: channel)
     buffer = MessageBuffer(pauseMax: state.maxMessages)
     self.state = state
   }
 
   deinit {
-    Task { @MainActor [weak self] in
-      self?.cancelWorkers()
-    }
+    print("Baj baj ")
+    consumeTask?.cancel()
+    renderTask?.cancel()
   }
 
   func dispatch(_ action: Action) {
@@ -111,7 +113,7 @@ private extension ChatStore {
 
       do {
         let stream = try await self.chatClient.connect(joinTo: self.state.channel)
-        let tpEmotes = await self.emoteClient.emotes(channelID: self.state.channelID)
+        let tpEmotes = await self.assetClient.emotes(channelID: self.state.channelID)
         let (recents, recentIds) = await self.recentsService.fetch(
           for: self.state.channel,
           tpEmotes: tpEmotes

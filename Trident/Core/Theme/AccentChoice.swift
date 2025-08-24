@@ -22,7 +22,7 @@ enum AccentChoice: String, CaseIterable, Identifiable, Codable, Sendable {
     case .cyan: return .systemCyan
     case .blue: return .systemBlue
     case .indigo: return .systemIndigo
-    case .purple: return .systemPurple
+    case .purple: return UIColor(.twitchPurple)
     case .pink: return .systemPink
     case .brown: return .systemBrown
     case .gray: return .systemGray
@@ -33,5 +33,5 @@ enum AccentChoice: String, CaseIterable, Identifiable, Codable, Sendable {
 }
 
 extension EnvironmentValues {
-  @Entry var accent: AccentChoice = .red
+  @Entry var accent: AccentChoice = .purple
 }

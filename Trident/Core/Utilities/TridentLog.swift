@@ -1,5 +1,5 @@
 //
-//  Logger.swift
+//  TridentLog.swift
 //  Trident
 //
 //  Created by Burak Duruk on 2025-08-17.
@@ -7,7 +7,7 @@
 
 import OSLog
 
-extension Logger {
+enum TridentLog {
   // swiftlint:disable:next force_unwrapping
   private static let subsystem = Bundle.main.bundleIdentifier!
 

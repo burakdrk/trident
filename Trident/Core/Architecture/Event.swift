@@ -7,8 +7,7 @@
 
 import Foundation
 
-@propertyWrapper
-struct EventChannel<Event: Sendable> {
+struct EventChannel<Event: Sendable>: Sendable {
   let stream: AsyncStream<Event>
   let yield: @Sendable (Event) -> Void
   let finish: @Sendable () -> Void
@@ -19,11 +18,8 @@ struct EventChannel<Event: Sendable> {
     yield = { continuation.yield($0) }
     finish = { continuation.finish() }
   }
-
-  var wrappedValue: EventChannel<Event> { self }
 }
 
-@MainActor
 protocol EventEmitting {
   associatedtype Event: Sendable, Equatable
   var eventChannel: EventChannel<Event> { get }

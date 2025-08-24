@@ -8,7 +8,7 @@
 import SwiftUI
 
 private struct ApplyThemeModifier: ViewModifier {
-  @Environment(ThemeManager.self) private var themeManager
+  @Environment(\.themeManager) private var themeManager
   @Environment(\.colorScheme) private var systemScheme
 
   func body(content: Content) -> some View {

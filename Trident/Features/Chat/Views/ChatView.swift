@@ -9,7 +9,11 @@ import SDWebImage
 import SwiftUI
 
 struct ChatView: View {
-  @State private var store = ChatStore()
+  @State private var store: ChatStore
+
+  init(channel: String) {
+    _store = State(initialValue: ChatStore(channel: channel))
+  }
 
   var body: some View {
     ZStack(alignment: .bottom) {
@@ -33,12 +37,16 @@ struct ChatView: View {
     .task {
       store.dispatch(.start)
     }
+    .onDisappear {
+      store.dispatch(.stop)
+    }
+    .hideFloatingTabBar()
   }
 }
 
 #Preview {
   let _: Void = SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
 
-  return ChatView()
+  return ChatView(channel: "forsen")
     .edgesIgnoringSafeArea(.all)
 }

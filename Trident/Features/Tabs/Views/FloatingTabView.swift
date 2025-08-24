@@ -9,15 +9,16 @@ import Foundation
 import SwiftUI
 
 struct FloatingTabView<Content: View>: View {
-  @Environment(AppRouter.self) private var router
-  var content: (Tabs, CGFloat) -> Content
+  @Environment(\.router) private var router
+  var content: (Tabs, CGFloat, String) -> Content
 
-  init(@ViewBuilder content: @escaping (Tabs, CGFloat) -> Content) {
+  init(@ViewBuilder content: @escaping (Tabs, CGFloat, String) -> Content) {
     self.content = content
   }
 
   @State private var tabBarSize: CGSize = .zero
   @State private var hideTabBar: Bool = false
+  @State private var searchText = ""
 
   var body: some View {
     @Bindable var router = router
@@ -26,17 +27,13 @@ struct FloatingTabView<Content: View>: View {
       TabView(selection: $router.selectedTab) {
         ForEach(Tabs.allCases, id: \.hashValue) { tab in
           Tab(value: tab) {
-            content(tab, tabBarSize.height)
+            content(tab, tabBarSize.height, searchText)
               .toolbarVisibility(.hidden, for: .tabBar)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
-              .themedBackground()
           }
         }
       }
 
-      FloatingTabBar(activeTab: $router.selectedTab)
-        .padding(.horizontal, 50)
-        .padding(.bottom, 5)
+      FloatingTabBar(activeTab: $router.selectedTab, searchText: $searchText)
         .onGeometryChange(for: CGSize.self) {
           $0.size
         } action: { newValue in
@@ -46,4 +43,11 @@ struct FloatingTabView<Content: View>: View {
         .animation(.smooth(duration: 0.35, extraBounce: 0), value: router.hideTabBar)
     }
   }
+}
+
+#Preview {
+  FloatingTabView { tab, _, _ in
+    Text(tab.name)
+  }
+  .applyTheme()
 }

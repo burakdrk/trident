@@ -6,23 +6,32 @@
 //
 
 import SDWebImage
+import SDWebImageSVGNativeCoder
 import SwiftUI
 
 @main
 struct TridentApp: App {
-  @State private var appRouter = AppRouter()
-  @State private var themeManager = ThemeManager()
+  @State private var appRouter = AppRouter.live
+  @State private var themeManager = ThemeManager.live
+  @State private var auth = AuthStore.live
 
   init() {
     SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
+    SDImageCodersManager.shared.addCoder(SDImageSVGNativeCoder.shared)
+
+    auth.dispatch(.loadSession)
   }
 
   var body: some Scene {
     WindowGroup {
       RootView()
         .applyTheme()
-        .environment(appRouter)
-        .environment(themeManager)
+        .environment(\.router, appRouter)
+        .environment(\.themeManager, themeManager)
+        .environment(\.auth, auth)
+        .task {
+          auth.dispatch(.startHourlyValidation)
+        }
     }
   }
 }

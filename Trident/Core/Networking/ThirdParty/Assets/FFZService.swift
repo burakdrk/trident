@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 
 /// A service that fetches emotes from the FrankerFaceZ (FFZ) API.
-struct FFZService: ThirdPartyEmoteService {
+struct FFZService: ThirdPartyAssetService {
   private let baseAPIURL = "https://api.frankerfacez.com/v1"
   private let requestTimeout: TimeInterval = 5.0
 

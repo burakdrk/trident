@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 
 /// A service that fetches emotes from the SevenTV (7TV) API.
-struct SevenTVService: ThirdPartyEmoteService {
+struct SevenTVService: ThirdPartyAssetService {
   private let baseAPIURL = "https://7tv.io/v3"
   private let requestTimeout: TimeInterval = 5.0
 

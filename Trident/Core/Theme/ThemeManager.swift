@@ -10,24 +10,16 @@ import SwiftUI
 @MainActor
 @Observable
 final class ThemeManager {
-  var theme: ThemeChoice
-  var accent: AccentChoice
+  var theme: ThemeChoice = .system
+  var accent: AccentChoice = .purple
 
   @ObservationIgnored private let defaults = UserDefaults.standard
   @ObservationIgnored private let themeKey = "theme.choice.v1"
   @ObservationIgnored private let accentKey = "theme.accentChoice.v1"
 
-  init(initialTheme: ThemeChoice = .system, initialAccent: AccentChoice = .red) {
-    if let raw = defaults.string(forKey: themeKey), let t = ThemeChoice(rawValue: raw) {
-      theme = t
-    } else {
-      theme = initialTheme
-    }
-
-    if let raw = defaults.string(forKey: accentKey), let a = AccentChoice(rawValue: raw) {
-      accent = a
-    } else {
-      accent = initialAccent
+  private nonisolated init() {
+    Task { @MainActor in
+      loadDefaults()
     }
   }
 
@@ -40,4 +32,24 @@ final class ThemeManager {
     accent = new
     defaults.set(new.rawValue, forKey: accentKey)
   }
+
+  private func loadDefaults() {
+    if let raw = defaults.string(forKey: themeKey), let t = ThemeChoice(rawValue: raw) {
+      theme = t
+    }
+
+    if let raw = defaults.string(forKey: accentKey), let a = AccentChoice(rawValue: raw) {
+      accent = a
+    }
+  }
+}
+
+// MARK: - Environment
+
+extension ThemeManager {
+  nonisolated static let live = ThemeManager()
+}
+
+extension EnvironmentValues {
+  @Entry var themeManager = ThemeManager.live
 }

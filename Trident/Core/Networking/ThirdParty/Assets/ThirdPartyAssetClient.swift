@@ -1,5 +1,5 @@
 //
-//  ThirdPartyEmoteClient.swift
+//  ThirdPartyAssetClient.swift
 //  Trident
 //
 //  Created by Burak Duruk on 2025-08-04.
@@ -8,13 +8,13 @@
 import Collections
 import Foundation
 
-actor ThirdPartyEmoteClient {
-  private let services: [any ThirdPartyEmoteService]
+actor ThirdPartyAssetClient {
+  private let services: [any ThirdPartyAssetService]
   private var emotes: [String: Emote]?
   private var forChannelID: String?
 
-  /// Creates an instance of the emote aggregator. Servoce order matters.
-  init(services: [any ThirdPartyEmoteService]) {
+  /// Creates an instance of the emote aggregator. Service order matters.
+  init(services: [any ThirdPartyAssetService]) {
     self.services = services
   }
 
@@ -45,7 +45,7 @@ actor ThirdPartyEmoteClient {
   }
 
   private func fetchOrderedEmotes(
-    from fetcher: @Sendable @escaping (any ThirdPartyEmoteService) async throws -> [Emote]
+    from fetcher: @Sendable @escaping (any ThirdPartyAssetService) async throws -> [Emote]
   ) async -> [Emote] {
     await withTaskGroup(of: (Int, [Emote]).self, returning: [Emote].self) { group in
       for (index, service) in self.services.enumerated() {
@@ -54,11 +54,8 @@ actor ThirdPartyEmoteClient {
             let emotes = try await fetcher(service)
             return (index, emotes)
           } catch {
-            #if DEBUG
-              print(
-                "Warning: Service \(index) failed to fetch emotes: \(error.localizedDescription)"
-              )
-            #endif
+            TridentLog.main
+              .warning("Service \(index) failed to fetch emotes: \(error.localizedDescription)")
             return (index, [])
           }
         }

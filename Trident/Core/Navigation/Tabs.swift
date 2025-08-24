@@ -9,16 +9,16 @@ import Foundation
 
 enum Tabs: CaseIterable, Hashable {
   case following
-  case top
-  case search
+  case explore
   case user
+  case search
 
   var name: String {
     switch self {
     case .following:
       return "Following"
-    case .top:
-      return "Top"
+    case .explore:
+      return "Explore"
     case .search:
       return "Search"
     case .user:
@@ -30,7 +30,7 @@ enum Tabs: CaseIterable, Hashable {
     switch self {
     case .following:
       return "heart"
-    case .top:
+    case .explore:
       return "safari"
     case .search:
       return "magnifyingglass"
@@ -45,5 +45,9 @@ enum Tabs: CaseIterable, Hashable {
     }
 
     return "\(imageName).fill"
+  }
+
+  var index: Int {
+    Self.allCases.firstIndex(of: self) ?? 0
   }
 }

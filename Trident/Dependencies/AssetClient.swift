@@ -1,5 +1,5 @@
 //
-//  EmoteClient.swift
+//  AssetClient.swift
 //  Trident
 //
 //  Created by Burak Duruk on 2025-08-14.
@@ -9,13 +9,13 @@ import Dependencies
 import DependenciesMacros
 
 @DependencyClient
-struct EmoteClient {
+struct AssetClient {
   var emotes: @Sendable (_ channelID: String) async -> [String: Emote] = { _ in [:] }
 }
 
-extension EmoteClient: DependencyKey {
+extension AssetClient: DependencyKey {
   static var liveValue: Self {
-    let client = ThirdPartyEmoteClient(services: [
+    let client = ThirdPartyAssetClient(services: [
       FFZService(),
       BTTVService(),
       SevenTVService()
@@ -30,8 +30,8 @@ extension EmoteClient: DependencyKey {
 }
 
 extension DependencyValues {
-  var emoteClient: EmoteClient {
-    get { self[EmoteClient.self] }
-    set { self[EmoteClient.self] = newValue }
+  var assetClient: AssetClient {
+    get { self[AssetClient.self] }
+    set { self[AssetClient.self] = newValue }
   }
 }

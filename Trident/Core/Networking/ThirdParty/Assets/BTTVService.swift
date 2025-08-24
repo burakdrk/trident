@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 
 /// A service that fetches emotes from the BetterTTV (BTTV) API.
-struct BTTVService: ThirdPartyEmoteService {
+struct BTTVService: ThirdPartyAssetService {
   private let baseAPIURL = "https://api.betterttv.net/3"
   private let baseCDNURL = "https://cdn.betterttv.net/emote"
   private let requestTimeout: TimeInterval = 5.0
