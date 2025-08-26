@@ -17,16 +17,15 @@ struct SearchTab: View {
     @Bindable var router = router
 
     NavigationStack(path: $router.searchPath) {
-      VStack {
+      VStack {  
         SearchRootView(text: store.state.query)
           .navigationTitle("Search")
           .navigationDestination(for: SearchRoute.self) { route in
             switch route {
-            case let .channels(query):
-              ChatView(channel: query)
-                .navigationTitle(query)
-            case let .users(query):
-              Text(query)
+            case let .channel(name):
+              ChatView(channel: name)
+                .navigationTitle(name)
+                .toolbarTitleDisplayMode(.inline)
             }
           }
       }

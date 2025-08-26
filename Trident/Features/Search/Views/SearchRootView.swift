@@ -15,14 +15,14 @@ struct SearchRootView: View {
 
   var body: some View {
     Button {
-      router.push(.channel(name: text))
+      router.push(to: .search, SearchRoute.channel(name: text))
     } label: {
       Text("Go to \(text)")
     }
     .if(auth.state.phase == .loggedOut) { view in
       view.onReceive(NotificationCenter.default.publisher(for: .searchSubmitted)) { notification in
         if let userInfo = notification.userInfo, let text = userInfo["text"] as? String {
-          router.push(.channel(name: text))
+          router.push(to: .search, SearchRoute.channel(name: text))
         }
       }
     }

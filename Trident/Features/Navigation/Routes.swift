@@ -7,21 +7,23 @@
 
 import Foundation
 
-enum ExploreRoute: Hashable, Codable {
+protocol Route: Hashable, Codable {}
+
+enum ExploreRoute: Route {
   case channel(name: String)
 }
 
-enum UserRoute: Hashable, Codable {
+enum UserRoute: Route {
   case account
   case settings
   case logs
   case licenses
 }
 
-enum SearchRoute: Hashable, Codable {
+enum SearchRoute: Route {
   case channel(name: String)
 }
 
-enum FollowingRoute: Hashable, Codable {
+enum FollowingRoute: Route {
   case channel(name: String)
 }

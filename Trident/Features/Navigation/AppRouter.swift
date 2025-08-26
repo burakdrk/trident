@@ -20,10 +20,21 @@ final class AppRouter {
 
   private nonisolated init() {}
 
-  func push(_ r: ExploreRoute) { explorePath.append(r) }
-  func push(_ r: UserRoute) { userPath.append(r) }
-  func push(_ r: SearchRoute) { searchPath.append(r) }
-  func push(_ r: FollowingRoute) { followingPath.append(r) }
+  func push(to tab: Tabs, _ route: any Route) {
+    selectedTab = tab
+    switch (tab, route) {
+    case let (.explore, r as ExploreRoute): push(r)
+    case let (.user, r as UserRoute): push(r)
+    case let (.search, r as SearchRoute): push(r)
+    case let (.following, r as FollowingRoute): push(r)
+    default: assertionFailure("Invalid route for tab \(tab)")
+    }
+  }
+
+  private func push(_ r: ExploreRoute) { explorePath.append(r) }
+  private func push(_ r: UserRoute) { userPath.append(r) }
+  private func push(_ r: SearchRoute) { searchPath.append(r) }
+  private func push(_ r: FollowingRoute) { followingPath.append(r) }
 
   func pop(tab: Tabs) {
     switch tab {
