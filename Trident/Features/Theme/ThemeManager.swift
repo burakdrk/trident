@@ -47,9 +47,9 @@ final class ThemeManager {
 // MARK: - Environment
 
 extension ThemeManager {
-  nonisolated static let live = ThemeManager()
+  nonisolated static let shared = ThemeManager()
 }
 
 extension EnvironmentValues {
-  @Entry var themeManager = ThemeManager.live
+  @Entry var themeManager = ThemeManager.shared
 }

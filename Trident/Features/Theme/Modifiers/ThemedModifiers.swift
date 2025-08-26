@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ThemedBackground: ViewModifier {
+private struct ThemedBackground: ViewModifier {
   @Environment(\.theme) private var theme
   var ignoresSafeArea: Bool = true
 
@@ -16,7 +16,7 @@ struct ThemedBackground: ViewModifier {
   }
 }
 
-struct ThemedCard: ViewModifier {
+private struct ThemedCard: ViewModifier {
   @Environment(\.theme) private var theme
 
   func body(content: Content) -> some View {
@@ -25,19 +25,19 @@ struct ThemedCard: ViewModifier {
   }
 }
 
-struct ThemedPrimaryText: ViewModifier {
+private struct ThemedPrimaryText: ViewModifier {
   @Environment(\.theme) private var theme
 
   func body(content: Content) -> some View { content.foregroundStyle(theme.fg) }
 }
 
-struct ThemedSecondaryText: ViewModifier {
+private struct ThemedSecondaryText: ViewModifier {
   @Environment(\.theme) private var theme
 
   func body(content: Content) -> some View { content.foregroundStyle(theme.fgSecondary) }
 }
 
-struct AccentForeground: ViewModifier {
+private struct AccentForeground: ViewModifier {
   @Environment(\.accent) private var accent
 
   func body(content: Content) -> some View { content.foregroundStyle(accent.color) }
@@ -52,11 +52,4 @@ extension View {
   func themedPrimaryText() -> some View { modifier(ThemedPrimaryText()) }
   func themedSecondaryText() -> some View { modifier(ThemedSecondaryText()) }
   func accentForeground() -> some View { modifier(AccentForeground()) }
-}
-
-/// A divider that respects the palette
-struct ThemedDivider: View {
-  @Environment(\.theme) private var theme
-
-  var body: some View { Divider().overlay(theme.separator) }
 }

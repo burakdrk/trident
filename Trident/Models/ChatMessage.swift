@@ -84,20 +84,18 @@ extension ChatMessage {
 
 // MARK: - Mock Data
 
-#if DEBUG
-  extension ChatMessage {
-    static let mock: ChatMessage = {
-      let string = "@badge-info=;badges=global_mod/1,turbo/1;color=#0D4200;display-name=ronni;emotes=25:0-4,12-16/1902:6-10;id=b34ccfc7-4977-403a-8a94-33c6bac34fb8;mod=0;room-id=1337;subscriber=0;tmi-sent-ts=1507246572675;turbo=1;user-id=1337;user-type=global_mod :ronni!ronni@ronni.tmi.twitch.tv PRIVMSG #ronni :Kappa Keepo Kappa sadEing RainTime"
+extension ChatMessage {
+  static var mock: ChatMessage {
+    let string = "@badge-info=;badges=global_mod/1,turbo/1;color=#0D4200;display-name=ronni;emotes=25:0-4,12-16/1902:6-10;id=\(UUID().uuidString);mod=0;room-id=1337;subscriber=0;tmi-sent-ts=1507246572675;turbo=1;user-id=1337;user-type=global_mod :ronni!ronni@ronni.tmi.twitch.tv PRIVMSG #ronni :Kappa Keepo Kappa sadEing RainTime"
 
-      let messages = IncomingMessage.parse(ircOutput: string)
-      guard case let .privateMessage(pm) = messages.first?.message as? IncomingMessage else {
-        return ChatMessage(pm: PrivateMessage(), thirdPartyEmotes: [:])
-      }
+    let messages = IncomingMessage.parse(ircOutput: string)
+    guard case let .privateMessage(pm) = messages.first?.message as? IncomingMessage else {
+      return ChatMessage(pm: PrivateMessage(), thirdPartyEmotes: [:])
+    }
 
-      return ChatMessage(pm: pm, thirdPartyEmotes: [
-        Emote.mock7tv.name: Emote.mock7tv,
-        Emote.mockOverlay.name: Emote.mockOverlay
-      ])
-    }()
+    return ChatMessage(pm: pm, thirdPartyEmotes: [
+      Emote.mock7tv.name: Emote.mock7tv,
+      Emote.mockOverlay.name: Emote.mockOverlay
+    ])
   }
-#endif
+}

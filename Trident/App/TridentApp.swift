@@ -11,9 +11,9 @@ import SwiftUI
 
 @main
 struct TridentApp: App {
-  @State private var appRouter = AppRouter.live
-  @State private var themeManager = ThemeManager.live
-  @State private var auth = AuthStore.live
+  @State private var appRouter = AppRouter.shared
+  @State private var themeManager = ThemeManager.shared
+  @State private var auth = AuthStore.shared
 
   init() {
     SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
@@ -29,9 +29,7 @@ struct TridentApp: App {
         .environment(\.router, appRouter)
         .environment(\.themeManager, themeManager)
         .environment(\.auth, auth)
-        .task {
-          auth.dispatch(.startHourlyValidation)
-        }
+        .task { auth.dispatch(.startHourlyValidation) }
     }
   }
 }

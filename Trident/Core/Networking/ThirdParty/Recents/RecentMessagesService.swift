@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 import TwitchIRC
 
-struct RecentMessagesService {
+struct RecentMessagesService: Sendable {
   private let baseAPIURL = "https://recent-messages.robotty.de/api/v2/recent-messages"
 
   func fetch(for channel: String, tpEmotes: [String: Emote]) async -> ([ChatMessage], Set<String>) {
@@ -41,7 +41,7 @@ struct RecentMessagesService {
   }
 }
 
-struct RecentMessagesResponse: Codable {
+private struct RecentMessagesResponse: Codable {
   let messages: [String]
   let error: String?
   let error_code: String?

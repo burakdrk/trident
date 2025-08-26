@@ -74,9 +74,9 @@ struct Emote: Identifiable, Hashable, Sendable {
 
 // MARK: - Mock Data
 
-#if DEBUG
-  extension Emote {
-    static let mockOverlay = Emote(
+extension Emote {
+  static var mockOverlay: Emote {
+    .init(
       name: "RainTime",
       id: "01FCY771D800007PQ2DF3GDTN6",
       category: .global,
@@ -85,8 +85,10 @@ struct Emote: Identifiable, Hashable, Sendable {
       width: 32,
       height: 32
     )
+  }
 
-    static let mock7tv = Emote(
+  static var mock7tv: Emote {
+    .init(
       name: "sadEing",
       id: "01J3Q6RTN80004SVBK6PNC1AA8",
       category: .channel,
@@ -95,10 +97,12 @@ struct Emote: Identifiable, Hashable, Sendable {
       width: 32,
       height: 32
     )
-
-    static let mocks: [Emote] = [.mockOverlay, .mock7tv]
   }
-#endif
+
+  static var mocks: [Emote] {
+    [.mockOverlay, .mock7tv]
+  }
+}
 
 // MARK: - Outliers
 

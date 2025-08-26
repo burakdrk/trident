@@ -19,8 +19,7 @@ enum UserRoute: Hashable, Codable {
 }
 
 enum SearchRoute: Hashable, Codable {
-  case channels(query: String)
-  case users(query: String)
+  case channel(name: String)
 }
 
 enum FollowingRoute: Hashable, Codable {

@@ -20,13 +20,11 @@ final class AppRouter {
 
   private nonisolated init() {}
 
-  // Push
   func push(_ r: ExploreRoute) { explorePath.append(r) }
   func push(_ r: UserRoute) { userPath.append(r) }
   func push(_ r: SearchRoute) { searchPath.append(r) }
   func push(_ r: FollowingRoute) { followingPath.append(r) }
 
-  // Pop
   func pop(tab: Tabs) {
     switch tab {
     case .explore: _ = explorePath.popLast()
@@ -49,9 +47,9 @@ final class AppRouter {
 // MARK: - Environment
 
 extension AppRouter {
-  nonisolated static let live = AppRouter()
+  nonisolated static let shared = AppRouter()
 }
 
 extension EnvironmentValues {
-  @Entry var router = AppRouter.live
+  @Entry var router = AppRouter.shared
 }

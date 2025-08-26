@@ -5,7 +5,7 @@
 //  Created by Burak Duruk on 2025-08-14.
 //
 
-import Dependencies
+import FactoryKit
 import Foundation
 import Observation
 
@@ -14,8 +14,6 @@ final class ChatStore: DataStore {
   struct State: Equatable {
     var channel: String
     var channelID = "22484632"
-    var maxMessages = 1000
-    var batchSpeed = 150 // milliseconds
 
     var isPaused = false
     var newMessageCount = 0
@@ -37,31 +35,27 @@ final class ChatStore: DataStore {
   }
 
   private(set) var state: State
+  private let maxMessages: Int
+  private let batchSpeed: Duration
 
-  @ObservationIgnored
-  @Dependency(\.assetClient) private var assetClient
-  @ObservationIgnored
-  @Dependency(\.liveChatClient) private var chatClient
-  @ObservationIgnored
-  @Dependency(\.continuousClock) private var clock
+  @ObservationIgnored @Injected(\.assetClient) private var assetClient
+  @ObservationIgnored @Injected(\.ircClient) private var chatClient
 
   // Workers
   private let buffer: MessageBuffer
-  @ObservationIgnored
-  private var consumeTask: Task<Void, Never>?
-  @ObservationIgnored
-  private var renderTask: Task<Void, Never>?
+  @ObservationIgnored private var consumeTask: Task<Void, Never>?
+  @ObservationIgnored private var renderTask: Task<Void, Never>?
 
   private var recentsService = RecentMessagesService()
 
-  init(channel: String) {
-    let state = State(channel: channel)
-    buffer = MessageBuffer(pauseMax: state.maxMessages)
-    self.state = state
+  init(channel: String, batchSpeed: Duration = .milliseconds(150), maxMessages: Int = 1000) {
+    buffer = MessageBuffer(pauseMax: maxMessages)
+    state = State(channel: channel)
+    self.maxMessages = maxMessages
+    self.batchSpeed = batchSpeed
   }
 
   deinit {
-    print("Baj baj ")
     consumeTask?.cancel()
     renderTask?.cancel()
   }
@@ -76,6 +70,7 @@ final class ChatStore: DataStore {
       cancelWorkers()
       state.isConnected = false
       state.newMessageCount = 0
+      Task { await chatClient.disconnect() }
 
     case let .togglePause(on):
       state.isPaused = on
@@ -90,8 +85,8 @@ final class ChatStore: DataStore {
       state.messages.insert(contentsOf: batch, at: 0)
 
       // Compute deletes if overflow
-      if state.messages.count > state.maxMessages {
-        let overflow = state.messages.count - state.maxMessages
+      if state.messages.count > maxMessages {
+        let overflow = state.messages.count - maxMessages
         state.messages.removeLast(overflow)
       }
 
@@ -105,63 +100,72 @@ final class ChatStore: DataStore {
 
 // MARK: - Workers
 
-private extension ChatStore {
-  func startWorkers() {
+extension ChatStore {
+  private func connect() async throws -> (IRCClientType.IRCMessageStream, Set<String>) {
+    let stream = try await chatClient.connect()
+    try await chatClient.join(to: state.channel)
+    let tpEmotes = await assetClient.emotes(state.channelID)
+    let (recents, recentIDs) = await recentsService.fetch(
+      for: state.channel,
+      tpEmotes: tpEmotes
+    )
+
+    dispatch(._flush(recents))
+    dispatch(._connected(true))
+
+    return (stream, recentIDs)
+  }
+
+  private func startWorkers() {
     consumeTask?.cancel()
-    consumeTask = Task { [weak self] in
-      guard let self else { return }
-
+    consumeTask = Task { @Sendable [weak self, buffer] in
       do {
-        let stream = try await self.chatClient.connect(joinTo: self.state.channel)
-        let tpEmotes = await self.assetClient.emotes(channelID: self.state.channelID)
-        let (recents, recentIds) = await self.recentsService.fetch(
-          for: self.state.channel,
-          tpEmotes: tpEmotes
-        )
-        self.dispatch(._flush(recents))
-
-        self.dispatch(._connected(true))
+        guard let (stream, recentIDs) = try await self?.connect() else { return }
 
         for try await message in stream {
           if Task.isCancelled { break }
 
           switch message {
           case let .privateMessage(pm):
-            if recentIds.contains(pm.id) { continue }
+            if recentIDs.contains(pm.id) {
+              continue
+            }
 
-            await self.buffer.add(
-              ChatMessage(pm: pm, thirdPartyEmotes: tpEmotes),
-              paused: self.state.isPaused
+            await buffer.add(
+              ChatMessage(pm: pm, thirdPartyEmotes: [:]),
+              paused: self?.state.isPaused ?? false
             )
-          case let .roomState(room):
-            print(room)
-          default:
-            break
+          case let .roomState(room): print(room)
+          default: break
           }
         }
       } catch {
-        self.dispatch(._error(String(describing: error)))
+        self?.dispatch(._error(String(describing: error)))
       }
+
+      print("Consume task died")
     }
 
     renderTask?.cancel()
-    renderTask = Task { [weak self] in
-      guard let self else { return }
-
+    renderTask = Task { @Sendable [weak self, buffer, batchSpeed] in
       while !Task.isCancelled {
-        try? await self.clock.sleep(for: .milliseconds(self.state.batchSpeed))
-        let pending = await self.buffer.pendingMessages
+        guard let self else { break }
+
+        try? await Task.sleep(for: batchSpeed)
+        let pending = await buffer.pendingMessages
         self.dispatch(._setNewCount(pending))
 
         guard !self.state.isPaused else { continue }
 
-        let batch = await self.buffer.flush()
+        let batch = await buffer.flush()
         if !batch.isEmpty { self.dispatch(._flush(batch)) }
       }
+
+      print("Render task died")
     }
   }
 
-  func cancelWorkers() {
+  private func cancelWorkers() {
     consumeTask?.cancel(); consumeTask = nil
     renderTask?.cancel(); renderTask = nil
   }

@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct HideFloatingTabBarModifier: ViewModifier {
-  var status: Bool
   @Environment(\.router) private var router
+
+  var status: Bool
 
   func body(content: Content) -> some View {
     content

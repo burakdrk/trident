@@ -6,21 +6,18 @@
 //
 
 import AuthenticationServices
-import Dependencies
-import Foundation
+import FactoryKit
 import SwiftUI
 
 @Observable
 final class AuthStore: NSObject, DataStore {
   struct State: Equatable {
-    var scopes = ["chat:read", "chat:edit", "user:read:follows"]
-
     var phase = Phase.loading
     var isBusy = false
     var errorMessage: String?
   }
 
-  enum Action: Equatable {
+  enum Action {
     case login
     case logout
     case cancelLogIn
@@ -29,59 +26,77 @@ final class AuthStore: NSObject, DataStore {
     case loadSession
 
     case _setPhase(Phase)
+    case _setErrorMessage(String?)
+    case _setIsBusy(Bool)
   }
 
-  enum Phase: Equatable { case loading, loggedOut, loggedIn }
+  enum Phase { case loading, loggedOut, loggedIn }
 
   private(set) var state = State()
-  @ObservationIgnored
-  private var validatorTask: Task<Void, Never>?
+  private let scopes = ["chat:read", "chat:edit", "user:read:follows"]
 
-  override nonisolated init() {
+  @ObservationIgnored private var validatorTask: Task<Void, Never>?
+  @ObservationIgnored private var session: ASWebAuthenticationSession?
+  @ObservationIgnored private var authProvider = Container.shared.authProvider().twitch
+
+  override private nonisolated init() {
     super.init()
-    Task { await startListening() }
+
+    // Non-isolated listener task
+    Task { [dispatch, authProvider] in
+      for await e in authProvider.events {
+        switch e {
+        case .loggedIn:
+          await dispatch(._setPhase(.loggedIn))
+        case .loggedOut:
+          await dispatch(._setPhase(.loggedOut))
+        }
+      }
+    }
   }
 
-  deinit {
-    validatorTask?.cancel()
-  }
-
-  @ObservationIgnored
-  private var session: ASWebAuthenticationSession?
-  @ObservationIgnored
-  @Dependency(\.authProvider.twitch) private var authProvider
-  @ObservationIgnored
-  @Dependency(\.uuid) private var uuid
-  @ObservationIgnored
-  @Dependency(\.continuousClock) private var clock
+  deinit { validatorTask?.cancel() }
 
   func dispatch(_ action: Action) {
     switch action {
     case .login:
-      Task { @MainActor in
-        state.isBusy = true
-        defer { state.isBusy = false }
+      Task {
+        dispatch(._setIsBusy(true))
+        dispatch(.cancelLogIn)
+        defer { dispatch(._setIsBusy(false)) }
 
         do {
           _ = try await logIn()
         } catch OAuthError.canceled {
-          state.errorMessage = "Log in canceled."
+          dispatch(._setErrorMessage("Log in canceled."))
         } catch {
-          state.errorMessage = "Log in failed. Try again."
+          dispatch(._setErrorMessage("Log in failed. Try again."))
         }
       }
+
     case .logout:
       Task { await authProvider.deleteToken() }
+
     case .cancelLogIn:
       cancelLogIn()
+
     case .startHourlyValidation:
       startHourlyValidation()
+
     case .stopHourlyValidation:
       stopHourlyValidation()
+
     case .loadSession:
       Task { await authProvider.loadSession() }
+
     case let ._setPhase(phase):
       state.phase = phase
+
+    case let ._setErrorMessage(msg):
+      state.errorMessage = msg
+
+    case let ._setIsBusy(isBusy):
+      state.isBusy = isBusy
     }
   }
 }
@@ -94,13 +109,13 @@ extension AuthStore: ASWebAuthenticationPresentationContextProviding {
       throw OAuthError.couldNotStart
     }
 
-    let identifier = uuid.callAsFunction().uuidString
+    let identifier = UUID().uuidString
 
     comps.queryItems = [
       .init(name: "client_id", value: "9bjmgzgap1vqh4ou8611ndjrg5vae6"),
       .init(name: "redirect_uri", value: "https://tridentapp.dev/oauth"),
       .init(name: "response_type", value: "token"),
-      .init(name: "scope", value: state.scopes.joined(separator: " ")),
+      .init(name: "scope", value: scopes.joined(separator: " ")),
       .init(name: "state", value: identifier)
     ]
 
@@ -169,11 +184,9 @@ extension AuthStore {
     }
 
     validatorTask = Task { [weak self] in
-      guard let self else { return }
-
       while !Task.isCancelled {
-        try? await clock.sleep(for: interval)
-        _ = try? await self.authProvider.validateSession()
+        try? await Task.sleep(for: interval)
+        _ = try? await self?.authProvider.validateSession()
       }
     }
   }
@@ -184,27 +197,12 @@ extension AuthStore {
   }
 }
 
-// MARK: - Event Listener
-
-extension AuthStore {
-  private func startListening() async {
-    for await e in authProvider.events {
-      switch e {
-      case .loggedIn:
-        dispatch(._setPhase(.loggedIn))
-      case .loggedOut:
-        dispatch(._setPhase(.loggedOut))
-      }
-    }
-  }
-}
-
 // MARK: - Environment
 
 extension AuthStore {
-  nonisolated static let live = AuthStore()
+  nonisolated static let shared = AuthStore()
 }
 
 extension EnvironmentValues {
-  @Entry var auth = AuthStore.live
+  @Entry var auth = AuthStore.shared
 }

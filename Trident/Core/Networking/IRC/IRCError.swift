@@ -9,11 +9,14 @@ import Foundation
 
 enum IRCError: LocalizedError {
   case failedToConnect
+  case alreadyConnected
 
   var errorDescription: String? {
     switch self {
     case .failedToConnect:
       return "Failed to connect to the chat"
+    case .alreadyConnected:
+      return "Already connected to the chat"
     }
   }
 }

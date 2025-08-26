@@ -24,6 +24,7 @@ struct SearchTab: View {
             switch route {
             case let .channels(query):
               ChatView(channel: query)
+                .navigationTitle(query)
             case let .users(query):
               Text(query)
             }

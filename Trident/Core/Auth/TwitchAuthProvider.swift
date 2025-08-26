@@ -6,7 +6,7 @@
 //
 
 import Alamofire
-import Dependencies
+import FactoryKit
 import Foundation
 
 actor TwitchAuthProvider: EventEmitting {
@@ -36,8 +36,7 @@ actor TwitchAuthProvider: EventEmitting {
     return storedToken
   }
 
-  @Dependency(\.secureStorage) var secureStorage
-  @Dependency(\.date) var date
+  @LazyInjected(\.secureStorage) private var secureStorage
 
   func deleteToken() async {
     try? await secureStorage.clear()
@@ -46,9 +45,9 @@ actor TwitchAuthProvider: EventEmitting {
 
   /// Load the token from the secure storage and validate
   func loadSession() async {
-    TridentLog.main.info("Loading Twitch session")
+    TridentLog.main.info("Loading Twitch session\("")")
 
-    guard let keychainToken = await secureStorage.load(key: .helixAcessToken),
+    guard let keychainToken = await secureStorage.load(.helixAcessToken),
           !keychainToken.isExpired
     else {
       storedToken = nil
@@ -60,7 +59,7 @@ actor TwitchAuthProvider: EventEmitting {
 
   /// Validates session and saves token to the secure storage and memory
   func validateSession(token: String? = nil) async throws -> AuthToken {
-    TridentLog.main.info("Validating Twitch session")
+    TridentLog.main.info("Validating Twitch session\("")")
 
     guard let tokenVal = (token ?? storedToken?.value) else {
       storedToken = nil
@@ -90,13 +89,10 @@ actor TwitchAuthProvider: EventEmitting {
 
     let authToken = AuthToken(
       value: tokenVal,
-      expiresAt: date.now.addingTimeInterval(TimeInterval(expiresIn))
+      expiresAt: Date.now.addingTimeInterval(TimeInterval(expiresIn))
     )
 
-    try? await secureStorage.save(
-      token: authToken,
-      key: .helixAcessToken
-    )
+    try? await secureStorage.save(authToken, .helixAcessToken)
 
     storedToken = authToken
     return authToken

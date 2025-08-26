@@ -5,86 +5,48 @@
 //  Created by Burak Duruk on 2025-08-04.
 //
 
-import Dependencies
 import Foundation
 import TwitchIRC
 
-actor IRCClient {
-  private let websocket: URLSessionWebSocketTask
-  private var joinedChannels: Set<String> = []
-
-  typealias IRCMessageStream = AsyncThrowingStream<IncomingMessage, Error>
-
-  private var stream: IRCMessageStream?
-
-  init() {
+actor IRCClient: IRCClientType {
+  private lazy var websocket: URLSessionWebSocketTask = {
     guard let url = URL(string: "wss://irc-ws.chat.twitch.tv:443") else {
       fatalError("Invalid IRC WebSocket URL")
     }
 
-    @Dependency(\.urlSession) var urlSession
-    websocket = urlSession.webSocketTask(with: url)
-  }
+    return URLSession.shared.webSocketTask(with: url)
+  }()
 
-  deinit {
-    websocket.cancel(with: .goingAway, reason: .none)
-  }
+  private var joinedChannels: Set<String> = []
+  private var continuation: IRCMessageStream.Continuation?
 
-  func connect(joinTo channel: String? = nil) async throws -> IRCMessageStream {
-    if let existingStream = stream {
-      try await partAll()
-      if let channel = channel {
-        try await join(to: channel)
-      }
-
-      return existingStream
+  func connect() async throws -> IRCMessageStream {
+    if websocket.closeCode != .invalid || websocket.state == .suspended {
+      websocket.resume()
+      try await requestCapabilities()
+      try await authenticate()
     }
 
-    websocket.resume()
-    try await requestCapabilities()
-    try await authenticate()
+    let (stream, continuation) = IRCMessageStream.makeStream()
+    self.continuation = continuation
 
-    if let channel = channel {
-      try await join(to: channel)
-    }
-
-    let newStream = AsyncThrowingStream { continuation in
-      Task {
-        do {
-          while true {
-            let messages = try await self.receiveMsg()
-            for msg in messages {
-              switch msg {
-              case .ping:
-                try await self.sendMsg(.pong)
-              case let .join(join):
-                joinedChannels.insert(join.channel)
-                continuation.yield(msg)
-              case let .part(part):
-                joinedChannels.remove(part.channel)
-                continuation.yield(msg)
-              default:
-                continuation.yield(msg)
-              }
-            }
-          }
-        } catch {
-          continuation.finish(throwing: error)
-          disconnect()
-        }
-      }
-    }
-
-    stream = newStream
-    return newStream
+    startReceiving()
+    return stream
   }
 
   func disconnect() {
-    websocket.cancel(with: .goingAway, reason: .none)
-    joinedChannels = []
+    Task {
+      print("Closing")
+      try? await self.partAll()
+      continuation?.finish()
+    }
+    // websocket.cancel(with: .goingAway, reason: .none)
+    // joinedChannels = []
+    // continuation = nil
   }
 
   func join(to channel: String) async throws {
+    guard !joinedChannels.contains(channel) else { return }
     try await sendMsg(.join(to: channel))
   }
 
@@ -138,6 +100,37 @@ extension IRCClient {
       return IncomingMessage.parse(ircOutput: msgStr).compactMap(\.message)
     } else {
       return []
+    }
+  }
+
+  private func startReceiving() {
+    Task {
+      var isAlive = true
+
+      while isAlive {
+        do {
+          let messages = try await receiveMsg()
+          for msg in messages {
+            switch msg {
+            case .ping:
+              try await sendMsg(.pong)
+            case let .join(join):
+              joinedChannels.insert(join.channel)
+              continuation?.yield(msg)
+            case let .part(part):
+              joinedChannels.remove(part.channel)
+              continuation?.yield(msg)
+            default:
+              continuation?.yield(msg)
+            }
+          }
+        } catch {
+          continuation?.finish(throwing: error)
+          isAlive = false
+        }
+      }
+
+      print("I DIED LULE")
     }
   }
 }

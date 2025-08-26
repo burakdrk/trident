@@ -18,14 +18,12 @@
 		EC72B6D52E3F18200011F8E0 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6CB2E3F18200011F8E0 /* SimpleKeychain */; };
 		EC72B6D62E3F18200011F8E0 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C92E3F18200011F8E0 /* Supabase */; };
 		EC72B6D72E3F18200011F8E0 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C72E3F18200011F8E0 /* Apollo */; };
-		EC75289B2E4AD45200065981 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = EC75289A2E4AD45200065981 /* Dependencies */; };
 		EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EC75289D2E4AD8E600065981 /* Alamofire */; };
-		EC7874E42E4EB96D001452E5 /* DependenciesMacros in Frameworks */ = {isa = PBXBuildFile; productRef = EC7874E32E4EB96D001452E5 /* DependenciesMacros */; };
-		EC7874E62E4EB976001452E5 /* DependenciesMacros in Frameworks */ = {isa = PBXBuildFile; productRef = EC7874E52E4EB976001452E5 /* DependenciesMacros */; };
 		ECBA79822E4AE1E20079A562 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ECBA79812E4AE1E20079A562 /* Alamofire */; };
 		ECC6223D2E5424FA00A2AD09 /* SDWebImageSVGNativeCoder in Frameworks */ = {isa = PBXBuildFile; productRef = ECC6223C2E5424FA00A2AD09 /* SDWebImageSVGNativeCoder */; };
 		ECC6223F2E54250E00A2AD09 /* SDWebImageSVGNativeCoder in Frameworks */ = {isa = PBXBuildFile; productRef = ECC6223E2E54250E00A2AD09 /* SDWebImageSVGNativeCoder */; };
-		ECC622412E54252500A2AD09 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = ECC622402E54252500A2AD09 /* Dependencies */; };
+		ECE380272E5BCB1200D37047 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = ECE380262E5BCB1200D37047 /* FactoryKit */; };
+		ECE380292E5BCB2300D37047 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = ECE380282E5BCB2300D37047 /* FactoryKit */; };
 		ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC352E36016300CF0AFE /* Apollo */; };
 		ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC3C2E37006300CF0AFE /* Supabase */; };
 		ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = ECEA81E22E388945002AA253 /* SimpleKeychain */; };
@@ -71,11 +69,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				ECBA79822E4AE1E20079A562 /* Alamofire in Frameworks */,
-				EC7874E62E4EB976001452E5 /* DependenciesMacros in Frameworks */,
 				EC6D60702E410BE9007DA5D9 /* Collections in Frameworks */,
+				ECE380292E5BCB2300D37047 /* FactoryKit in Frameworks */,
 				EC72B6D42E3F18200011F8E0 /* SDWebImageSwiftUI in Frameworks */,
 				ECC6223F2E54250E00A2AD09 /* SDWebImageSVGNativeCoder in Frameworks */,
-				ECC622412E54252500A2AD09 /* Dependencies in Frameworks */,
 				EC6D60742E410BF4007DA5D9 /* TwitchIRC in Frameworks */,
 				EC72B6D52E3F18200011F8E0 /* SimpleKeychain in Frameworks */,
 				EC72B6D62E3F18200011F8E0 /* Supabase in Frameworks */,
@@ -90,11 +87,10 @@
 			files = (
 				EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */,
 				EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */,
+				ECE380272E5BCB1200D37047 /* FactoryKit in Frameworks */,
 				ECC6223D2E5424FA00A2AD09 /* SDWebImageSVGNativeCoder in Frameworks */,
-				EC7874E42E4EB96D001452E5 /* DependenciesMacros in Frameworks */,
 				EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */,
 				EC1A251C2E3B2AF900B8CF5D /* SDWebImageSwiftUI in Frameworks */,
-				EC75289B2E4AD45200065981 /* Dependencies in Frameworks */,
 				ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */,
 				ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */,
 				ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */,
@@ -168,10 +164,9 @@
 				EC6D606F2E410BE9007DA5D9 /* Collections */,
 				EC6D60732E410BF4007DA5D9 /* TwitchIRC */,
 				ECBA79812E4AE1E20079A562 /* Alamofire */,
-				EC7874E52E4EB976001452E5 /* DependenciesMacros */,
 				ECC6223E2E54250E00A2AD09 /* SDWebImageSVGNativeCoder */,
-				ECC622402E54252500A2AD09 /* Dependencies */,
 				EC5A10BB2E5AE131001FE869 /* AsyncAlgorithms */,
+				ECE380282E5BCB2300D37047 /* FactoryKit */,
 			);
 			productName = Trident;
 			productReference = EC72B6DC2E3F18200011F8E0 /* TridentPlus.app */;
@@ -201,11 +196,10 @@
 				EC1A251B2E3B2AF900B8CF5D /* SDWebImageSwiftUI */,
 				EC6D60542E407FBD007DA5D9 /* TwitchIRC */,
 				EC6D606A2E410B98007DA5D9 /* Collections */,
-				EC75289A2E4AD45200065981 /* Dependencies */,
 				EC75289D2E4AD8E600065981 /* Alamofire */,
-				EC7874E32E4EB96D001452E5 /* DependenciesMacros */,
 				ECC6223C2E5424FA00A2AD09 /* SDWebImageSVGNativeCoder */,
 				EC5A10B92E5AE121001FE869 /* AsyncAlgorithms */,
+				ECE380262E5BCB1200D37047 /* FactoryKit */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -269,10 +263,10 @@
 				EC1A251A2E3B2AF900B8CF5D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				EC6D60532E407FBD007DA5D9 /* XCRemoteSwiftPackageReference "TwitchIRC" */,
 				EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				EC7528992E4AD45200065981 /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 				EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				ECC6223B2E5424FA00A2AD09 /* XCRemoteSwiftPackageReference "SDWebImageSVGNativeCoder" */,
 				EC5A10B82E5AE121001FE869 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
+				ECE380252E5BCB1200D37047 /* XCRemoteSwiftPackageReference "Factory" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EC7631D12E30B41A00A86ABD /* Products */;
@@ -789,14 +783,6 @@
 				minimumVersion = 3.1.3;
 			};
 		};
-		EC7528992E4AD45200065981 /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-dependencies";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.9.3;
-			};
-		};
 		EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -811,6 +797,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.2.0;
+			};
+		};
+		ECE380252E5BCB1200D37047 /* XCRemoteSwiftPackageReference "Factory" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hmlongco/Factory";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.3;
 			};
 		};
 		ECE8DC342E36016300CF0AFE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
@@ -895,25 +889,10 @@
 			package = EC72B6CE2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
 		};
-		EC75289A2E4AD45200065981 /* Dependencies */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC7528992E4AD45200065981 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
-			productName = Dependencies;
-		};
 		EC75289D2E4AD8E600065981 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		EC7874E32E4EB96D001452E5 /* DependenciesMacros */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC7528992E4AD45200065981 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
-			productName = DependenciesMacros;
-		};
-		EC7874E52E4EB976001452E5 /* DependenciesMacros */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC7528992E4AD45200065981 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
-			productName = DependenciesMacros;
 		};
 		ECBA79812E4AE1E20079A562 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -930,10 +909,15 @@
 			package = ECC6223B2E5424FA00A2AD09 /* XCRemoteSwiftPackageReference "SDWebImageSVGNativeCoder" */;
 			productName = SDWebImageSVGNativeCoder;
 		};
-		ECC622402E54252500A2AD09 /* Dependencies */ = {
+		ECE380262E5BCB1200D37047 /* FactoryKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = EC7528992E4AD45200065981 /* XCRemoteSwiftPackageReference "swift-dependencies" */;
-			productName = Dependencies;
+			package = ECE380252E5BCB1200D37047 /* XCRemoteSwiftPackageReference "Factory" */;
+			productName = FactoryKit;
+		};
+		ECE380282E5BCB2300D37047 /* FactoryKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ECE380252E5BCB1200D37047 /* XCRemoteSwiftPackageReference "Factory" */;
+			productName = FactoryKit;
 		};
 		ECE8DC352E36016300CF0AFE /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -11,6 +11,7 @@ import SwiftUI
 struct FloatingTabBar: View {
   @Environment(\.accent) private var accent
   @Environment(\.theme) private var theme
+  @Environment(\.auth) private var auth
 
   @Namespace private var animation
 
@@ -57,6 +58,7 @@ struct FloatingTabBar: View {
     }
     .geometryGroup()
     .padding(.horizontal, isKeyboardActive ? 0 : 36)
+    .padding(.bottom, 5)
   }
 }
 
@@ -72,17 +74,27 @@ extension FloatingTabBar {
     searchLayout {
       HStack {
         if isSearchExpanded {
-          TextField("Search...", text: $searchText)
-            .autocorrectionDisabled()
-            .textInputAutocapitalization(.never)
-            .foregroundStyle(theme.fg)
-            .focused($isKeyboardActive)
-            .frame(height: barHeight)
-            .contentShape(Rectangle())
-            .padding(.horizontal, 12)
-            .onTapGesture {
-              isKeyboardActive = true
-            }
+          TextField(
+            auth.state.phase == .loggedIn ? "Search..." : "Enter a channel to join",
+            text: $searchText
+          )
+          .autocorrectionDisabled()
+          .textInputAutocapitalization(.never)
+          .foregroundStyle(theme.fg)
+          .focused($isKeyboardActive)
+          .frame(height: barHeight)
+          .contentShape(Rectangle())
+          .padding(.horizontal, 12)
+          .onTapGesture {
+            isKeyboardActive = true
+          }
+          .onSubmit {
+            NotificationCenter.default.post(
+              name: .searchSubmitted,
+              object: nil,
+              userInfo: ["text": searchText]
+            )
+          }
         } else {
           TabButton(Tabs.search)
             .frame(width: barHeight, height: barHeight)
@@ -154,6 +166,11 @@ extension FloatingTabBar {
     }
     .compositingGroup()
   }
+}
+
+extension Notification.Name {
+  static let searchSubmitted = Notification
+    .Name("\(Bundle.main.bundleIdentifier ?? "dev.tridentapp.Trident").searchSubmitted")
 }
 
 #Preview(traits: .sizeThatFitsLayout) {

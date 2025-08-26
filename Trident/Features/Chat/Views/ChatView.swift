@@ -34,12 +34,8 @@ struct ChatView: View {
       }
       .padding(.bottom, 50)
     }
-    .task {
-      store.dispatch(.start)
-    }
-    .onDisappear {
-      store.dispatch(.stop)
-    }
+    .task { store.dispatch(.start) }
+    .onDisappear { store.dispatch(.stop) }
     .hideFloatingTabBar()
   }
 }

@@ -14,3 +14,9 @@ struct ScaleButtonStyle: ButtonStyle {
       .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
   }
 }
+
+extension ButtonStyle where Self == ScaleButtonStyle {
+  static func scale() -> Self {
+    ScaleButtonStyle()
+  }
+}
