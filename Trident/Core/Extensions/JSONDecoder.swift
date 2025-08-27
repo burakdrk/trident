@@ -1,10 +1,3 @@
-//
-//  JSONDecoder.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-25.
-//
-
 import Foundation
 
 extension JSONDecoder {

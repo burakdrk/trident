@@ -1,10 +1,3 @@
-//
-//  Tabs.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-17.
-//
-
 import Foundation
 
 enum Tabs: CaseIterable, Hashable {
@@ -16,26 +9,26 @@ enum Tabs: CaseIterable, Hashable {
   var name: String {
     switch self {
     case .following:
-      return "Following"
+      "Following"
     case .explore:
-      return "Explore"
+      "Explore"
     case .search:
-      return "Search"
+      "Search"
     case .user:
-      return "User"
+      "User"
     }
   }
 
   var imageName: String {
     switch self {
     case .following:
-      return "heart"
+      "heart"
     case .explore:
-      return "safari"
+      "safari"
     case .search:
-      return "magnifyingglass"
+      "magnifyingglass"
     case .user:
-      return "person"
+      "person"
     }
   }
 

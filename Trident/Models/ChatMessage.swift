@@ -1,10 +1,3 @@
-//
-//  Message.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-04.
-//
-
 import Foundation
 import TwitchIRC
 
@@ -53,14 +46,14 @@ extension ChatMessage {
     twitchEmotes: [String: Emote],
     thirdPartyEmotes: [String: Emote]
   ) -> [Inline] {
-    let chunks = body.split(whereSeparator: { $0.isWhitespace })
+    let chunks = body.split { $0.isWhitespace }
     var inlines: [Inline] = []
 
     for chunk in chunks {
       let part = String(chunk)
       let emote = twitchEmotes[part] ?? thirdPartyEmotes[part]
 
-      if let emote = emote {
+      if let emote {
         if emote.overlay, !inlines.isEmpty, case let .emote(lastEmotes) = inlines.last {
           inlines[inlines.count - 1] = .emote(lastEmotes + [emote])
         } else {

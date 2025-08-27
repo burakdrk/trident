@@ -1,2 +1,15 @@
---max-width 100
+--swift-version 6.1
 
+--max-width 100
+--header strip
+--indent 2
+--decimalgrouping 3
+--hexgrouping "ignore"
+--nospaceoperators ...,..<
+--nospaceoperators ...,..<
+--stripunusedargs closure-only
+--wraparguments before-first
+--wrapcollections before-first
+--wrapparameters before-first
+--ifdef no-indent
+--trailing-commas never

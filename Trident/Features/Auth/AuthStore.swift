@@ -1,10 +1,3 @@
-//
-//  AuthStore.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-19.
-//
-
 import AuthenticationServices
 import FactoryKit
 import SwiftUI
@@ -142,7 +135,7 @@ extension AuthStore: ASWebAuthenticationPresentationContextProviding {
         let token = frag?.queryItems?.first(where: { $0.name == "access_token" })?.value
         let stateRes = frag?.queryItems?.first(where: { $0.name == "state" })?.value
 
-        guard let token = token, stateRes == identifier else {
+        guard let token, stateRes == identifier else {
           cont.resume(throwing: OAuthError.missingToken)
           return
         }
@@ -159,7 +152,7 @@ extension AuthStore: ASWebAuthenticationPresentationContextProviding {
 
       s.prefersEphemeralWebBrowserSession = true
       s.presentationContextProvider = self
-      self.session = s
+      session = s
       if !s.start() { cont.resume(throwing: OAuthError.couldNotStart) }
     }
   }
@@ -170,7 +163,7 @@ extension AuthStore: ASWebAuthenticationPresentationContextProviding {
   }
 
   func presentationAnchor(for _: ASWebAuthenticationSession) -> ASPresentationAnchor {
-    return ASPresentationAnchor()
+    ASPresentationAnchor()
   }
 }
 
@@ -178,7 +171,7 @@ extension AuthStore: ASWebAuthenticationPresentationContextProviding {
 
 extension AuthStore {
   /// Start hourly validation. Note: it doesn't immediately validate.
-  private func startHourlyValidation(interval: Duration = .seconds(3600)) {
+  private func startHourlyValidation(interval: Duration = .seconds(3_600)) {
     guard validatorTask?.isCancelled ?? true else {
       return
     }

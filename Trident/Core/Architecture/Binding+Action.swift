@@ -1,10 +1,3 @@
-//
-//  Binding+Action.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-12.
-//
-
 import SwiftUI
 
 extension Binding {

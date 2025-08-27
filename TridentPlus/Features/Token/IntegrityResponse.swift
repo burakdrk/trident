@@ -1,10 +1,3 @@
-//
-//  IntegrityResponse.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-05.
-//
-
 import Foundation
 
 // MARK: - IntegrityResponse

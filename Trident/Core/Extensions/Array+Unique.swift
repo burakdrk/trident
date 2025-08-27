@@ -1,10 +1,3 @@
-//
-//  Array+unique.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-05.
-//
-
 extension Array {
   func unique<T: Hashable>(by keyPath: KeyPath<Element, T>) -> [Element] {
     var seen = Set<T>()

@@ -1,10 +1,3 @@
-//
-//  IRCClient.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-04.
-//
-
 import Foundation
 import TwitchIRC
 
@@ -68,9 +61,9 @@ extension IRCClient {
   private func requestCapabilities() async throws {
     try await sendMsg(.capabilities([.tags, .commands]))
 
-    let success = try await receiveMsg().contains(where: {
+    let success = try await receiveMsg().contains {
       if case .capabilities = $0 { true } else { false }
-    })
+    }
 
     if !success {
       throw IRCError.failedToConnect
@@ -81,9 +74,9 @@ extension IRCClient {
     try await sendMsg(.pass(pass: "SCHMOOPIIE"))
     try await sendMsg(.nick(name: "justinfan28264"))
 
-    let success = try await receiveMsg().contains(where: {
+    let success = try await receiveMsg().contains {
       if case .connectionNotice = $0 { true } else { false }
-    })
+    }
 
     if !success {
       throw IRCError.failedToConnect

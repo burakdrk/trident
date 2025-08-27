@@ -1,10 +1,3 @@
-//
-//  TridentTests.swift
-//  TridentTests
-//
-//  Created by Burak Duruk on 2025-07-23.
-//
-
 import Testing
 @testable import Trident
 

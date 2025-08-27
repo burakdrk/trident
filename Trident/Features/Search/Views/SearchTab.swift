@@ -1,10 +1,3 @@
-//
-//  SearchTab.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-19.
-//
-
 import SwiftUI
 
 struct SearchTab: View {
@@ -17,21 +10,32 @@ struct SearchTab: View {
     @Bindable var router = router
 
     NavigationStack(path: $router.searchPath) {
-      VStack {  
+      VStack {
         SearchRootView(text: store.state.query)
           .navigationTitle("Search")
           .navigationDestination(for: SearchRoute.self) { route in
             switch route {
             case let .channel(name):
               ChatView(channel: name)
+                .ignoresSafeArea(edges: .bottom)
                 .navigationTitle(name)
                 .toolbarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden()
+                .toolbar {
+                  ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                      router.pop(tab: .search)
+                    } label: {
+                      Image(systemName: "chevron.left")
+                    }
+                  }
+                }
             }
           }
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .themedBackground()
-      .onChange(of: searchText) { _, newValue in
+      .onChange(of: searchText, initial: true) { _, newValue in
         store.dispatch(.setQuery(newValue))
       }
     }
@@ -39,5 +43,6 @@ struct SearchTab: View {
 }
 
 #Preview {
-  SearchTab(searchText: "Preview")
+  SearchTab(searchText: "forsen")
+    .applyTheme()
 }

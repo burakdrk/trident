@@ -1,10 +1,3 @@
-//
-//  SecureStorage.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-18.
-//
-
 import FactoryKit
 import Foundation
 import SimpleKeychain
@@ -16,7 +9,7 @@ struct SecureStorage {
 
   enum Keys: String {
     #if PLUS
-      case gqlAccessToken
+    case gqlAccessToken
     #endif
     case helixAcessToken
   }

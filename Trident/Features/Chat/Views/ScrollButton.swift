@@ -1,10 +1,3 @@
-//
-//  ScrollButton.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-04.
-//
-
 import SwiftUI
 import UIKit
 
@@ -70,7 +63,7 @@ struct ScrollButton: View {
     while true {
       try? await Task.sleep(for: .seconds(0.5))
       guard isVisible else { continue }
-      newMessageCount += Int.random(in: 0 ... 10)
+      newMessageCount += Int.random(in: 0...10)
     }
   }
 }

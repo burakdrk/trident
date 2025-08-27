@@ -1,10 +1,3 @@
-//
-//  UIColor+hex.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-09.
-//
-
 import UIKit
 
 public extension UIColor {

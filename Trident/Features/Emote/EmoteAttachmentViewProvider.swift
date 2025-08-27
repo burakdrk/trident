@@ -1,10 +1,3 @@
-//
-//  EmoteAttachmentViewProvider.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-08.
-//
-
 import UIKit
 
 final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
@@ -64,8 +57,10 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
 
     // center the emote vertically within the line fragment
     return CGRect(
-      x: 0, y: (proposedLineFragment.height - emoteSize.height) / 2,
-      width: emoteSize.width, height: emoteSize.height
+      x: 0,
+      y: (proposedLineFragment.height - emoteSize.height) / 2,
+      width: emoteSize.width,
+      height: emoteSize.height
     )
   }
 }

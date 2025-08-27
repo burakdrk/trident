@@ -1,10 +1,3 @@
-//
-//  ThemeChoice.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-18.
-//
-
 import SwiftUI
 
 enum ThemeChoice: String, CaseIterable, Identifiable, Codable, Sendable {

@@ -1,10 +1,3 @@
-//
-//  TwitchAuthProvider.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-19.
-//
-
 import Alamofire
 import FactoryKit
 import Foundation
@@ -19,7 +12,7 @@ actor TwitchAuthProvider: EventEmitting {
 
   private var storedToken: AuthToken? {
     didSet {
-      if let storedToken = storedToken, !storedToken.isExpired {
+      if let storedToken, !storedToken.isExpired {
         emit(.loggedIn)
       } else {
         emit(.loggedOut)
@@ -29,7 +22,7 @@ actor TwitchAuthProvider: EventEmitting {
 
   /// For representation of the in-memory loaded token
   var token: AuthToken? {
-    if let storedToken = storedToken, storedToken.isExpired {
+    if let storedToken, storedToken.isExpired {
       self.storedToken = nil
     }
 
@@ -47,8 +40,7 @@ actor TwitchAuthProvider: EventEmitting {
   func loadSession() async {
     TridentLog.main.info("Loading Twitch session\("")")
 
-    guard let keychainToken = await secureStorage.load(.helixAcessToken),
-          !keychainToken.isExpired
+    guard let keychainToken = await secureStorage.load(.helixAcessToken), !keychainToken.isExpired
     else {
       storedToken = nil
       return
@@ -75,7 +67,7 @@ actor TwitchAuthProvider: EventEmitting {
     let statusCode = req.response?.statusCode ?? 401
 
     switch statusCode {
-    case 200 ..< 300:
+    case 200..<300:
       break
     default:
       storedToken = nil
@@ -101,18 +93,16 @@ actor TwitchAuthProvider: EventEmitting {
 
 // MARK: - Twitch Response
 
-extension TwitchAuthProvider {
-  private struct RefreshResponse: Codable {
-    let clientID, login: String
-    let scopes: [String]
-    let userID: String
-    let expiresIn: Int
+private struct RefreshResponse: Codable {
+  let clientID, login: String
+  let scopes: [String]
+  let userID: String
+  let expiresIn: Int
 
-    enum CodingKeys: String, CodingKey {
-      case clientID = "client_id"
-      case login, scopes
-      case userID = "user_id"
-      case expiresIn = "expires_in"
-    }
+  enum CodingKeys: String, CodingKey {
+    case clientID = "client_id"
+    case login, scopes
+    case userID = "user_id"
+    case expiresIn = "expires_in"
   }
 }

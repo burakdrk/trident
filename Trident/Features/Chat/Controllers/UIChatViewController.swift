@@ -1,10 +1,3 @@
-//
-//  UIChatViewController.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-15.
-//
-
 import Foundation
 import UIKit
 

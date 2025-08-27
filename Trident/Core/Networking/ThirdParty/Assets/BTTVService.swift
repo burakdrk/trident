@@ -1,10 +1,3 @@
-//
-//  BTTVService.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-05.
-//
-
 import Alamofire
 import Foundation
 
@@ -24,7 +17,7 @@ struct BTTVService: ThirdPartyAssetService {
 
     // Use a dictionary to merge emotes. This ensures channel emotes overwrite
     // shared emotes if they have the same name, matching the original logic.
-    var uniqueEmotes = [String: BTTVEmote]()
+    var uniqueEmotes: [String: BTTVEmote] = [:]
     response.sharedEmotes.forEach { uniqueEmotes[$0.code] = $0 }
     response.channelEmotes.forEach { uniqueEmotes[$0.code] = $0 }
 

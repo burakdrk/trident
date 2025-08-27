@@ -1,10 +1,3 @@
-//
-//  AuthBoundaryModifier.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-20.
-//
-
 import SwiftUI
 
 private struct AuthBoundaryModifier: ViewModifier {

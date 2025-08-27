@@ -1,10 +1,3 @@
-//
-//  AssetClient.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-14.
-//
-
 import FactoryKit
 
 struct AssetClient: Sendable {

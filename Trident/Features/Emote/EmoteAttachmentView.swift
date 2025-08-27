@@ -1,10 +1,3 @@
-//
-//  EmoteAttachmentView.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-08.
-//
-
 import SDWebImage
 import UIKit
 
@@ -74,8 +67,10 @@ final class EmoteAttachmentView: UIImageView {
   }
 
   override func display(_ layer: CALayer) {
-    guard let emote, let player = EmotePlayer.player(for: emote, view: self),
-          let image = player.image
+    guard
+      let emote,
+      let player = EmotePlayer.player(for: emote, view: self),
+      let image = player.image
     else {
       super.display(layer)
       return

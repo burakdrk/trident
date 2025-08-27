@@ -1,10 +1,3 @@
-//
-//  TwitchIntegrityFetcher.swift
-//  TridentPlus
-//
-//  Created by Burak Duruk on 2025-07-28.
-//
-
 import WebKit
 
 final class TwitchIntegrityFetcher: NSObject, WKNavigationDelegate {
@@ -84,17 +77,17 @@ final class TwitchIntegrityFetcher: NSObject, WKNavigationDelegate {
     config.userContentController = contentController
 
     let contentRulesList = """
-          [{"trigger": { "url-filter": ".*" }, "action": { "type": "block" }},
-          {"trigger": { "url-filter": "\(endpoint)" }, "action": { "type": "ignore-previous-rules" }},
-          {"trigger": { "url-filter": "\(scriptSrc)" }, "action": { "type": "ignore-previous-rules" }},
-          {"trigger": { "url-filter": "https://gql.twitch.tv" }, "action": { "type": "ignore-previous-rules" }}]
-      """
+      [{"trigger": { "url-filter": ".*" }, "action": { "type": "block" }},
+      {"trigger": { "url-filter": "\(endpoint)" }, "action": { "type": "ignore-previous-rules" }},
+      {"trigger": { "url-filter": "\(scriptSrc)" }, "action": { "type": "ignore-previous-rules" }},
+      {"trigger": { "url-filter": "https://gql.twitch.tv" }, "action": { "type": "ignore-previous-rules" }}]
+    """
 
     WKContentRuleListStore.default().compileContentRuleList(
       forIdentifier: "TwitchRules",
       encodedContentRuleList: contentRulesList
     ) { ruleList, _ in
-      if let ruleList = ruleList {
+      if let ruleList {
         config.userContentController.add(ruleList)
       }
     }
@@ -105,40 +98,40 @@ final class TwitchIntegrityFetcher: NSObject, WKNavigationDelegate {
   private var makeJS: String {
     """
     var p = new Promise((resolve, reject) => {
-        function configureKPSDK() {
-            window.KPSDK.configure([{
-                "protocol": "https:",
-                "method": "POST",
-                "domain": "gql.twitch.tv",
-                "path": "/integrity"
-            }]);
+      function configureKPSDK() {
+        window.KPSDK.configure([{
+          "protocol": "https:",
+          "method": "POST",
+          "domain": "gql.twitch.tv",
+          "path": "/integrity"
+        }]);
+      }
+
+      async function fetchIntegrity() {
+        const headers = Object.assign({"Client-ID": "\(clientID)"}, {"x-device-id": "\(deviceID)"});
+        const resp = await window.fetch("https://gql.twitch.tv/integrity", {
+          "headers": headers,
+          "body": null,
+          "method": "POST",
+          "mode": "cors",
+          "credentials": "omit"
+        });
+
+        if (resp.status !== 200) {
+          throw new Error(`Unexpected integrity response status code ${resp.status}`);
         }
 
-        async function fetchIntegrity() {
-            const headers = Object.assign({"Client-ID": "\(clientID)"}, {"x-device-id": "\(deviceID)"});
-            const resp = await window.fetch("https://gql.twitch.tv/integrity", {
-                "headers": headers,
-                "body": null,
-                "method": "POST",
-                "mode": "cors",
-                "credentials": "omit"
-            });
-
-            if (resp.status !== 200) {
-                throw new Error(`Unexpected integrity response status code ${resp.status}`);
-            }
-
-            return JSON.stringify(await resp.json());
-        }
+        return JSON.stringify(await resp.json());
+      }
 
 
-        document.addEventListener("kpsdk-load", configureKPSDK, {once: true});
-        document.addEventListener("kpsdk-ready", () => fetchIntegrity().then(resolve, reject), {once: true});
+      document.addEventListener("kpsdk-load", configureKPSDK, {once: true});
+      document.addEventListener("kpsdk-ready", () => fetchIntegrity().then(resolve, reject), {once: true});
 
-        const script = document.createElement("script");
-        script.addEventListener("error", reject);
-        script.src = "\(TwitchIntegrityFetcher.scriptSrc)";
-        document.body.appendChild(script);
+      const script = document.createElement("script");
+      script.addEventListener("error", reject);
+      script.src = "\(TwitchIntegrityFetcher.scriptSrc)";
+      document.body.appendChild(script);
     });
     await p;
     return p;

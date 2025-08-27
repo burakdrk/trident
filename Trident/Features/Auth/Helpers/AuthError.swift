@@ -1,10 +1,3 @@
-//
-//  AuthError.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-19.
-//
-
 import Foundation
 
 enum AuthError: LocalizedError {
@@ -15,11 +8,11 @@ enum AuthError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case .expiredToken:
-      return "Expired token"
+      "Expired token"
     case .invalidToken:
-      return "Invalid token"
+      "Invalid token"
     case .noToken:
-      return "No token"
+      "No token"
     }
   }
 }

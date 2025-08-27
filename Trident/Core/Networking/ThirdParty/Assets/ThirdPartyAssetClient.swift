@@ -1,10 +1,3 @@
-//
-//  ThirdPartyAssetClient.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-04.
-//
-
 import Collections
 import Foundation
 
@@ -66,7 +59,7 @@ actor ThirdPartyAssetClient {
         indexedResults.append(result)
       }
 
-      return indexedResults.sorted { $0.0 < $1.0 }.flatMap { $0.1 }
+      return indexedResults.sorted { $0.0 < $1.0 }.flatMap(\.1)
     }
   }
 }

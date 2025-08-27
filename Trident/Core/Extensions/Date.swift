@@ -1,10 +1,3 @@
-//
-//  Date.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-12.
-//
-
 import Foundation
 
 extension Date {
@@ -19,7 +12,7 @@ extension Date {
 
   /// Initializes a Date from a Unix timestamp in milliseconds.
   init(timestamp: Int) {
-    self = Date(timeIntervalSince1970: TimeInterval(timestamp) / 1000.0)
+    self = Date(timeIntervalSince1970: TimeInterval(timestamp) / 1_000.0)
   }
 
   var formattedTime: String {

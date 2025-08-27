@@ -1,10 +1,3 @@
-//
-//  EmoteAttachment.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-07.
-//
-
 import SDWebImage
 import UIKit
 import UniformTypeIdentifiers

@@ -1,10 +1,3 @@
-//
-//  RecentMessagesService.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-17.
-//
-
 import Alamofire
 import Foundation
 import TwitchIRC
@@ -20,7 +13,7 @@ struct RecentMessagesService: Sendable {
       .serializingDecodable(RecentMessagesResponse.self)
       .value
 
-    guard let res = res else {
+    guard let res else {
       return ([], Set<String>())
     }
 

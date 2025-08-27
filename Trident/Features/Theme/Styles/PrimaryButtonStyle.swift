@@ -1,10 +1,3 @@
-//
-//  PrimaryButtonStyle.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-20.
-//
-
 import SwiftUI
 
 struct PrimaryButtonStyle: ButtonStyle {
@@ -18,14 +11,14 @@ struct PrimaryButtonStyle: ButtonStyle {
 
   var clipShape: AnyShape {
     if shape == .rect {
-      return AnyShape(RoundedRectangle(cornerRadius: 8, style: .circular))
+      AnyShape(RoundedRectangle(cornerRadius: 8, style: .circular))
     } else {
-      return AnyShape(Capsule())
+      AnyShape(Capsule())
     }
   }
 
   var backgroundColor: Color {
-    let color = (self.color ?? accent.color)
+    let color = (color ?? accent.color)
     if isEnabled {
       return color
     } else {

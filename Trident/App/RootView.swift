@@ -1,10 +1,3 @@
-//
-//  RootView.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-07-28.
-//
-
 import SwiftUI
 
 struct RootView: View {

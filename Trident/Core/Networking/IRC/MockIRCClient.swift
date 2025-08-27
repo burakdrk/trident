@@ -1,10 +1,3 @@
-//
-//  MockIRCClient.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-24.
-//
-
 import Foundation
 import TwitchIRC
 
@@ -96,7 +89,7 @@ extension MockIRCClient {
     let clientNonce = String.lowerRandomAlphanumeric(length: 32)
     let color = String.randomNumeric(length: 6)
     let userID = String.randomNumeric(length: 9)
-    let sent = Date.now.timeIntervalSince1970 * 1000
+    let sent = Date.now.timeIntervalSince1970 * 1_000
 
     return IncomingMessage
       .parse(

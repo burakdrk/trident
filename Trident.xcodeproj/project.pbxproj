@@ -177,6 +177,7 @@
 			buildConfigurationList = EC7631F12E30B41B00A86ABD /* Build configuration list for PBXNativeTarget "Trident" */;
 			buildPhases = (
 				EC7631CC2E30B41A00A86ABD /* Sources */,
+				ECA0197F2E5E9F7F0087FC33 /* ShellScript */,
 				EC7631CD2E30B41A00A86ABD /* Frameworks */,
 				EC7631CE2E30B41A00A86ABD /* Resources */,
 			);
@@ -302,6 +303,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		ECA0197F2E5E9F7F0087FC33 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [[ \"$(uname -m)\" == arm64 ]]\nthen\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EC72B6D12E3F18200011F8E0 /* Sources */ = {

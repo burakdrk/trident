@@ -1,10 +1,3 @@
-//
-//  ThemedModifiers.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-18.
-//
-
 import SwiftUI
 
 private struct ThemedBackground: ViewModifier {

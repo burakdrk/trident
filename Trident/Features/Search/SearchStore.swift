@@ -1,10 +1,3 @@
-//
-//  SearchStore.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-19.
-//
-
 import AsyncAlgorithms
 import Foundation
 import Observation
@@ -21,10 +14,8 @@ final class SearchStore: DataStore {
   }
 
   private(set) var state = State()
-  @ObservationIgnored
-  private let changes = AsyncChannel<String>()
-  @ObservationIgnored
-  private var debounceTask: Task<Void, Never>?
+  @ObservationIgnored private let changes = AsyncChannel<String>()
+  @ObservationIgnored private var debounceTask: Task<Void, Never>?
 
   init() { startDebounceLoop() }
   deinit { changes.finish(); debounceTask?.cancel() }

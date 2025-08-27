@@ -1,10 +1,3 @@
-//
-//  IRCClientType.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-24.
-//
-
 import FactoryKit
 import Foundation
 import TwitchIRC

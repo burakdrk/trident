@@ -1,10 +1,3 @@
-//
-//  ChatStore.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-14.
-//
-
 import FactoryKit
 import Foundation
 import Observation
@@ -48,7 +41,7 @@ final class ChatStore: DataStore {
 
   private var recentsService = RecentMessagesService()
 
-  init(channel: String, batchSpeed: Duration = .milliseconds(150), maxMessages: Int = 1000) {
+  init(channel: String, batchSpeed: Duration = .milliseconds(150), maxMessages: Int = 1_000) {
     buffer = MessageBuffer(pauseMax: maxMessages)
     state = State(channel: channel)
     self.maxMessages = maxMessages
@@ -153,12 +146,12 @@ extension ChatStore {
 
         try? await Task.sleep(for: batchSpeed)
         let pending = await buffer.pendingMessages
-        self.dispatch(._setNewCount(pending))
+        dispatch(._setNewCount(pending))
 
-        guard !self.state.isPaused else { continue }
+        guard !state.isPaused else { continue }
 
         let batch = await buffer.flush()
-        if !batch.isEmpty { self.dispatch(._flush(batch)) }
+        if !batch.isEmpty { dispatch(._flush(batch)) }
       }
 
       print("Render task died")

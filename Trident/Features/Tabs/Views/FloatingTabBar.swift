@@ -1,10 +1,3 @@
-//
-//  FloatingTabBar.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-07-30.
-//
-
 import Foundation
 import SwiftUI
 
@@ -58,7 +51,7 @@ struct FloatingTabBar: View {
     }
     .geometryGroup()
     .padding(.horizontal, isKeyboardActive ? 0 : 36)
-    .padding(.bottom, 5)
+    .padding(.bottom, isKeyboardActive ? 0 : 10)
   }
 }
 

@@ -1,10 +1,3 @@
-//
-//  FFZService.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-05.
-//
-
 import Alamofire
 import Foundation
 
@@ -24,15 +17,17 @@ struct FFZService: ThirdPartyAssetService {
       throw URLError(.badServerResponse)
     }
 
-    return emotes.compactMap { Emote(
-      name: $0.name,
-      id: String($0.id),
-      category: .channel,
-      source: .ffz,
-      overlay: false,
-      width: $0.width,
-      height: $0.height
-    ) }
+    return emotes.compactMap {
+      Emote(
+        name: $0.name,
+        id: String($0.id),
+        category: .channel,
+        source: .ffz,
+        overlay: false,
+        width: $0.width,
+        height: $0.height
+      )
+    }
   }
 
   func globalEmotes() async throws -> [Emote] {
@@ -46,15 +41,17 @@ struct FFZService: ThirdPartyAssetService {
       throw URLError(.badServerResponse)
     }
 
-    return emotes.compactMap { Emote(
-      name: $0.name,
-      id: String($0.id),
-      category: .global,
-      source: .ffz,
-      overlay: false,
-      width: $0.width,
-      height: $0.height
-    ) }
+    return emotes.compactMap {
+      Emote(
+        name: $0.name,
+        id: String($0.id),
+        category: .global,
+        source: .ffz,
+        overlay: false,
+        width: $0.width,
+        height: $0.height
+      )
+    }
   }
 }
 

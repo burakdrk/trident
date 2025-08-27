@@ -1,10 +1,3 @@
-//
-//  GQLTokenProvider.swift
-//  TridentPlus
-//
-//  Created by Burak Duruk on 2025-07-28.
-//
-
 import Foundation
 
 @MainActor
@@ -58,6 +51,6 @@ final class GQLTokenProvider: TokenProvider {
   }
 
   func validateToken() async -> Bool {
-    return true // NOT IMPLEMENTED YET
+    true // NOT IMPLEMENTED YET
   }
 }

@@ -1,10 +1,3 @@
-//
-//  GraphQLClient.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-07-27.
-//
-
 import Apollo
 import Foundation
 

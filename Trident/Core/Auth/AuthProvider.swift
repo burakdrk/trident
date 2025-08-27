@@ -1,10 +1,3 @@
-//
-//  AuthProvider.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-19.
-//
-
 import FactoryKit
 
 struct AuthProvider {

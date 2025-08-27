@@ -1,10 +1,3 @@
-//
-//  ChatViewController.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-06.
-//
-
 import Foundation
 import SwiftUI
 import UIKit
@@ -17,7 +10,7 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
 
   // Only update view when lastUpdateID or isPaused changes
   nonisolated static func == (lhs: Self, rhs: Self) -> Bool {
-    return lhs.lastUpdateID == rhs.lastUpdateID
+    lhs.lastUpdateID == rhs.lastUpdateID
       && lhs.isPaused == rhs.isPaused
   }
 
@@ -86,7 +79,7 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
     }
 
     func scrollToBottom(animated: Bool = false) {
-      guard let tableView = tableView, !parent.isPaused else {
+      guard let tableView, !parent.isPaused else {
         return
       }
 

@@ -1,10 +1,3 @@
-//
-//  EmotePlayer.swift
-//  Trident
-//
-//  Created by Burak Duruk on 2025-08-08.
-//
-
 /// https://github.com/SDWebImage/SDWebImageSwiftUI/issues/300#issuecomment-2440050558
 /// Referenced from the above issue, to synchronize similar image playback
 
