@@ -20,7 +20,7 @@ struct FFZService: ThirdPartyAssetService {
     return emotes.compactMap {
       Emote(
         name: $0.name,
-        id: String($0.id),
+        sourceID: String($0.id),
         category: .channel,
         source: .ffz,
         overlay: false,
@@ -44,7 +44,7 @@ struct FFZService: ThirdPartyAssetService {
     return emotes.compactMap {
       Emote(
         name: $0.name,
-        id: String($0.id),
+        sourceID: String($0.id),
         category: .global,
         source: .ffz,
         overlay: false,

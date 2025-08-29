@@ -8,7 +8,7 @@ extension TwitchIRC.PrivateMessage {
     for item in parseEmotes().unique(by: \.id) {
       uniqueTwitchEmotes[item.name] = Emote(
         name: item.name,
-        id: item.id,
+        sourceID: item.id,
         category: .unknown,
         source: .twitch,
         overlay: false

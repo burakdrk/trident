@@ -8,6 +8,7 @@ struct PrimaryButtonStyle: ButtonStyle {
 
   var color: Color?
   var shape: SelectedShape = .rect
+  var gradient: Bool
 
   var clipShape: AnyShape {
     if shape == .rect {
@@ -30,7 +31,9 @@ struct PrimaryButtonStyle: ButtonStyle {
     configuration.label
       .font(.callout.bold())
       .padding(12)
-      .background(backgroundColor)
+      .background(gradient ? AnyShapeStyle(backgroundColor.gradient) :
+        AnyShapeStyle(backgroundColor)
+      )
       .foregroundStyle(.white)
       .clipShape(clipShape)
       .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
@@ -42,7 +45,15 @@ struct PrimaryButtonStyle: ButtonStyle {
 }
 
 extension ButtonStyle where Self == PrimaryButtonStyle {
-  static func primary(color: Color?, shape: Self.SelectedShape = .rect) -> Self {
-    PrimaryButtonStyle(color: color, shape: shape)
+  static func primary(
+    color: Color,
+    shape: Self.SelectedShape = .rect,
+    gradient: Bool = false
+  ) -> Self {
+    PrimaryButtonStyle(color: color, shape: shape, gradient: gradient)
+  }
+
+  static func primary(shape: Self.SelectedShape = .rect, gradient: Bool = false) -> Self {
+    PrimaryButtonStyle(color: nil, shape: shape, gradient: gradient)
   }
 }

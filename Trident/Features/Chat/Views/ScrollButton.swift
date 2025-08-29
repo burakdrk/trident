@@ -40,7 +40,7 @@ struct ScrollButton: View {
     }
     .allowsHitTesting(isVisible)
     .opacity(isVisible ? 1 : 0)
-    .buttonStyle(.primary(color: nil, shape: .capsule))
+    .buttonStyle(.primary(shape: .capsule))
   }
 }
 

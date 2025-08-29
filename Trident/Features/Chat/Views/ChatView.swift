@@ -3,6 +3,7 @@ import SwiftUI
 
 struct ChatView: View {
   @State private var store: ChatStore
+  @Environment(\.router) private var router
 
   init(channel: String) {
     _store = State(initialValue: ChatStore(channel: channel))
@@ -18,6 +19,9 @@ struct ChatView: View {
         store.dispatch(.togglePause(val))
       }
       .equatable()
+      .padding(.horizontal, 5)
+      .ignoresSafeArea(.all)
+      .themedBackground()
 
       ScrollButton(
         newMessageCount: store.state.newMessageCount,
@@ -25,17 +29,33 @@ struct ChatView: View {
       ) {
         store.dispatch(.togglePause(false))
       }
-      .padding(.bottom, 50)
+      .padding(.bottom, 20)
     }
     .task { store.dispatch(.start) }
     .onDisappear { store.dispatch(.stop) }
     .hideFloatingTabBar()
+    .navigationTitle(store.state.channel)
+    .toolbarTitleDisplayMode(.inline)
+    .navigationBarBackButtonHidden()
+    .toolbarBackgroundVisibility(.visible, for: .navigationBar)
+    .toolbar {
+      ToolbarItem(placement: .topBarLeading) {
+        Button {
+          router.pop(tab: .search)
+        } label: {
+          Image(systemName: "chevron.left")
+        }
+      }
+    }
+    .safeAreaInset(edge: .bottom, spacing: 0) {
+      ChatInputBar {}
+    }
   }
 }
 
 #Preview {
   let _: Void = SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
 
-  return ChatView(channel: "forsen")
+  return ChatView(channel: "xqc")
     .edgesIgnoringSafeArea(.all)
 }

@@ -61,28 +61,30 @@ struct Badge: Identifiable, Hashable, Sendable {
 
 // MARK: - Mock Data
 
-#if DEBUG
 extension Badge {
-  static let mockOverlay = Badge(
-    name: "RainTime",
-    id: "01FCY771D800007PQ2DF3GDTN6",
-    category: .global,
-    source: .seventv,
-    overlay: true,
-    width: 32,
-    height: 32
-  )
+  static var mockOverlay: Badge {
+    .init(
+      name: "RainTime",
+      id: "01FCY771D800007PQ2DF3GDTN6",
+      category: .global,
+      source: .seventv,
+      overlay: true,
+      width: 32,
+      height: 32
+    )
+  }
 
-  static let mock7tv = Badge(
-    name: "sadEing",
-    id: "01J3Q6RTN80004SVBK6PNC1AA8",
-    category: .channel,
-    source: .seventv,
-    overlay: false,
-    width: 32,
-    height: 32
-  )
+  static var mock7tv: Badge {
+    .init(
+      name: "sadEing",
+      id: "01J3Q6RTN80004SVBK6PNC1AA8",
+      category: .channel,
+      source: .seventv,
+      overlay: false,
+      width: 32,
+      height: 32
+    )
+  }
 
-  static let mocks: [Badge] = [.mockOverlay, .mock7tv]
+  static var mocks: [Badge] { [.mockOverlay, .mock7tv] }
 }
-#endif

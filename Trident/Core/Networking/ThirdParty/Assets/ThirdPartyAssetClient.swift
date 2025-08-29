@@ -3,41 +3,60 @@ import Foundation
 
 actor ThirdPartyAssetClient {
   private let services: [any ThirdPartyAssetService]
-  private var emotes: [String: Emote]?
-  private var forChannelID: String?
 
-  /// Creates an instance of the emote aggregator. Service order matters.
+  /// Registry that maps channel IDs to a list of emotes.
+  private let channelEmoteCache = Cache<String, [Emote]>()
+  private var globalEmoteCache: [Emote]?
+
+  /// Service order matters for precedence in case of emote name collisions.
   init(services: [any ThirdPartyAssetService]) {
     self.services = services
   }
 
   /// Retrieves a dictionary of unique emotes from all configured services, keyed by emote name.
-  func emotes(for channelID: String) async -> [String: Emote] {
-    // If emotes are already fetched, return them.
-    if let cachedEmotes = emotes, forChannelID == channelID {
-      return cachedEmotes
-    }
-
-    async let globalEmotes = fetchOrderedEmotes(from: { try await $0.globalEmotes() })
-    async let channelEmotes =
-      fetchOrderedEmotes(from: { try await $0.channelEmotes(for: channelID) })
-
-    let (allGlobal, allChannel) = await (globalEmotes, channelEmotes)
+  func emotes(for channelID: String?) async -> [String: Emote] {
+    async let g = getGlobalEmotes()
+    async let c = getChannelEmotes(for: channelID)
+    let (allGlobal, allChannel) = await (g, c)
 
     var uniqueEmotes = Dictionary(
       allGlobal.map { ($0.name, $0) },
       uniquingKeysWith: { _, new in new }
     )
 
+    // Channel emotes take precedence over global emotes in case of name collisions.
     uniqueEmotes.merge(allChannel.map { ($0.name, $0) }, uniquingKeysWith: { _, new in new })
-
-    emotes = uniqueEmotes
-    forChannelID = channelID
 
     return uniqueEmotes
   }
+}
 
-  private func fetchOrderedEmotes(
+// MARK: - Emote Helpers
+
+private extension ThirdPartyAssetClient {
+  func getGlobalEmotes() async -> [Emote] {
+    if let cache = globalEmoteCache {
+      return cache
+    }
+
+    let tmp = await fetchOrderedEmotes(from: { try await $0.globalEmotes() })
+    globalEmoteCache = tmp
+    return tmp
+  }
+
+  func getChannelEmotes(for channelID: String?) async -> [Emote] {
+    guard let channelID else { return [] }
+
+    if let cache = channelEmoteCache[channelID] {
+      return cache
+    }
+
+    let tmp = await fetchOrderedEmotes(from: { try await $0.channelEmotes(for: channelID) })
+    channelEmoteCache[channelID] = tmp
+    return tmp
+  }
+
+  func fetchOrderedEmotes(
     from fetcher: @Sendable @escaping (any ThirdPartyAssetService) async throws -> [Emote]
   ) async -> [Emote] {
     await withTaskGroup(of: (Int, [Emote]).self, returning: [Emote].self) { group in

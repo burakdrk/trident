@@ -11,12 +11,33 @@ final class UIChatViewController: UIViewController {
 
   private var dataSource: ChatDataSource?
 
-  var lastUpdateID: UUID = .init()
+  var lastUpdateID = UUID()
+  var backgroundColor: UIColor
+
+  init(bg: UIColor) {
+    backgroundColor = bg
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  @available(*, unavailable)
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
     configureTableView()
     configureDataSource()
+  }
+
+  override func viewSafeAreaInsetsDidChange() {
+    super.viewSafeAreaInsetsDidChange()
+    tableView.contentInset = UIEdgeInsets(
+      top: view.safeAreaInsets.top + 5,
+      left: 0,
+      bottom: view.safeAreaInsets.bottom,
+      right: 0
+    )
   }
 
   private func configureTableView() {
@@ -29,6 +50,7 @@ final class UIChatViewController: UIViewController {
     tableView.separatorStyle = .none
     tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
     tableView.contentInsetAdjustmentBehavior = .never
+    tableView.backgroundColor = backgroundColor
   }
 }
 
@@ -60,7 +82,7 @@ extension UIChatViewController {
 
       cell.makeMessage(
         message: item,
-        font: UIFont.systemFont(ofSize: 16)
+        font: UIFont.systemFont(ofSize: 15)
       )
 
       return cell

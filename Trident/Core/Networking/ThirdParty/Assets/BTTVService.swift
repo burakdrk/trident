@@ -39,7 +39,7 @@ struct BTTVService: ThirdPartyAssetService {
   private func mapToEmote(_ bttvEmote: BTTVEmote, _ type: Emote.Category) -> Emote? {
     Emote(
       name: bttvEmote.code,
-      id: bttvEmote.id,
+      sourceID: bttvEmote.id,
       category: type,
       source: .bttv,
       overlay: false,

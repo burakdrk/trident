@@ -8,7 +8,7 @@ final class SearchStore: DataStore {
     var query: String = ""
   }
 
-  enum Action: Equatable {
+  enum Action {
     case setQuery(String?)
     case _setDebouncedQuery(String)
   }

@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct ThemePalette: Sendable {
-  let bg: Color
-  let bgElev: Color
-  let fg: Color
-  let fgSecondary: Color
-  let separator: Color
+  let bg: UIColor
+  let bgElev: UIColor
+  let fg: UIColor
+  let fgSecondary: UIColor
+  let separator: UIColor
 }
 
 // MARK: - Light Theme
@@ -13,11 +13,11 @@ struct ThemePalette: Sendable {
 extension ThemePalette {
   /// Regular light theme.
   static let light = Self(
-    bg: Color(.systemBackground),
-    bgElev: Color(.secondarySystemBackground),
-    fg: Color(.label),
-    fgSecondary: Color(.secondaryLabel),
-    separator: Color(.separator)
+    bg: .systemBackground,
+    bgElev: .secondarySystemBackground,
+    fg: .label,
+    fgSecondary: .secondaryLabel,
+    separator: .separator
   )
 }
 
@@ -26,11 +26,11 @@ extension ThemePalette {
 extension ThemePalette {
   /// Dark gray (not pure black).
   static let dark = Self(
-    bg: Color(.secondarySystemBackground),
-    bgElev: .black,
-    fg: Color(.label),
-    fgSecondary: Color(.secondaryLabel),
-    separator: Color(.separator)
+    bg: .secondarySystemBackground,
+    bgElev: UIColor(hex: "#101011") ?? .black,
+    fg: .label,
+    fgSecondary: .secondaryLabel,
+    separator: .separator
   )
 }
 
@@ -39,11 +39,11 @@ extension ThemePalette {
 extension ThemePalette {
   /// True black for OLED.
   static let black = Self(
-    bg: .black,
-    bgElev: Color(red: 0.06, green: 0.06, blue: 0.06),
-    fg: .white,
-    fgSecondary: .white.opacity(0.7),
-    separator: .white.opacity(0.12)
+    bg: .systemBackground,
+    bgElev: .secondarySystemBackground,
+    fg: .label,
+    fgSecondary: .secondaryLabel,
+    separator: .separator
   )
 }
 

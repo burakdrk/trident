@@ -15,32 +15,41 @@ struct Emote: Identifiable, Hashable, Sendable {
   }
 
   let name: String
-  let id: String
+  let sourceID: String
   let category: Category
   let source: Source
   let overlay: Bool
   var width = 28
   var height = 28
 
+  var id: String {
+    { switch source {
+    case .twitch: "twitch"
+    case .bttv: "bttv"
+    case .ffz: "ffz"
+    case .seventv: "7tv"
+    }}() + "_" + sourceID
+  }
+
   var url: URL {
     switch source {
     case .bttv:
-      guard let url = URL(string: "\(source.rawValue)\(id)/2x.webp") else {
+      guard let url = URL(string: "\(source.rawValue)\(sourceID)/2x.webp") else {
         fatalError("Invalid BTTV URL")
       }
       return url
     case .ffz:
-      guard let url = URL(string: "\(source.rawValue)\(id)/2") else {
+      guard let url = URL(string: "\(source.rawValue)\(sourceID)/2") else {
         fatalError("Invalid FFZ URL")
       }
       return url
     case .seventv:
-      guard let url = URL(string: "\(source.rawValue)\(id)/2x.webp") else {
+      guard let url = URL(string: "\(source.rawValue)\(sourceID)/2x.webp") else {
         fatalError("Invalid 7TV URL")
       }
       return url
     case .twitch:
-      guard let url = URL(string: "\(source.rawValue)\(id)/default/dark/2.0") else {
+      guard let url = URL(string: "\(source.rawValue)\(sourceID)/default/dark/2.0") else {
         fatalError("Invalid Twitch URL")
       }
       return url
@@ -53,7 +62,7 @@ struct Emote: Identifiable, Hashable, Sendable {
     var w = width
     var h = height
     if source == .twitch {
-      (w, h) = Emote.twitchOutliers[id] ?? (width, height)
+      (w, h) = Emote.twitchOutliers[sourceID] ?? (width, height)
     }
 
     let multiplier = multiplier * 1.25 // Baseline multiplier for better visibility
@@ -61,7 +70,7 @@ struct Emote: Identifiable, Hashable, Sendable {
   }
 
   static func == (lhs: Emote, rhs: Emote) -> Bool {
-    lhs.id == rhs.id && lhs.source == rhs.source
+    lhs.id == rhs.id
   }
 }
 
@@ -71,7 +80,7 @@ extension Emote {
   static var mockOverlay: Emote {
     .init(
       name: "RainTime",
-      id: "01FCY771D800007PQ2DF3GDTN6",
+      sourceID: "01FCY771D800007PQ2DF3GDTN6",
       category: .global,
       source: .seventv,
       overlay: true,
@@ -83,7 +92,7 @@ extension Emote {
   static var mock7tv: Emote {
     .init(
       name: "sadEing",
-      id: "01J3Q6RTN80004SVBK6PNC1AA8",
+      sourceID: "01J3Q6RTN80004SVBK6PNC1AA8",
       category: .channel,
       source: .seventv,
       overlay: false,

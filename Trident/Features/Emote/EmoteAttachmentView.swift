@@ -1,6 +1,9 @@
 import SDWebImage
 import UIKit
 
+/// https://github.com/SDWebImage/SDWebImageSwiftUI/issues/300#issuecomment-2440050558
+/// Referenced from the above issue, to synchronize similar image playback
+
 final class EmoteAttachmentView: UIImageView {
   var emote: Emote? {
     didSet {

@@ -6,7 +6,8 @@ import Observation
 final class ChatStore: DataStore {
   struct State: Equatable {
     var channel: String
-    var channelID = "22484632"
+    var channelID: String = "71092938"
+    var tpEmotes: [String: Emote]?
 
     var isPaused = false
     var newMessageCount = 0
@@ -49,6 +50,7 @@ final class ChatStore: DataStore {
   }
 
   deinit {
+    print("Deinit ChatStore")
     consumeTask?.cancel()
     renderTask?.cancel()
   }
@@ -65,16 +67,16 @@ final class ChatStore: DataStore {
       state.newMessageCount = 0
       Task { await chatClient.disconnect() }
 
-    case let .togglePause(on):
+    case .togglePause(let on):
       state.isPaused = on
 
-    case let ._connected(ok):
+    case ._connected(let ok):
       state.isConnected = ok
 
-    case let ._setNewCount(n):
+    case ._setNewCount(let n):
       state.newMessageCount = n
 
-    case let ._flush(batch):
+    case ._flush(let batch):
       state.messages.insert(contentsOf: batch, at: 0)
 
       // Compute deletes if overflow
@@ -85,7 +87,7 @@ final class ChatStore: DataStore {
 
       state.lastUpdateID = UUID()
 
-    case let ._error(msg):
+    case ._error(let msg):
       state.lastError = msg
     }
   }
@@ -97,11 +99,25 @@ extension ChatStore {
   private func connect() async throws -> (IRCClientType.IRCMessageStream, Set<String>) {
     let stream = try await chatClient.connect()
     try await chatClient.join(to: state.channel)
-    let tpEmotes = await assetClient.emotes(state.channelID)
-    let (recents, recentIDs) = await recentsService.fetch(
-      for: state.channel,
-      tpEmotes: tpEmotes
-    )
+
+    // Don't wait for emotes, they can come later
+    Task { @MainActor [weak self] in
+      try? await Task.sleep(for: .seconds(5)) // slight
+      let tpEmotes = await self?.assetClient.emotes(self?.state.channelID)
+
+      // Don't proceed if instance got deallocated
+      guard let self, let tpEmotes else { return }
+
+      state.tpEmotes = tpEmotes
+
+      for i in state.messages.indices {
+        state.messages[i].addEmotes(tpEmotes)
+      }
+
+      state.lastUpdateID = UUID()
+    }
+
+    let (recents, recentIDs) = await recentsService.fetch(for: state.channel)
 
     dispatch(._flush(recents))
     dispatch(._connected(true))
@@ -119,7 +135,7 @@ extension ChatStore {
           if Task.isCancelled { break }
 
           switch message {
-          case let .privateMessage(pm):
+          case .privateMessage(let pm):
             if recentIDs.contains(pm.id) {
               continue
             }
@@ -128,7 +144,6 @@ extension ChatStore {
               ChatMessage(pm: pm, thirdPartyEmotes: [:]),
               paused: self?.state.isPaused ?? false
             )
-          case let .roomState(room): print(room)
           default: break
           }
         }

@@ -13,10 +13,11 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
     case emote([Emote]) // Array for overlay emotes
   }
 
-  let id: String
+  private let unparsedTwitchEmotes: String
+  private(set) var id: String
+  private(set) var inlines: [Inline]
   let author: Author
   let timestamp: Date
-  let inlines: [Inline]
   let rawText: String
   let historical: Bool
 
@@ -27,6 +28,7 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
     author = .init(displayName: pm.displayName, colorHex: normalized, badges: pm.badges)
     timestamp = Date(timestamp: Int(pm.tmiSentTs))
     rawText = pm.message
+    unparsedTwitchEmotes = pm.emotes
     self.historical = historical
     inlines = ChatMessage.tokenize(
       body: pm.message,
@@ -35,7 +37,23 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
     )
   }
 
-  static func == (left: ChatMessage, right: ChatMessage) -> Bool { left.id == right.id }
+  mutating func addEmotes(_ emotes: [String: Emote]) {
+    var pm = PrivateMessage()
+    pm.emotes = unparsedTwitchEmotes
+    pm.message = rawText
+
+    inlines = ChatMessage.tokenize(
+      body: pm.message,
+      twitchEmotes: pm.parseEmotesToDict(),
+      thirdPartyEmotes: emotes
+    )
+
+    id = "emotesloaded_\(id)"
+  }
+
+  static func == (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
+    lhs.id == rhs.id
+  }
 }
 
 // MARK: - Tokenization
@@ -54,13 +72,13 @@ extension ChatMessage {
       let emote = twitchEmotes[part] ?? thirdPartyEmotes[part]
 
       if let emote {
-        if emote.overlay, !inlines.isEmpty, case let .emote(lastEmotes) = inlines.last {
+        if emote.overlay, !inlines.isEmpty, case .emote(let lastEmotes) = inlines.last {
           inlines[inlines.count - 1] = .emote(lastEmotes + [emote])
         } else {
           inlines.append(.emote([emote]))
         }
       } else {
-        if !inlines.isEmpty, case let .text(lastText) = inlines.last {
+        if !inlines.isEmpty, case .text(let lastText) = inlines.last {
           inlines[inlines.count - 1] = .text(lastText + " " + part)
         } else {
           inlines.append(.text(part))
@@ -82,7 +100,7 @@ extension ChatMessage {
     let string = "@badge-info=;badges=global_mod/1,turbo/1;color=#0D4200;display-name=ronni;emotes=25:0-4,12-16/1902:6-10;id=\(UUID().uuidString);mod=0;room-id=1337;subscriber=0;tmi-sent-ts=1507246572675;turbo=1;user-id=1337;user-type=global_mod :ronni!ronni@ronni.tmi.twitch.tv PRIVMSG #ronni :Kappa Keepo Kappa sadEing RainTime"
 
     let messages = IncomingMessage.parse(ircOutput: string)
-    guard case let .privateMessage(pm) = messages.first?.message as? IncomingMessage else {
+    guard case .privateMessage(let pm) = messages.first?.message as? IncomingMessage else {
       return ChatMessage(pm: PrivateMessage(), thirdPartyEmotes: [:])
     }
 

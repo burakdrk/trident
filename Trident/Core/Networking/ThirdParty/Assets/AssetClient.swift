@@ -1,7 +1,7 @@
 import FactoryKit
 
 struct AssetClient: Sendable {
-  var emotes: @Sendable (_ channelID: String) async -> [String: Emote]
+  var emotes: @Sendable (_ channelID: String?) async -> [String: Emote]
 }
 
 private extension AssetClient {

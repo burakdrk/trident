@@ -8,6 +8,10 @@ final class AuthStore: NSObject, DataStore {
     var phase = Phase.loading
     var isBusy = false
     var errorMessage: String?
+
+    var isAuthenticated: Bool {
+      phase == .loggedIn
+    }
   }
 
   enum Action {
@@ -82,13 +86,13 @@ final class AuthStore: NSObject, DataStore {
     case .loadSession:
       Task { await authProvider.loadSession() }
 
-    case let ._setPhase(phase):
+    case ._setPhase(let phase):
       state.phase = phase
 
-    case let ._setErrorMessage(msg):
+    case ._setErrorMessage(let msg):
       state.errorMessage = msg
 
-    case let ._setIsBusy(isBusy):
+    case ._setIsBusy(let isBusy):
       state.isBusy = isBusy
     }
   }

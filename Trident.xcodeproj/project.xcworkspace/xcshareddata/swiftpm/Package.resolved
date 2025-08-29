@@ -1,5 +1,5 @@
 {
-  "originHash" : "652112a0f27e8dea80089602fe8b0f4f21520818641b4952d1b9434f4e72eb71",
+  "originHash" : "a2d5117a830d157c2d24a6356cbd1fda8504a0b0087ace1015b5234484106d82",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "d591c1dd55824867877cff4f6551fe32983d7f51",
         "version" : "1.23.0"
+      }
+    },
+    {
+      "identity" : "coretextswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/CoreTextSwift",
+      "state" : {
+        "revision" : "833177201d6421e6322296f39fce6ff6ae52618a",
+        "version" : "0.2.0"
       }
     },
     {
@@ -62,6 +71,24 @@
       "state" : {
         "revision" : "776c4a6db74d5c6c143974be91c383680d468630",
         "version" : "1.3.0"
+      }
+    },
+    {
+      "identity" : "sttextkitplus",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/STTextKitPlus",
+      "state" : {
+        "revision" : "42513da2f28f90fb180d422c31fe670cf3e0875a",
+        "version" : "0.1.10"
+      }
+    },
+    {
+      "identity" : "sttextview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/STTextView",
+      "state" : {
+        "revision" : "ac032776f287e632139cda9d89cbe2fb1373ed0b",
+        "version" : "2.1.2"
       }
     },
     {

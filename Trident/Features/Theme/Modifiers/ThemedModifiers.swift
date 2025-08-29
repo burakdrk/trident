@@ -5,7 +5,7 @@ private struct ThemedBackground: ViewModifier {
   var ignoresSafeArea: Bool = true
 
   func body(content: Content) -> some View {
-    content.background(theme.bg.ignoresSafeArea(ignoresSafeArea ? .all : []))
+    content.background(Color(theme.bg).ignoresSafeArea(ignoresSafeArea ? .all : []))
   }
 }
 
@@ -14,20 +14,20 @@ private struct ThemedCard: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .background(theme.bgElev)
+      .background(Color(theme.bgElev))
   }
 }
 
 private struct ThemedPrimaryText: ViewModifier {
   @Environment(\.theme) private var theme
 
-  func body(content: Content) -> some View { content.foregroundStyle(theme.fg) }
+  func body(content: Content) -> some View { content.foregroundStyle(Color(theme.fg)) }
 }
 
 private struct ThemedSecondaryText: ViewModifier {
   @Environment(\.theme) private var theme
 
-  func body(content: Content) -> some View { content.foregroundStyle(theme.fgSecondary) }
+  func body(content: Content) -> some View { content.foregroundStyle(Color(theme.fgSecondary)) }
 }
 
 private struct AccentForeground: ViewModifier {

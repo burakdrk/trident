@@ -4,12 +4,13 @@ import TwitchIRC
 
 struct RecentMessagesService: Sendable {
   private let baseAPIURL = "https://recent-messages.robotty.de/api/v2/recent-messages"
+  private let params = ["hide_moderation_messages": "true", "hide_moderated_messages": "true"]
 
-  func fetch(for channel: String, tpEmotes: [String: Emote]) async -> ([ChatMessage], Set<String>) {
+  func fetch(for channel: String) async -> ([ChatMessage], Set<String>) {
     let urlString = "\(baseAPIURL)/\(channel)"
 
     let res = try? await AF
-      .request(urlString)
+      .request(urlString, parameters: params)
       .serializingDecodable(RecentMessagesResponse.self)
       .value
 
@@ -22,9 +23,9 @@ struct RecentMessagesService: Sendable {
     let messages = res.messages.reversed()
       .flatMap { IncomingMessage.parse(ircOutput: $0).compactMap(\.message) }
       .compactMap { message in
-        if case let .privateMessage(pm) = message {
+        if case .privateMessage(let pm) = message {
           ids.insert(pm.id)
-          return ChatMessage(pm: pm, thirdPartyEmotes: tpEmotes, historical: true)
+          return ChatMessage(pm: pm, thirdPartyEmotes: [:], historical: true)
         }
 
         return nil
@@ -32,10 +33,10 @@ struct RecentMessagesService: Sendable {
 
     return (messages, ids)
   }
-}
 
-private struct RecentMessagesResponse: Codable {
-  let messages: [String]
-  let error: String?
-  let error_code: String?
+  private struct RecentMessagesResponse: Codable {
+    let messages: [String]
+    let error: String?
+    let error_code: String?
+  }
 }

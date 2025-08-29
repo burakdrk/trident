@@ -8,6 +8,8 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
   var lastUpdateID: UUID
   var togglePause: (Bool) -> Void
 
+  @Environment(\.theme) private var theme
+
   // Only update view when lastUpdateID or isPaused changes
   nonisolated static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.lastUpdateID == rhs.lastUpdateID
@@ -15,7 +17,7 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
   }
 
   func makeUIViewController(context: Context) -> UIChatViewController {
-    let vc = UIChatViewController()
+    let vc = UIChatViewController(bg: theme.bg)
     vc.tableView.delegate = context.coordinator
     context.coordinator.tableView = vc.tableView
     return vc
@@ -23,6 +25,7 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
 
   func updateUIViewController(_ vc: UIChatViewController, context: Context) {
     if vc.lastUpdateID == lastUpdateID {
+      vc.backgroundColor = theme.bg
       context.coordinator.parent = self
       context.coordinator.scrollToBottom(animated: true)
       return
@@ -35,7 +38,7 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
   }
 
   func makeCoordinator() -> Coordinator {
-    Coordinator(parent: self)
+    Coordinator(self)
   }
 
   // MARK: - Coordinator
@@ -46,7 +49,7 @@ struct ChatViewController: UIViewControllerRepresentable, Equatable {
     var lastY: CGFloat = .zero
     weak var tableView: UITableView?
 
-    init(parent: ChatViewController) {
+    init(_ parent: ChatViewController) {
       self.parent = parent
     }
 

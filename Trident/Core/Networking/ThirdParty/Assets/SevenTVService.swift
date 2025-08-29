@@ -16,7 +16,7 @@ struct SevenTVService: ThirdPartyAssetService {
     return response.emoteSet.emotes.compactMap {
       Emote(
         name: $0.name,
-        id: $0.id,
+        sourceID: $0.id,
         category: .channel,
         source: .seventv,
         overlay: $0.data.flags == (1 << 8),
@@ -36,7 +36,7 @@ struct SevenTVService: ThirdPartyAssetService {
     return response.emotes.compactMap {
       Emote(
         name: $0.name,
-        id: $0.id,
+        sourceID: $0.id,
         category: .global,
         source: .seventv,
         overlay: $0.data.flags == (1 << 8),

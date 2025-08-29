@@ -4,7 +4,7 @@ import UIKit
 final class MessageCell: UITableViewCell {
   static let reuseID = "MessageCellId"
 
-  let textView: UITextView = LinkOnlyTextView()
+  private lazy var textView: UITextView = LinkOnlyTextView()
 
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -12,6 +12,7 @@ final class MessageCell: UITableViewCell {
     // Configure the cell
     selectionStyle = .none
     transform = CGAffineTransform(scaleX: 1, y: -1)
+    backgroundColor = .clear
 
     setupTextView() // Setup the text view with necessary properties
   }
@@ -83,10 +84,10 @@ extension MessageCell {
     // Message body
     for inline in message.inlines {
       switch inline {
-      case let .emote(emote):
+      case .emote(let emote):
         let att = EmoteAttachment(emote, historical: message.historical)
         out.append(NSAttributedString(attachment: att))
-      case let .text(text):
+      case .text(let text):
         out.append(NSAttributedString(string: text, attributes: attrs))
       }
     }

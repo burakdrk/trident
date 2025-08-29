@@ -73,7 +73,7 @@ extension FloatingTabBar {
           )
           .autocorrectionDisabled()
           .textInputAutocapitalization(.never)
-          .foregroundStyle(theme.fg)
+          .themedPrimaryText()
           .focused($isKeyboardActive)
           .frame(height: barHeight)
           .contentShape(Rectangle())
@@ -155,7 +155,7 @@ extension FloatingTabBar {
   private func TabBarBackground() -> some View {
     ZStack {
       Rectangle().fill(.ultraThinMaterial)
-      Rectangle().fill(theme.bgElev.opacity(0.8))
+      Rectangle().fill(Color(theme.bgElev).opacity(0.8))
     }
     .compositingGroup()
   }

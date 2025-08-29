@@ -1,8 +1,8 @@
-/// https://github.com/SDWebImage/SDWebImageSwiftUI/issues/300#issuecomment-2440050558
-/// Referenced from the above issue, to synchronize similar image playback
-
 import OrderedCollections
 import SDWebImage
+
+/// https://github.com/SDWebImage/SDWebImageSwiftUI/issues/300#issuecomment-2440050558
+/// Referenced from the above issue, to synchronize similar image playback
 
 @MainActor
 final class EmotePlayer {
