@@ -19,7 +19,6 @@
 		EC72B6D62E3F18200011F8E0 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C92E3F18200011F8E0 /* Supabase */; };
 		EC72B6D72E3F18200011F8E0 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C72E3F18200011F8E0 /* Apollo */; };
 		EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EC75289D2E4AD8E600065981 /* Alamofire */; };
-		ECA019912E5EDAB30087FC33 /* STTextView in Frameworks */ = {isa = PBXBuildFile; productRef = ECA019902E5EDAB30087FC33 /* STTextView */; };
 		ECBA79822E4AE1E20079A562 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ECBA79812E4AE1E20079A562 /* Alamofire */; };
 		ECC6223D2E5424FA00A2AD09 /* SDWebImageSVGNativeCoder in Frameworks */ = {isa = PBXBuildFile; productRef = ECC6223C2E5424FA00A2AD09 /* SDWebImageSVGNativeCoder */; };
 		ECC6223F2E54250E00A2AD09 /* SDWebImageSVGNativeCoder in Frameworks */ = {isa = PBXBuildFile; productRef = ECC6223E2E54250E00A2AD09 /* SDWebImageSVGNativeCoder */; };
@@ -94,7 +93,6 @@
 				EC1A251C2E3B2AF900B8CF5D /* SDWebImageSwiftUI in Frameworks */,
 				ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */,
 				ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */,
-				ECA019912E5EDAB30087FC33 /* STTextView in Frameworks */,
 				ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */,
 				EC5A10BA2E5AE121001FE869 /* AsyncAlgorithms in Frameworks */,
 			);
@@ -202,7 +200,6 @@
 				ECC6223C2E5424FA00A2AD09 /* SDWebImageSVGNativeCoder */,
 				EC5A10B92E5AE121001FE869 /* AsyncAlgorithms */,
 				ECE380262E5BCB1200D37047 /* FactoryKit */,
-				ECA019902E5EDAB30087FC33 /* STTextView */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -270,7 +267,6 @@
 				ECC6223B2E5424FA00A2AD09 /* XCRemoteSwiftPackageReference "SDWebImageSVGNativeCoder" */,
 				EC5A10B82E5AE121001FE869 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 				ECE380252E5BCB1200D37047 /* XCRemoteSwiftPackageReference "Factory" */,
-				ECA0198F2E5EDAB30087FC33 /* XCRemoteSwiftPackageReference "STTextView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EC7631D12E30B41A00A86ABD /* Products */;
@@ -378,6 +374,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -416,6 +413,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -576,6 +574,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -614,6 +613,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -795,14 +795,6 @@
 				minimumVersion = 5.10.2;
 			};
 		};
-		ECA0198F2E5EDAB30087FC33 /* XCRemoteSwiftPackageReference "STTextView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/krzyzanowskim/STTextView";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.2;
-			};
-		};
 		ECC6223B2E5424FA00A2AD09 /* XCRemoteSwiftPackageReference "SDWebImageSVGNativeCoder" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSVGNativeCoder";
@@ -905,11 +897,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		ECA019902E5EDAB30087FC33 /* STTextView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ECA0198F2E5EDAB30087FC33 /* XCRemoteSwiftPackageReference "STTextView" */;
-			productName = STTextView;
 		};
 		ECBA79812E4AE1E20079A562 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
