@@ -155,7 +155,7 @@ extension FloatingTabBar {
   private func TabBarBackground() -> some View {
     ZStack {
       Rectangle().fill(.ultraThinMaterial)
-      Rectangle().fill(Color(theme.bgElev).opacity(0.8))
+      Rectangle().fill(theme.bgElev.opacity(0.8))
     }
     .compositingGroup()
   }

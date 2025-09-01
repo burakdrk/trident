@@ -25,7 +25,7 @@ struct ChatInputBar: View {
       .textFieldStyle(.plain)
       .focused($isKeyboardActive)
       .padding(12)
-      .background(Color(theme.bgElev), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+      .background(theme.bgElev, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
       .themedForeground()
       .disabled(!auth.state.isAuthenticated)
 

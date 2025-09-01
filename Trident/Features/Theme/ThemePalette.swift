@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct ThemePalette: Sendable {
-  let bg: UIColor
-  let bgElev: UIColor
-  let fg: UIColor
-  let fgSecondary: UIColor
-  let separator: UIColor
+  let bg: Color
+  let bgElev: Color
+  let fg: Color
+  let fgSecondary: Color
+  let separator: Color
 }
 
 // MARK: - Light Theme
@@ -13,11 +13,11 @@ struct ThemePalette: Sendable {
 extension ThemePalette {
   /// Regular light theme.
   static let light = Self(
-    bg: .systemBackground,
-    bgElev: .secondarySystemBackground,
-    fg: .label,
-    fgSecondary: .secondaryLabel,
-    separator: .separator
+    bg: Color(.systemBackground),
+    bgElev: Color(.secondarySystemBackground),
+    fg: Color(.label),
+    fgSecondary: Color(.secondaryLabel),
+    separator: Color(.separator)
   )
 }
 
@@ -26,11 +26,11 @@ extension ThemePalette {
 extension ThemePalette {
   /// Dark gray (not pure black).
   static let dark = Self(
-    bg: .secondarySystemBackground,
-    bgElev: UIColor(hex: "#101011") ?? .black,
-    fg: .label,
-    fgSecondary: .secondaryLabel,
-    separator: .separator
+    bg: Color(.secondarySystemBackground),
+    bgElev: Color(UIColor(hex: "#101011") ?? .black),
+    fg: Color(.label),
+    fgSecondary: Color(.secondaryLabel),
+    separator: Color(.separator)
   )
 }
 
@@ -39,11 +39,11 @@ extension ThemePalette {
 extension ThemePalette {
   /// True black for OLED.
   static let black = Self(
-    bg: .systemBackground,
-    bgElev: .secondarySystemBackground,
-    fg: .label,
-    fgSecondary: .secondaryLabel,
-    separator: .separator
+    bg: Color(.systemBackground),
+    bgElev: Color(.secondarySystemBackground),
+    fg: Color(.label),
+    fgSecondary: Color(.secondaryLabel),
+    separator: Color(.separator)
   )
 }
 

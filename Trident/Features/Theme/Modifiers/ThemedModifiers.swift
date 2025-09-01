@@ -5,7 +5,7 @@ private struct ThemedBackground: ViewModifier {
   var ignoresSafeArea: Bool = true
 
   func body(content: Content) -> some View {
-    content.background(Color(theme.bg).ignoresSafeArea(ignoresSafeArea ? .all : []))
+    content.background(theme.bg.ignoresSafeArea(ignoresSafeArea ? .all : []))
   }
 }
 
@@ -15,7 +15,7 @@ private struct ThemedAppBackground: ViewModifier {
   func body(content: Content) -> some View {
     ZStack {
       Rectangle()
-        .foregroundColor(Color(theme.bg))
+        .foregroundColor(theme.bg)
         .edgesIgnoringSafeArea(.all)
 
       content
@@ -28,20 +28,20 @@ private struct ThemedCard: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .background(Color(theme.bgElev))
+      .background(theme.bgElev)
   }
 }
 
 private struct ThemedForeground: ViewModifier {
   @Environment(\.theme) private var theme
 
-  func body(content: Content) -> some View { content.foregroundStyle(Color(theme.fg)) }
+  func body(content: Content) -> some View { content.foregroundStyle(theme.fg) }
 }
 
 private struct ThemedSecondaryForeground: ViewModifier {
   @Environment(\.theme) private var theme
 
-  func body(content: Content) -> some View { content.foregroundStyle(Color(theme.fgSecondary)) }
+  func body(content: Content) -> some View { content.foregroundStyle(theme.fgSecondary) }
 }
 
 private struct AccentForeground: ViewModifier {

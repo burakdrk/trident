@@ -4,25 +4,25 @@ enum AccentChoice: String, CaseIterable, Identifiable, Codable, Sendable {
   case red, orange, yellow, green, mint, teal, cyan, blue, indigo, purple, pink, brown, gray
   var id: String { rawValue }
 
-  var uiColor: UIColor {
+  var color: Color {
     switch self {
-    case .red: .systemRed
-    case .orange: .systemOrange
-    case .yellow: .systemYellow
-    case .green: .systemGreen
-    case .mint: .systemMint
-    case .teal: .systemTeal
-    case .cyan: .systemCyan
-    case .blue: .systemBlue
-    case .indigo: .systemIndigo
-    case .purple: UIColor(.twitchPurple)
-    case .pink: .systemPink
-    case .brown: .systemBrown
-    case .gray: .systemGray
+    case .red: .red
+    case .orange: .orange
+    case .yellow: .yellow
+    case .green: .green
+    case .mint: .mint
+    case .teal: .teal
+    case .cyan: .cyan
+    case .blue: .blue
+    case .indigo: .indigo
+    case .purple: .twitchPurple
+    case .pink: .pink
+    case .brown: .brown
+    case .gray: .gray
     }
   }
 
-  var color: Color { Color(uiColor) }
+  var uiColor: UIColor { UIColor(color) }
 }
 
 extension EnvironmentValues {

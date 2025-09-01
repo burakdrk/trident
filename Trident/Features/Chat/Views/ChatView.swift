@@ -12,7 +12,7 @@ struct ChatView: UIViewRepresentable {
     view.register(MessageCell.self, forCellReuseIdentifier: MessageCell.reuseID)
     view.separatorStyle = .none
     view.contentInsetAdjustmentBehavior = .never
-    view.backgroundColor = context.environment.theme.bg
+    view.backgroundColor = UIColor(context.environment.theme.bg)
     view.delegate = context.coordinator
     context.coordinator.configureDataSource(view)
     return view
