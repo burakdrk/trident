@@ -10,12 +10,11 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
 
   enum Inline: Hashable, Sendable {
     case text(String)
-    case emote([Emote]) // Array for overlay emotes
+    case emote([Emote]) // Array for overlay (zero-width) emotes
   }
 
-  private let unparsedTwitchEmotes: String
-  private(set) var id: String
-  private(set) var inlines: [Inline]
+  let id: String
+  let inlines: [Inline]
   let author: Author
   let timestamp: Date
   let rawText: String
@@ -28,7 +27,6 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
     author = .init(displayName: pm.displayName, colorHex: normalized, badges: pm.badges)
     timestamp = Date(timestamp: Int(pm.tmiSentTs))
     rawText = pm.message
-    unparsedTwitchEmotes = pm.emotes
     self.historical = historical
     inlines = ChatMessage.tokenize(
       body: pm.message,
@@ -37,21 +35,11 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
     )
   }
 
-  mutating func addEmotes(_ emotes: [String: Emote]) {
-    var pm = PrivateMessage()
-    pm.emotes = unparsedTwitchEmotes
-    pm.message = rawText
-
-    inlines = ChatMessage.tokenize(
-      body: pm.message,
-      twitchEmotes: pm.parseEmotesToDict(),
-      thirdPartyEmotes: emotes
-    )
-
-    id = "emotesloaded_\(id)"
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
   }
 
-  static func == (lhs: ChatMessage, rhs: ChatMessage) -> Bool {
+  static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.id == rhs.id
   }
 }
@@ -97,16 +85,33 @@ extension ChatMessage {
 
 extension ChatMessage {
   static var mock: ChatMessage {
-    let string = "@badge-info=;badges=global_mod/1,turbo/1;color=#0D4200;display-name=ronni;emotes=25:0-4,12-16/1902:6-10;id=\(UUID().uuidString);mod=0;room-id=1337;subscriber=0;tmi-sent-ts=1507246572675;turbo=1;user-id=1337;user-type=global_mod :ronni!ronni@ronni.tmi.twitch.tv PRIVMSG #ronni :Kappa Keepo Kappa sadEing RainTime"
+    let string = """
+    @badge-info=;
+    badges=global_mod/1,turbo/1;
+    color=#0D4200;
+    display-name=ronni;
+    emotes=25:0-4,12-16/1902:6-10;
+    id=\(UUID().uuidString);
+    mod=0;
+    room-id=1337;
+    subscriber=0;
+    tmi-sent-ts=1507246572675;
+    turbo=1;
+    user-id=1337;
+    user-type=global_mod :ronni!ronni@ronni.tmi.twitch.tv PRIVMSG #ronni :Kappa Keepo Kappa sadEing RainTime
+    """
 
     let messages = IncomingMessage.parse(ircOutput: string)
     guard case .privateMessage(let pm) = messages.first?.message as? IncomingMessage else {
       return ChatMessage(pm: PrivateMessage(), thirdPartyEmotes: [:])
     }
 
-    return ChatMessage(pm: pm, thirdPartyEmotes: [
-      Emote.mock7tv.name: Emote.mock7tv,
-      Emote.mockOverlay.name: Emote.mockOverlay
-    ])
+    return ChatMessage(
+      pm: pm,
+      thirdPartyEmotes: [
+        Emote.mock7tv.name: Emote.mock7tv,
+        Emote.mockOverlay.name: Emote.mockOverlay
+      ]
+    )
   }
 }

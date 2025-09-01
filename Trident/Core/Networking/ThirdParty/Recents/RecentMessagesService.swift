@@ -6,7 +6,7 @@ struct RecentMessagesService: Sendable {
   private let baseAPIURL = "https://recent-messages.robotty.de/api/v2/recent-messages"
   private let params = ["hide_moderation_messages": "true", "hide_moderated_messages": "true"]
 
-  func fetch(for channel: String) async -> ([ChatMessage], Set<String>) {
+  func fetch(for channel: String, emotes: [String: Emote]) async -> ([ChatMessage], Set<String>) {
     let urlString = "\(baseAPIURL)/\(channel)"
 
     let res = try? await AF
@@ -25,7 +25,7 @@ struct RecentMessagesService: Sendable {
       .compactMap { message in
         if case .privateMessage(let pm) = message {
           ids.insert(pm.id)
-          return ChatMessage(pm: pm, thirdPartyEmotes: [:], historical: true)
+          return ChatMessage(pm: pm, thirdPartyEmotes: emotes, historical: true)
         }
 
         return nil

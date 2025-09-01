@@ -1,17 +1,15 @@
-import SwiftUI
 import UIKit
 
 final class MessageCell: UITableViewCell {
   static let reuseID = "MessageCellId"
 
-  private lazy var textView: UITextView = LinkOnlyTextView()
+  lazy var textView: UITextView = LinkOnlyTextView()
 
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 
     // Configure the cell
     selectionStyle = .none
-    transform = CGAffineTransform(scaleX: 1, y: -1)
     backgroundColor = .clear
 
     setupTextView() // Setup the text view with necessary properties
@@ -31,101 +29,28 @@ final class MessageCell: UITableViewCell {
     textView.dataDetectorTypes = [.link]
     textView.isScrollEnabled = false
     textView.backgroundColor = .clear
-    textView.textContainerInset = .zero
+    textView.textContainerInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
     textView.textContainer.lineFragmentPadding = .zero
 
     contentView.addSubview(textView)
 
     NSLayoutConstraint.activate([
-      textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+      textView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
       textView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
       textView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-      textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4)
+      textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0)
     ])
-  }
-}
-
-// MARK: - Message Rendering
-
-extension MessageCell {
-  func makeMessage(message: ChatMessage, font: UIFont) {
-    let out = NSMutableAttributedString()
-    let alpha = message.historical ? 0.5 : 1.0
-
-    let attrs: [NSAttributedString.Key: Any] = [
-      .font: font,
-      .foregroundColor: UIColor.label.withAlphaComponent(alpha)
-    ]
-
-    // Timestamp
-    let smallFont = UIFont.systemFont(ofSize: font.pointSize * 0.7)
-    out.append(NSAttributedString(
-      string: message.timestamp.formattedTime + " ",
-      attributes: [
-        .font: smallFont,
-        .foregroundColor: UIColor.secondaryLabel.withAlphaComponent(alpha),
-        .baselineOffset: (font.pointSize - smallFont.pointSize) / 2 - 1
-      ]
-    ))
-
-    // Display name
-    out.append(
-      NSAttributedString(
-        string: message.author.displayName,
-        attributes: [
-          .font: UIFont.boldSystemFont(ofSize: font.pointSize),
-          .foregroundColor: (UIColor(hex: message.author.colorHex) ?? .gray)
-            .withAlphaComponent(alpha)
-        ]
-      )
-    )
-    out.append(NSAttributedString(string: ": ", attributes: attrs))
-
-    // Message body
-    for inline in message.inlines {
-      switch inline {
-      case .emote(let emote):
-        let att = EmoteAttachment(emote, historical: message.historical)
-        out.append(NSAttributedString(attachment: att))
-      case .text(let text):
-        out.append(NSAttributedString(string: text, attributes: attrs))
-      }
-    }
-
-    // Force fixed line height for all wrapped lines in this paragraph
-    let pst = NSMutableParagraphStyle()
-    pst.lineSpacing = 4
-    pst.baseWritingDirection = .leftToRight
-
-    let full = NSRange(location: 0, length: out.length)
-
-    out.enumerateAttribute(.font, in: full, options: []) { value, range, _ in
-      guard value is UIFont else { return }
-      out.addAttribute(.paragraphStyle, value: pst, range: range)
-    }
-
-    textView.attributedText = out
   }
 }
 
 // MARK: - Preview
 
-struct CustomCellPreview: PreviewProvider {
-  static var previews: some View {
-    CellPreviewContainer()
-      .frame(width: .infinity, height: 100)
-      .transformEffect(CGAffineTransform(scaleX: 1, y: -1)) // Flip the preview back
-  }
-
-  struct CellPreviewContainer: UIViewRepresentable {
-    func makeUIView(context _: Context) -> UITableViewCell {
-      let cell = MessageCell(style: .default, reuseIdentifier: MessageCell.reuseID)
-      cell.makeMessage(message: .mock, font: .systemFont(ofSize: 20))
-      return cell
-    }
-
-    func updateUIView(_: UITableViewCell, context _: Context) { /* noop */ }
-
-    typealias UIViewType = UITableViewCell
-  }
+#Preview(traits: .sizeThatFitsLayout) {
+  let cell = MessageCell(style: .default, reuseIdentifier: MessageCell.reuseID)
+  cell.textView.attributedText = MessageProcessor.makeAttributedString(
+    for: .mock,
+    font: .systemFont(ofSize: 20)
+  )
+  cell.bounds = CGRect(x: 0, y: -400, width: 0, height: 0)
+  return cell
 }

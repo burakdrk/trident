@@ -26,7 +26,7 @@ struct ChatInputBar: View {
       .focused($isKeyboardActive)
       .padding(12)
       .background(Color(theme.bgElev), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
-      .themedPrimaryText()
+      .themedForeground()
       .disabled(!auth.state.isAuthenticated)
 
       // Send
@@ -45,7 +45,14 @@ struct ChatInputBar: View {
     }
     .padding(.horizontal, 12)
     .padding(.vertical, 10)
-    .background(.ultraThinMaterial)
+    .apply {
+      if #available(iOS 26.0, *) {
+        $0.glassEffect(.regular)
+          .padding(.horizontal, 20)
+      } else {
+        $0.background(.ultraThinMaterial)
+      }
+    }
   }
 }
 

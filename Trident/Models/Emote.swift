@@ -1,6 +1,6 @@
 import Foundation
 
-struct Emote: Identifiable, Hashable, Sendable {
+struct Emote: Identifiable, Hashable, Sendable, Equatable {
   enum Category: String, Sendable {
     case global = "Global"
     case channel = "Channel"
@@ -67,6 +67,10 @@ struct Emote: Identifiable, Hashable, Sendable {
 
     let multiplier = multiplier * 1.25 // Baseline multiplier for better visibility
     return CGSize(width: CGFloat(w) * multiplier, height: CGFloat(h) * multiplier)
+  }
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
   }
 
   static func == (lhs: Emote, rhs: Emote) -> Bool {

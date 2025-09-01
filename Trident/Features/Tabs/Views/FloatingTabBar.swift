@@ -73,7 +73,7 @@ extension FloatingTabBar {
           )
           .autocorrectionDisabled()
           .textInputAutocapitalization(.never)
-          .themedPrimaryText()
+          .themedForeground()
           .focused($isKeyboardActive)
           .frame(height: barHeight)
           .contentShape(Rectangle())

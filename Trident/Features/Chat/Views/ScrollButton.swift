@@ -36,7 +36,7 @@ struct ScrollButton: View {
           Text("Auto-scroll")
         }
       }
-      .accessibilityLabel("Scroll to new messages")
+      .accessibilityLabel("Scroll to bottom")
     }
     .allowsHitTesting(isVisible)
     .opacity(isVisible ? 1 : 0)

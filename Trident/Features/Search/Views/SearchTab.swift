@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct SearchTab: View {
-  @Environment(\.router) private var router
   @State private var store = SearchStore()
+  @Environment(\.router) private var router
 
   var searchText: String
 
@@ -10,18 +10,17 @@ struct SearchTab: View {
     @Bindable var router = router
 
     NavigationStack(path: $router.searchPath) {
-      VStack {
+      ZStack {
         SearchRootView(text: store.state.query)
           .navigationTitle("Search")
           .navigationDestination(for: SearchRoute.self) { route in
             switch route {
-            case let .channel(name):
-              ChatView(channel: name)
+            case .channel(let name):
+              ChatRootView(channel: name)
             }
           }
       }
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .themedBackground()
+      .themedAppBackground()
       .onChange(of: searchText, initial: true) { _, newValue in
         store.dispatch(.setQuery(newValue))
       }
@@ -30,6 +29,6 @@ struct SearchTab: View {
 }
 
 #Preview {
-  SearchTab(searchText: "xqc")
+  SearchTab(searchText: "quin69")
     .applyTheme()
 }

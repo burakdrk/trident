@@ -9,6 +9,20 @@ private struct ThemedBackground: ViewModifier {
   }
 }
 
+private struct ThemedAppBackground: ViewModifier {
+  @Environment(\.theme) private var theme
+
+  func body(content: Content) -> some View {
+    ZStack {
+      Rectangle()
+        .foregroundColor(Color(theme.bg))
+        .edgesIgnoringSafeArea(.all)
+
+      content
+    }
+  }
+}
+
 private struct ThemedCard: ViewModifier {
   @Environment(\.theme) private var theme
 
@@ -18,13 +32,13 @@ private struct ThemedCard: ViewModifier {
   }
 }
 
-private struct ThemedPrimaryText: ViewModifier {
+private struct ThemedForeground: ViewModifier {
   @Environment(\.theme) private var theme
 
   func body(content: Content) -> some View { content.foregroundStyle(Color(theme.fg)) }
 }
 
-private struct ThemedSecondaryText: ViewModifier {
+private struct ThemedSecondaryForeground: ViewModifier {
   @Environment(\.theme) private var theme
 
   func body(content: Content) -> some View { content.foregroundStyle(Color(theme.fgSecondary)) }
@@ -41,8 +55,9 @@ extension View {
     modifier(ThemedBackground(ignoresSafeArea: ignoresSafeArea))
   }
 
+  func themedAppBackground() -> some View { modifier(ThemedAppBackground()) }
   func themedCard() -> some View { modifier(ThemedCard()) }
-  func themedPrimaryText() -> some View { modifier(ThemedPrimaryText()) }
-  func themedSecondaryText() -> some View { modifier(ThemedSecondaryText()) }
+  func themedForeground() -> some View { modifier(ThemedForeground()) }
+  func themedSecondaryForeground() -> some View { modifier(ThemedSecondaryForeground()) }
   func accentForeground() -> some View { modifier(AccentForeground()) }
 }

@@ -30,17 +30,26 @@ struct PrimaryButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
       .font(.callout.bold())
+      .themedForeground()
       .padding(12)
-      .background(gradient ? AnyShapeStyle(backgroundColor.gradient) :
-        AnyShapeStyle(backgroundColor)
-      )
-      .foregroundStyle(.white)
-      .clipShape(clipShape)
-      .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-      .animation(
-        .easeInOut(duration: 0.15),
-        value: configuration.isPressed
-      )
+      .apply {
+        if #available(iOS 26.0, *) {
+          $0.background(accent.color.opacity(0.5))
+            .clipShape(clipShape)
+            .glassEffect(.regular.interactive(), in: clipShape)
+        } else {
+          $0.background(gradient ?
+            AnyShapeStyle(backgroundColor.gradient) :
+            AnyShapeStyle(backgroundColor)
+          )
+          .clipShape(clipShape)
+          .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+          .animation(
+            .easeInOut(duration: 0.15),
+            value: configuration.isPressed
+          )
+        }
+      }
   }
 }
 

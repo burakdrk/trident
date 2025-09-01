@@ -1,5 +1,4 @@
 import SDWebImage
-import SDWebImageSVGNativeCoder
 import SwiftUI
 
 @main
@@ -10,8 +9,6 @@ struct TridentApp: App {
 
   init() {
     SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
-    SDImageCodersManager.shared.addCoder(SDImageSVGNativeCoder.shared)
-
     auth.dispatch(.loadSession)
   }
 

@@ -1,26 +1,29 @@
+import Collections
 import FactoryKit
 import Foundation
 import Observation
+import UIKit
 
 @Observable
 final class ChatStore: DataStore {
   struct State: Equatable {
     var channel: String
     var channelID: String = "71092938"
-    var tpEmotes: [String: Emote]?
+    var fittingWidth: CGFloat?
 
     var isPaused = false
     var newMessageCount = 0
-    var messages: [ChatMessage] = []
+    var tpEmotes: [String: Emote] = [:]
     var isConnected = false
     var lastError: String?
-    var lastUpdateID: UUID = .init()
   }
 
   enum Action: Equatable {
     case start
     case stop
     case togglePause(Bool)
+    case setFittingWidth(CGFloat)
+    case setThirdPartyEmotes([String: Emote])
 
     case _connected(Bool)
     case _setNewCount(Int)
@@ -31,6 +34,7 @@ final class ChatStore: DataStore {
   private(set) var state: State
   private let maxMessages: Int
   private let batchSpeed: Duration
+  let messages: MessageSource
 
   @ObservationIgnored @Injected(\.assetClient) private var assetClient
   @ObservationIgnored @Injected(\.ircClient) private var chatClient
@@ -42,11 +46,12 @@ final class ChatStore: DataStore {
 
   private var recentsService = RecentMessagesService()
 
-  init(channel: String, batchSpeed: Duration = .milliseconds(150), maxMessages: Int = 1_000) {
+  init(channel: String, batchSpeed: Duration = .milliseconds(150), maxMessages: Int = 500) {
     buffer = MessageBuffer(pauseMax: maxMessages)
     state = State(channel: channel)
     self.maxMessages = maxMessages
     self.batchSpeed = batchSpeed
+    messages = MessageSource(capacity: maxMessages)
   }
 
   deinit {
@@ -70,6 +75,12 @@ final class ChatStore: DataStore {
     case .togglePause(let on):
       state.isPaused = on
 
+    case .setFittingWidth(let width):
+      state.fittingWidth = width
+
+    case .setThirdPartyEmotes(let emotes):
+      state.tpEmotes = emotes
+
     case ._connected(let ok):
       state.isConnected = ok
 
@@ -77,15 +88,7 @@ final class ChatStore: DataStore {
       state.newMessageCount = n
 
     case ._flush(let batch):
-      state.messages.insert(contentsOf: batch, at: 0)
-
-      // Compute deletes if overflow
-      if state.messages.count > maxMessages {
-        let overflow = state.messages.count - maxMessages
-        state.messages.removeLast(overflow)
-      }
-
-      state.lastUpdateID = UUID()
+      messages.add(batch, fittingWidth: state.fittingWidth)
 
     case ._error(let msg):
       state.lastError = msg
@@ -100,26 +103,11 @@ extension ChatStore {
     let stream = try await chatClient.connect()
     try await chatClient.join(to: state.channel)
 
-    // Don't wait for emotes, they can come later
-    Task { @MainActor [weak self] in
-      try? await Task.sleep(for: .seconds(5)) // slight
-      let tpEmotes = await self?.assetClient.emotes(self?.state.channelID)
+    let tpEmotes = await assetClient.emotes(state.channelID)
+    let (recents, recentIDs) = await recentsService.fetch(for: state.channel, emotes: tpEmotes)
 
-      // Don't proceed if instance got deallocated
-      guard let self, let tpEmotes else { return }
-
-      state.tpEmotes = tpEmotes
-
-      for i in state.messages.indices {
-        state.messages[i].addEmotes(tpEmotes)
-      }
-
-      state.lastUpdateID = UUID()
-    }
-
-    let (recents, recentIDs) = await recentsService.fetch(for: state.channel)
-
-    dispatch(._flush(recents))
+    dispatch(.setThirdPartyEmotes(tpEmotes))
+    dispatch(._flush(recents.reversed()))
     dispatch(._connected(true))
 
     return (stream, recentIDs)
@@ -141,7 +129,7 @@ extension ChatStore {
             }
 
             await buffer.add(
-              ChatMessage(pm: pm, thirdPartyEmotes: [:]),
+              ChatMessage(pm: pm, thirdPartyEmotes: self?.state.tpEmotes ?? [:]),
               paused: self?.state.isPaused ?? false
             )
           default: break

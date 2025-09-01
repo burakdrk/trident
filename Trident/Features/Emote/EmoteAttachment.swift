@@ -12,8 +12,6 @@ final class EmoteAttachment: NSTextAttachment {
     self.multiplier = multiplier
 
     super.init(data: nil, ofType: UTType.image.identifier)
-
-    allowsTextAttachmentView = true
   }
 
   @available(*, unavailable)
@@ -21,19 +19,34 @@ final class EmoteAttachment: NSTextAttachment {
     fatalError("init(coder:) has not been implemented")
   }
 
+  override func attachmentBounds(
+    for textContainer: NSTextContainer?,
+    proposedLineFragment lineFrag: CGRect,
+    glyphPosition position: CGPoint,
+    characterIndex charIndex: Int
+  ) -> CGRect {
+    let height = emote.max { $0.height < $1.height }?.size(multiplier: multiplier).height
+    let width = emote.max { $0.width < $1.width }?.size(multiplier: multiplier).width
+    guard let height, let width else { return .zero }
+
+    return CGRect(
+      x: 0,
+      y: (lineFrag.height - height) / 2, // Center the emote vertically within the line fragment
+      width: width,
+      height: height
+    )
+  }
+
   override func viewProvider(
     for parentView: UIView?,
     location: NSTextLocation,
     textContainer: NSTextContainer?
   ) -> NSTextAttachmentViewProvider? {
-    let viewProvider = EmoteAttachmentViewProvider(
+    EmoteAttachmentViewProvider(
       textAttachment: self,
       parentView: parentView,
       textLayoutManager: textContainer?.textLayoutManager,
       location: location
     )
-
-    viewProvider.tracksTextAttachmentViewBounds = true
-    return viewProvider
   }
 }

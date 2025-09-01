@@ -1,3 +1,4 @@
+import SDWebImage
 import UIKit
 
 final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
@@ -10,10 +11,11 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
       // MARK: - Single Emote Renderer
 
       if emote.count == 1 {
-        let attachmentView = EmoteAttachmentView()
-        attachmentView.emote = emote[0]
-        if historical { attachmentView.alpha = 0.5 }
-        return attachmentView
+        let imageView = SDAnimatedImageView()
+        imageView.animationGroup = emote[0].id
+        imageView.sd_setImage(with: emote[0].url, placeholderImage: nil)
+        if historical { imageView.alpha = 0.5 }
+        return imageView
       }
 
       // MARK: - Overlay Renderer
@@ -22,45 +24,29 @@ final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
       container.isOpaque = false
 
       // Base
-      let baseView = EmoteAttachmentView()
+      let baseView = SDAnimatedImageView()
       container.addAndFillSubview(baseView)
 
       // Overlays
-      var overlayViews: [EmoteAttachmentView] = []
+      var overlayViews: [SDAnimatedImageView] = []
       for _ in emote {
-        let v = EmoteAttachmentView()
+        let v = SDAnimatedImageView()
         container.addAndFillSubview(v)
         overlayViews.append(v)
       }
 
       // Load images
-      baseView.emote = emote[0]
+      baseView.animationGroup = emote[0].id
+      baseView.sd_setImage(with: emote[0].url, placeholderImage: nil)
       for (i, e) in emote.enumerated() {
         if i == 0 { continue }
-        overlayViews[i].emote = e
+
+        overlayViews[i].animationGroup = e.id
+        overlayViews[i].sd_setImage(with: e.url, placeholderImage: nil)
       }
 
       if historical { container.alpha = 0.5 }
       return container
     }
-  }
-
-  override func attachmentBounds(
-    for _: [NSAttributedString.Key: Any],
-    location _: any NSTextLocation,
-    textContainer _: NSTextContainer?,
-    proposedLineFragment: CGRect,
-    position _: CGPoint
-  ) -> CGRect {
-    guard let textAttachment = textAttachment as? EmoteAttachment else { return .zero }
-    let emoteSize = textAttachment.emote[0].size(multiplier: textAttachment.multiplier)
-
-    // center the emote vertically within the line fragment
-    return CGRect(
-      x: 0,
-      y: (proposedLineFragment.height - emoteSize.height) / 2,
-      width: emoteSize.width,
-      height: emoteSize.height
-    )
   }
 }

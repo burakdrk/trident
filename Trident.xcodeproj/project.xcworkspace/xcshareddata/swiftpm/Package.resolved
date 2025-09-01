@@ -1,5 +1,5 @@
 {
-  "originHash" : "652112a0f27e8dea80089602fe8b0f4f21520818641b4952d1b9434f4e72eb71",
+  "originHash" : "4dcab9c2eeb01e061c41cdaa72b6fdacda608c76d21fdf1f7b2d9e1b3c82ef78",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -31,28 +31,10 @@
     {
       "identity" : "sdwebimage",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImage.git",
+      "location" : "https://github.com/dreampiggy/SDWebImage",
       "state" : {
-        "revision" : "b62cb63bf4ed1f04c961a56c9c6c9d5ab8524ec6",
-        "version" : "5.21.1"
-      }
-    },
-    {
-      "identity" : "sdwebimagesvgnativecoder",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImageSVGNativeCoder",
-      "state" : {
-        "revision" : "09a6199bbc0899c90382e734bbe07850eae2aa83",
-        "version" : "0.2.0"
-      }
-    },
-    {
-      "identity" : "sdwebimageswiftui",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImageSwiftUI",
-      "state" : {
-        "revision" : "451c6dfd5ecec2cf626d1d9ca81c2d4a60355172",
-        "version" : "3.1.3"
+        "branch" : "feature/animated_image_sync_coordinator",
+        "revision" : "226c1a658347bad26baf9233da6f7d04f1f0dce5"
       }
     },
     {
@@ -71,15 +53,6 @@
       "state" : {
         "revision" : "8ac8c4a3d355eb833917cc387d8f5f13ca55dbb4",
         "version" : "2.30.2"
-      }
-    },
-    {
-      "identity" : "svgnative-xcode",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/svgnative-Xcode.git",
-      "state" : {
-        "revision" : "de560bb9f69bc89f4624855998148eb6e0bb8e60",
-        "version" : "0.1.0"
       }
     },
     {

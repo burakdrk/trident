@@ -89,7 +89,7 @@ extension IRCClient {
 
   private func receiveMsg() async throws -> [IncomingMessage] {
     let result = try await websocket.receive()
-    if case let .string(msgStr) = result {
+    if case .string(let msgStr) = result {
       return IncomingMessage.parse(ircOutput: msgStr).compactMap(\.message)
     } else {
       return []
@@ -107,10 +107,10 @@ extension IRCClient {
             switch msg {
             case .ping:
               try await sendMsg(.pong)
-            case let .join(join):
+            case .join(let join):
               joinedChannels.insert(join.channel)
               continuation?.yield(msg)
-            case let .part(part):
+            case .part(let part):
               joinedChannels.remove(part.channel)
               continuation?.yield(msg)
             default:
@@ -122,8 +122,6 @@ extension IRCClient {
           isAlive = false
         }
       }
-
-      print("I DIED LULE")
     }
   }
 }
