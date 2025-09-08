@@ -1,5 +1,5 @@
 {
-  "originHash" : "4dcab9c2eeb01e061c41cdaa72b6fdacda608c76d21fdf1f7b2d9e1b3c82ef78",
+  "originHash" : "7e1a4ca6935e8f260cef8639f7ff4e595ffd8731f5144eefc08c56b520eed6df",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "d591c1dd55824867877cff4f6551fe32983d7f51",
         "version" : "1.23.0"
+      }
+    },
+    {
+      "identity" : "difference",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzysztofzablocki/Difference.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "1deadf0ef4215797e4a00567894462c22824a105"
       }
     },
     {

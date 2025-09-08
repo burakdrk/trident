@@ -13,4 +13,4 @@
 --wrapparameters before-first
 --ifdef no-indent
 --trailing-commas never
---pattern-let inline
+

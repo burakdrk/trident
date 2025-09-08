@@ -4,6 +4,7 @@ struct PrimaryButtonStyle: ButtonStyle {
   enum SelectedShape { case capsule, rect }
 
   @Environment(\.accent) private var accent
+  @Environment(\.themeManager) private var themeManager
   @Environment(\.isEnabled) var isEnabled
 
   var color: Color?
@@ -30,13 +31,15 @@ struct PrimaryButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
       .font(.callout.bold())
-      .themedForeground()
+      .foregroundStyle(.white)
       .padding(12)
       .apply {
         if #available(iOS 26.0, *) {
-          $0.background(accent.color.opacity(0.5))
-            .clipShape(clipShape)
-            .glassEffect(.regular.interactive(), in: clipShape)
+          $0.background(themeManager.theme == .light ?
+            accent.color.opacity(0.9) : accent.color.opacity(0.6)
+          )
+          .clipShape(clipShape)
+          .glassEffect(.regular.interactive(), in: clipShape)
         } else {
           $0.background(gradient ?
             AnyShapeStyle(backgroundColor.gradient) :

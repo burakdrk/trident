@@ -9,7 +9,6 @@ struct TridentApp: App {
 
   init() {
     SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
-    auth.dispatch(.loadSession)
   }
 
   var body: some Scene {
@@ -19,7 +18,9 @@ struct TridentApp: App {
         .environment(\.router, appRouter)
         .environment(\.themeManager, themeManager)
         .environment(\.auth, auth)
-        .task { auth.dispatch(.startHourlyValidation) }
+        .task { await auth.startEventListener() }
+        .task { await auth.loadSession() }
+        .task { await auth.startHourlyValidation() }
     }
   }
 }

@@ -1,13 +1,43 @@
-import Foundation
-import Observation
+import SwiftUI
+#if DEBUG
+import Difference
+#endif
+
+protocol StoreState: Equatable, Sendable { init() }
+@MainActor protocol StoreDependencies: Sendable { init() }
 
 @MainActor
-protocol DataStore: Observable {
-  associatedtype State: Equatable
-  associatedtype Action
+@Observable
+final class Store<State: StoreState, Dependencies: StoreDependencies> {
+  private(set) var state: State
+  @ObservationIgnored let deps = Dependencies()
 
-  var state: State { get }
+  init(initialState state: State = .init()) {
+    print("\(Self.self) init")
+    self.state = state
+  }
 
-  /// Dispatch an action to the store to mutate the state.
-  func dispatch(_ action: Action)
+  func binding<T>(_ keyPath: KeyPath<State, T>, action: @escaping (T) -> Void) -> Binding<T> {
+    Binding(
+      get: { self.state[keyPath: keyPath] },
+      set: { newValue in action(newValue) }
+    )
+  }
+
+  deinit { print("\(Self.self) deinit") }
+
+  func update(_ body: (inout State) -> Void) {
+    var newState = state
+    body(&newState)
+
+    #if DEBUG
+    print("State update: \(Self.self)")
+    print(diff(newState, state).joined(separator: ", ")
+      .replacingOccurrences(of: "Received:", with: "Before:")
+      .replacingOccurrences(of: "Expected:", with: "After:")
+    )
+    #endif
+
+    state = newState
+  }
 }

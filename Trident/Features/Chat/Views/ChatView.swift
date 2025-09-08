@@ -31,7 +31,7 @@ struct ChatView: UIViewRepresentable {
         bottom: bottomInset + 8,
         right: 0
       )
-      uiView.verticalScrollIndicatorInsets.bottom = bottomInset
+      uiView.verticalScrollIndicatorInsets.bottom = bottomInset - uiView.safeAreaInsets.bottom
       context.coordinator.lastBottomInset = bottomInset
     }
 
@@ -128,7 +128,7 @@ extension ChatView {
     }
 
     private func executeActionAtTheEnd(of scrollView: UIScrollView) {
-      let threshold: CGFloat = 20
+      let threshold: CGFloat = 10
       let bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height
       if bottomEdge >= scrollView.contentSize.height - threshold {
         store.dispatch(.togglePause(false))

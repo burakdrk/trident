@@ -13,7 +13,7 @@ struct AuthBoundaryView: View {
 
       Button {
         haptics.generate(.impactLight)
-        auth.dispatch(.login)
+        Task { await auth.logIn() }
       } label: {
         Text(auth.state.isBusy ? "Logging in…" : "Log in with Twitch")
           .frame(maxWidth: .infinity)
@@ -26,7 +26,6 @@ struct AuthBoundaryView: View {
       }
     }
     .padding(24)
-    .shadow(radius: 10)
     .padding()
   }
 }

@@ -2,12 +2,10 @@ import SDWebImage
 import SwiftUI
 
 struct ChatRootView: View {
-  @State private var store: ChatStore
+  @State private var store = ChatStore()
   @Environment(\.router) private var router
 
-  init(channel: String) {
-    _store = State(initialValue: ChatStore(channel: channel))
-  }
+  var channelName: String
 
   var body: some View {
     ZStack(alignment: .bottom) {
@@ -29,31 +27,22 @@ struct ChatRootView: View {
       }
       .padding(.bottom, 20)
     }
-    .task { store.dispatch(.start) }
-    .onDisappear { store.dispatch(.stop) }
-    .hideFloatingTabBar()
-    .navigationTitle(store.state.channel)
-    .toolbarTitleDisplayMode(.inline)
-    .navigationBarBackButtonHidden()
-    .toolbarBackgroundVisibility(.visible, for: .navigationBar)
-    .toolbar {
-      ToolbarItem(placement: .topBarLeading) {
-        Button {
-          router.pop(tab: .search)
-        } label: {
-          Image(systemName: "chevron.left")
+    .toolbar(.hidden, for: .tabBar)
+    .apply {
+      if #available(iOS 26.0, *) {
+        $0.safeAreaBar(edge: .bottom, spacing: 0) {
+          ChatInputBar {}
+        }
+      } else {
+        $0.safeAreaInset(edge: .bottom, spacing: 0) {
+          ChatInputBar {}
         }
       }
-    }
-    .safeAreaInset(edge: .bottom, spacing: 0) {
-      ChatInputBar {}
     }
   }
 }
 
 #Preview {
   let _: Void = SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
-
-  return ChatRootView(channel: "xqc")
-    .edgesIgnoringSafeArea(.all)
+  return ChatRootView(channelName: "xqc")
 }

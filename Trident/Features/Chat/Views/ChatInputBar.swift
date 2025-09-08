@@ -15,7 +15,7 @@ struct ChatInputBar: View {
       // Input
       TextField(
         auth.state.isAuthenticated ? "Enter message" : "Log in to send a message",
-        text: $store.state.text,
+        text: .init { store.state.text } set: { store.setText($0) },
         axis: .vertical
       )
       .submitScope()
@@ -31,7 +31,7 @@ struct ChatInputBar: View {
 
       // Send
       Button {
-        store.dispatch(.sendIfNeeded(onSend))
+        store.sendIfNeeded(onSend)
       } label: {
         Image(systemName: "paperplane.fill")
           .font(.system(size: 22, weight: .semibold))
@@ -47,8 +47,8 @@ struct ChatInputBar: View {
     .padding(.vertical, 10)
     .apply {
       if #available(iOS 26.0, *) {
-        $0.glassEffect(.regular)
-          .padding(.horizontal, 20)
+        $0.glassEffect()
+          .padding(.horizontal, 16)
       } else {
         $0.background(.ultraThinMaterial)
       }

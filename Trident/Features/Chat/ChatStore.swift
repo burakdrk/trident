@@ -1,13 +1,13 @@
 import Collections
 import FactoryKit
-import Foundation
 import Observation
 import UIKit
 
+@MainActor
 @Observable
-final class ChatStore: DataStore {
+final class ChatStore {
   struct State: Equatable {
-    var channel: String
+    var channel: String?
     var channelID: String = "71092938"
     var fittingWidth: CGFloat?
 
@@ -19,7 +19,7 @@ final class ChatStore: DataStore {
   }
 
   enum Action: Equatable {
-    case start
+    case start(String)
     case stop
     case togglePause(Bool)
     case setFittingWidth(CGFloat)
@@ -31,7 +31,7 @@ final class ChatStore: DataStore {
     case _error(String)
   }
 
-  private(set) var state: State
+  private(set) var state = State()
   private let maxMessages: Int
   private let batchSpeed: Duration
   let messages: MessageSource
@@ -46,9 +46,8 @@ final class ChatStore: DataStore {
 
   private var recentsService = RecentMessagesService()
 
-  init(channel: String, batchSpeed: Duration = .milliseconds(150), maxMessages: Int = 500) {
+  init(batchSpeed: Duration = .milliseconds(150), maxMessages: Int = 500) {
     buffer = MessageBuffer(pauseMax: maxMessages)
-    state = State(channel: channel)
     self.maxMessages = maxMessages
     self.batchSpeed = batchSpeed
     messages = MessageSource(capacity: maxMessages)
@@ -62,9 +61,9 @@ final class ChatStore: DataStore {
 
   func dispatch(_ action: Action) {
     switch action {
-    case .start:
+    case let .start(channelName):
       state.lastError = nil
-      startWorkers()
+      startWorkers(channelName)
 
     case .stop:
       cancelWorkers()
@@ -72,25 +71,25 @@ final class ChatStore: DataStore {
       state.newMessageCount = 0
       Task { await chatClient.disconnect() }
 
-    case .togglePause(let on):
+    case let .togglePause(on):
       state.isPaused = on
 
-    case .setFittingWidth(let width):
+    case let .setFittingWidth(width):
       state.fittingWidth = width
 
-    case .setThirdPartyEmotes(let emotes):
+    case let .setThirdPartyEmotes(emotes):
       state.tpEmotes = emotes
 
-    case ._connected(let ok):
+    case let ._connected(ok):
       state.isConnected = ok
 
-    case ._setNewCount(let n):
+    case let ._setNewCount(n):
       state.newMessageCount = n
 
-    case ._flush(let batch):
+    case let ._flush(batch):
       messages.add(batch, fittingWidth: state.fittingWidth)
 
-    case ._error(let msg):
+    case let ._error(msg):
       state.lastError = msg
     }
   }
@@ -99,12 +98,12 @@ final class ChatStore: DataStore {
 // MARK: - Workers
 
 extension ChatStore {
-  private func connect() async throws -> (IRCClientType.IRCMessageStream, Set<String>) {
+  func connect(to channel: String) async throws -> (IRCClientType.IRCMessageStream, Set<String>) {
     let stream = try await chatClient.connect()
-    try await chatClient.join(to: state.channel)
+    try await chatClient.join(to: channel)
 
     let tpEmotes = await assetClient.emotes(state.channelID)
-    let (recents, recentIDs) = await recentsService.fetch(for: state.channel, emotes: tpEmotes)
+    let (recents, recentIDs) = await recentsService.fetch(for: channel, emotes: tpEmotes)
 
     dispatch(.setThirdPartyEmotes(tpEmotes))
     dispatch(._flush(recents.reversed()))
@@ -113,20 +112,22 @@ extension ChatStore {
     return (stream, recentIDs)
   }
 
-  private func startWorkers() {
+  private func startWorkers(_ channel: String) {
     consumeTask?.cancel()
     consumeTask = Task { @Sendable [weak self, buffer] in
       do {
-        guard let (stream, recentIDs) = try await self?.connect() else { return }
+        guard let (stream, recentIDs) = try await self?.connect(to: channel) else { return }
 
         for try await message in stream {
           if Task.isCancelled { break }
 
           switch message {
-          case .privateMessage(let pm):
+          case let .privateMessage(pm):
             if recentIDs.contains(pm.id) {
               continue
             }
+
+            print(pm.channel)
 
             await buffer.add(
               ChatMessage(pm: pm, thirdPartyEmotes: self?.state.tpEmotes ?? [:]),

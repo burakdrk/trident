@@ -1,41 +1,33 @@
 import SwiftUI
 
-@Observable
-final class ChatInputStore: DataStore {
-  struct State: Equatable {
-    var text = ""
-    var isSending = false
+struct ChatInputState: StoreState {
+  var text = ""
+  var isSending = false
+}
+
+struct ChatInputDependencies: StoreDependencies {}
+
+typealias ChatInputStore = Store<ChatInputState, ChatInputDependencies>
+
+extension ChatInputStore {
+  func reset() {
+    update { $0.text = "" }
   }
 
-  enum Action {
-    case reset
-    case sendIfNeeded(@Sendable () async throws -> Void)
+  func setText(_ text: String) {
+    update { $0.text = text }
   }
 
-  var state = State()
-
-  func dispatch(_ action: Action) {
-    switch action {
-    case .reset:
-      state.text = ""
-
-    case .sendIfNeeded(let action):
-      sendIfNeeded(action)
-    }
-  }
-
-  /// Do your send here (network, DB, etc.)
-  private func sendIfNeeded(_ action: @MainActor () async throws -> Void) {
+  func sendIfNeeded(_ action: @Sendable () async throws -> Void) {
     guard
       !state.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
       !state.isSending else { return }
 
-    state.isSending = true
-
-    Task { @MainActor in
-      defer { state.isSending = false }
-      try await Task.sleep(nanoseconds: 500_000_000) // Simulate network delay
-      await MainActor.run { self.dispatch(.reset) }
+    Task {
+      update { $0.isSending = true }
+      defer { update { $0.isSending = false } }
+      try await Task.sleep(nanoseconds: 500_000_000)
+      reset()
     }
   }
 }
