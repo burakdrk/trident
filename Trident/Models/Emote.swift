@@ -38,25 +38,13 @@ struct Emote: Identifiable, Hashable, Sendable, Equatable {
   var url: URL {
     switch source {
     case .bttv:
-      guard let url = URL(string: "\(source.baseURL)\(sourceID)/2x.webp") else {
-        fatalError("Invalid BTTV URL")
-      }
-      return url
+      URL.make("\(source.baseURL)\(sourceID)/2x.webp")
     case .ffz:
-      guard let url = URL(string: "\(source.baseURL)\(sourceID)/2") else {
-        fatalError("Invalid FFZ URL")
-      }
-      return url
+      URL.make("\(source.baseURL)\(sourceID)/2")
     case .seventv:
-      guard let url = URL(string: "\(source.baseURL)\(sourceID)/2x.webp") else {
-        fatalError("Invalid 7TV URL")
-      }
-      return url
+      URL.make("\(source.baseURL)\(sourceID)/2x.webp")
     case .twitch:
-      guard let url = URL(string: "\(source.baseURL)\(sourceID)/default/dark/2.0") else {
-        fatalError("Invalid Twitch URL")
-      }
-      return url
+      URL.make("\(source.baseURL)\(sourceID)/default/dark/2.0")
     }
   }
 

@@ -25,25 +25,13 @@ struct Badge: Identifiable, Hashable, Sendable {
   var url: URL {
     switch source {
     case .bttv:
-      guard let url = URL(string: "\(source.rawValue)\(id)") else {
-        fatalError("Invalid BTTV URL")
-      }
-      return url
+      URL.make("\(source.rawValue)\(id)")
     case .ffz:
-      guard let url = URL(string: "\(source.rawValue)\(id)/1") else {
-        fatalError("Invalid FFZ URL")
-      }
-      return url
+      URL.make("\(source.rawValue)\(id)/1")
     case .seventv:
-      guard let url = URL(string: "\(source.rawValue)\(id)/2x.webp") else {
-        fatalError("Invalid 7TV URL")
-      }
-      return url
+      URL.make("\(source.rawValue)\(id)/2x.webp")
     case .twitch:
-      guard let url = URL(string: "\(source.rawValue)\(id)/default/dark/2.0") else {
-        fatalError("Invalid Twitch URL")
-      }
-      return url
+      URL.make("\(source.rawValue)\(id)/default/dark/2.0")
     }
   }
 
