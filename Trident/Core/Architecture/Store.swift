@@ -1,43 +1,42 @@
 import SwiftUI
-#if DEBUG
-import Difference
-#endif
-
-protocol StoreState: Equatable, Sendable { init() }
-@MainActor protocol StoreDependencies: Sendable { init() }
 
 @MainActor
-@Observable
-final class Store<State: StoreState, Dependencies: StoreDependencies> {
+@Observable @dynamicMemberLookup
+final class Store<State: Equatable, Dependencies>: @MainActor Equatable {
   private(set) var state: State
-  @ObservationIgnored let deps = Dependencies()
+  @ObservationIgnored let dependencies: Dependencies
 
-  init(initialState state: State = .init()) {
-    print("\(Self.self) init")
+  init(initialState state: State, dependencies: Dependencies) {
     self.state = state
+    self.dependencies = dependencies
   }
 
-  func binding<T>(_ keyPath: KeyPath<State, T>, action: @escaping (T) -> Void) -> Binding<T> {
+  /// Creates and returns a two-way binding for a state variable in the store.
+  /// - Parameters:
+  ///   - keyPath: Path of the state variable
+  ///   - action: An optional side effect to execute after a set operation
+  /// - Returns: Binding for the selected state variable
+  func binding<T>(
+    _ keyPath: WritableKeyPath<State, T>,
+    action: ((T) -> Void)? = nil
+  ) -> Binding<T> {
     Binding(
       get: { self.state[keyPath: keyPath] },
-      set: { newValue in action(newValue) }
+      set: { self.state[keyPath: keyPath] = $0; action?($0) }
     )
   }
 
-  deinit { print("\(Self.self) deinit") }
+  subscript<T>(dynamicMember keyPath: KeyPath<State, T>) -> T {
+    state[keyPath: keyPath]
+  }
 
   func update(_ body: (inout State) -> Void) {
     var newState = state
     body(&newState)
-
-    #if DEBUG
-    print("State update: \(Self.self)")
-    print(diff(newState, state).joined(separator: ", ")
-      .replacingOccurrences(of: "Received:", with: "Before:")
-      .replacingOccurrences(of: "Expected:", with: "After:")
-    )
-    #endif
-
     state = newState
+  }
+
+  static func == (lhs: Store<State, Dependencies>, rhs: Store<State, Dependencies>) -> Bool {
+    lhs === rhs
   }
 }

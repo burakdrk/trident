@@ -1,11 +1,12 @@
 import SDWebImage
 import SwiftUI
 
-struct ChatRootView: View {
-  @State private var store = ChatStore()
+struct ChatRootView: @MainActor Routable {
   @Environment(\.router) private var router
+  @Environment(\.streamManager) private var streamManager
 
-  var channelName: String
+  let store: ChatStore
+  var id: AnyHashable { store.dependencies.channel }
 
   var body: some View {
     ZStack(alignment: .bottom) {
@@ -23,10 +24,12 @@ struct ChatRootView: View {
         newMessageCount: store.state.newMessageCount,
         isVisible: store.state.isPaused
       ) {
-        store.dispatch(.togglePause(false))
+        store.togglePause(false)
       }
       .padding(.bottom, 20)
     }
+    .task { await store.startReading() }
+    .task { await store.startRendering() }
     .toolbar(.hidden, for: .tabBar)
     .apply {
       if #available(iOS 26.0, *) {
@@ -40,9 +43,4 @@ struct ChatRootView: View {
       }
     }
   }
-}
-
-#Preview {
-  let _: Void = SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
-  return ChatRootView(channelName: "xqc")
 }

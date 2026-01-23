@@ -1,4 +1,3 @@
-import Alamofire
 import Foundation
 
 /// A service that fetches emotes from the BetterTTV (BTTV) API.

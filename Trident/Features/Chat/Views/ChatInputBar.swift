@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ChatInputBar: View {
-  @State private var store = ChatInputStore()
+  @State private var store = ChatInputStore(initialState: .init(), dependencies: .init())
   @FocusState private var isKeyboardActive: Bool
 
   @Environment(\.accent) private var accent

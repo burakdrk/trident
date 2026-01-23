@@ -1,25 +1,55 @@
+import Dependencies
 import SwiftUI
 
-struct StreamState: StoreState {
-  var activeChannels: [Channel] = []
+struct StreamState: Equatable {
+  var activeChannels: [Channel: ChatStore] = [:]
+  var visibleChannel: Channel?
+  var lastError: String?
 }
 
-struct StreamDependencies: StoreDependencies {}
+struct StreamDependencies {
+  @Dependency(\.ircClient) var chatClient
+  @Dependency(\.assetClient) var assetClient
+}
 
 typealias StreamStore = Store<StreamState, StreamDependencies>
 
 extension StreamStore {
-  static let shared = StreamStore()
+  static let shared = StreamStore(initialState: .init(), dependencies: .init())
+
+  func loadStream(for channel: Channel) async {
+    guard state.activeChannels[channel] == nil else { return }
+
+    do {
+      await dependencies.chatClient.connect()
+      try await dependencies.chatClient.join(to: channel)
+      let tpEmotes = await dependencies.assetClient.emotes(channel.id)
+
+      update {
+        $0.activeChannels[channel] = ChatStore(
+          initialState: .init(tpEmotes: tpEmotes),
+          dependencies: .init(channel: channel)
+        )
+      }
+    } catch {
+      update { $0.lastError = error.localizedDescription }
+    }
+  }
+
+  private func unloadStream(for channel: Channel) async {
+    try? await dependencies.chatClient.part(from: channel)
+    update { $0.activeChannels.removeValue(forKey: channel) }
+  }
 }
 
-struct StreamKey: @MainActor EnvironmentKey {
+private enum StreamStoreKey: @MainActor EnvironmentKey {
   @MainActor static var defaultValue = StreamStore.shared
 }
 
 extension EnvironmentValues {
   @MainActor
-  var streamStore: StreamStore {
-    get { self[StreamKey.self] }
-    set { self[StreamKey.self] = newValue }
+  var streamManager: StreamStore {
+    get { self[StreamStoreKey.self] }
+    set { self[StreamStoreKey.self] = newValue }
   }
 }

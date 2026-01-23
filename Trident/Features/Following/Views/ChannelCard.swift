@@ -3,11 +3,11 @@ import SwiftUI
 struct ChannelCard: View {
   @Environment(\.theme) private var theme
 
-  var channel: String
+  var channel: Channel
 
   var body: some View {
     VStack {
-      Text(channel)
+      Text(channel.displayName)
     }
     .frame(width: 300, height: 100)
     .background(theme.bgElev)

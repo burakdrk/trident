@@ -1,0 +1,102 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ new message%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ new message%2$@"
+          }
+        }
+      }
+    },
+    "Authenticate with Twitch to unlock this feature." : {
+
+    },
+    "Auto-scroll" : {
+
+    },
+    "Enter a channel to join" : {
+
+    },
+    "Enter message" : {
+
+    },
+    "EXPLORE_TAB" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Explore"
+          }
+        }
+      }
+    },
+    "FOLLOWING_TAB" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Following"
+          }
+        }
+      }
+    },
+    "Go to %@" : {
+
+    },
+    "Loading..." : {
+
+    },
+    "Log in to continue" : {
+
+    },
+    "Log in to send a message" : {
+
+    },
+    "Log in with Twitch" : {
+
+    },
+    "Logging in…" : {
+
+    },
+    "Scroll to bottom" : {
+
+    },
+    "Search" : {
+
+    },
+    "SEARCH_TAB" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        }
+      }
+    },
+    "Search..." : {
+
+    },
+    "Twitch Lock" : {
+
+    },
+    "USER_TAB" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.1"
+}

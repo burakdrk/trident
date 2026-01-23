@@ -8,10 +8,19 @@ struct Emote: Identifiable, Hashable, Sendable, Equatable {
   }
 
   enum Source: String, Sendable {
-    case twitch = "https://static-cdn.jtvnw.net/emoticons/v2/"
-    case bttv = "https://cdn.betterttv.net/emote/"
-    case ffz = "https://cdn.frankerfacez.com/emote/"
-    case seventv = "https://cdn.7tv.app/emote/"
+    case twitch
+    case bttv
+    case ffz
+    case seventv
+
+    var baseURL: String {
+      switch self {
+      case .twitch: "https://static-cdn.jtvnw.net/emoticons/v2/"
+      case .bttv: "https://cdn.betterttv.net/emote/"
+      case .ffz: "https://cdn.frankerfacez.com/emote/"
+      case .seventv: "https://cdn.7tv.app/emote/"
+      }
+    }
   }
 
   let name: String
@@ -23,33 +32,28 @@ struct Emote: Identifiable, Hashable, Sendable, Equatable {
   var height = 28
 
   var id: String {
-    { switch source {
-    case .twitch: "twitch"
-    case .bttv: "bttv"
-    case .ffz: "ffz"
-    case .seventv: "7tv"
-    }}() + "_" + sourceID
+    source.rawValue + "_" + sourceID
   }
 
   var url: URL {
     switch source {
     case .bttv:
-      guard let url = URL(string: "\(source.rawValue)\(sourceID)/2x.webp") else {
+      guard let url = URL(string: "\(source.baseURL)\(sourceID)/2x.webp") else {
         fatalError("Invalid BTTV URL")
       }
       return url
     case .ffz:
-      guard let url = URL(string: "\(source.rawValue)\(sourceID)/2") else {
+      guard let url = URL(string: "\(source.baseURL)\(sourceID)/2") else {
         fatalError("Invalid FFZ URL")
       }
       return url
     case .seventv:
-      guard let url = URL(string: "\(source.rawValue)\(sourceID)/2x.webp") else {
+      guard let url = URL(string: "\(source.baseURL)\(sourceID)/2x.webp") else {
         fatalError("Invalid 7TV URL")
       }
       return url
     case .twitch:
-      guard let url = URL(string: "\(source.rawValue)\(sourceID)/default/dark/2.0") else {
+      guard let url = URL(string: "\(source.baseURL)\(sourceID)/default/dark/2.0") else {
         fatalError("Invalid Twitch URL")
       }
       return url

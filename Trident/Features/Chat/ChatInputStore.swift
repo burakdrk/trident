@@ -1,11 +1,11 @@
 import SwiftUI
 
-struct ChatInputState: StoreState {
+struct ChatInputState: Equatable {
   var text = ""
   var isSending = false
 }
 
-struct ChatInputDependencies: StoreDependencies {}
+struct ChatInputDependencies {}
 
 typealias ChatInputStore = Store<ChatInputState, ChatInputDependencies>
 

@@ -1,16 +1,20 @@
-import Alamofire
 import Foundation
 import TwitchIRC
 
-struct RecentMessagesService: Sendable {
-  private let baseAPIURL = "https://recent-messages.robotty.de/api/v2/recent-messages"
-  private let params = ["hide_moderation_messages": "true", "hide_moderated_messages": "true"]
+private enum Constants {
+  static let baseAPIURL = "https://recent-messages.robotty.de/api/v2/recent-messages"
+  static let params = [
+    "hide_moderation_messages": "true",
+    "hide_moderated_messages": "true"
+  ]
+}
 
+struct RecentMessagesService: Sendable {
   func fetch(for channel: String, emotes: [String: Emote]) async -> ([ChatMessage], Set<String>) {
-    let urlString = "\(baseAPIURL)/\(channel)"
+    let urlString = "\(Constants.baseAPIURL)/\(channel)"
 
     let res = try? await AF
-      .request(urlString, parameters: params)
+      .request(urlString, parameters: Constants.params)
       .serializingDecodable(RecentMessagesResponse.self)
       .value
 
@@ -23,7 +27,7 @@ struct RecentMessagesService: Sendable {
     let messages = res.messages.reversed()
       .flatMap { IncomingMessage.parse(ircOutput: $0).compactMap(\.message) }
       .compactMap { message in
-        if case .privateMessage(let pm) = message {
+        if case let .privateMessage(pm) = message {
           ids.insert(pm.id)
           return ChatMessage(pm: pm, thirdPartyEmotes: emotes, historical: true)
         }

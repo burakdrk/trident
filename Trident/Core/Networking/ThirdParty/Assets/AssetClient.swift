@@ -1,11 +1,11 @@
-import FactoryKit
+import Dependencies
 
 struct AssetClient: Sendable {
   var emotes: @Sendable (_ channelID: String?) async -> [String: Emote]
 }
 
-private extension AssetClient {
-  static var live: Self {
+extension AssetClient: DependencyKey {
+  static var liveValue: Self {
     let client = ThirdPartyAssetClient(services: [
       FFZService(),
       BTTVService(),
@@ -20,9 +20,9 @@ private extension AssetClient {
   }
 }
 
-extension Container {
-  var assetClient: Factory<AssetClient> {
-    self { AssetClient.live }
-      .cached
+extension DependencyValues {
+  var assetClient: AssetClient {
+    get { self[AssetClient.self] }
+    set { self[AssetClient.self] = newValue }
   }
 }

@@ -1,21 +1,19 @@
 import Alamofire
-import FactoryKit
+import AsyncAlgorithms
+import Dependencies
 import Foundation
 
-actor TwitchAuthProvider: EventEmitting {
-  enum Event: Sendable, Equatable, Codable {
-    case loggedOut
-    case loggedIn
-  }
-
-  let eventChannel = EventChannel(Event.self)
+actor TwitchAuthProvider: AuthProviding {
+  let eventChannel = AsyncChannel<AuthEvent>()
 
   private var storedToken: AuthToken? {
     didSet {
-      if let storedToken, !storedToken.isExpired {
-        emit(.loggedIn)
-      } else {
-        emit(.loggedOut)
+      Task {
+        if let storedToken, !storedToken.isExpired {
+          await eventChannel.send(.loggedIn)
+        } else {
+          await eventChannel.send(.loggedOut)
+        }
       }
     }
   }
@@ -29,7 +27,11 @@ actor TwitchAuthProvider: EventEmitting {
     return storedToken
   }
 
-  @LazyInjected(\.secureStorage) private var secureStorage
+  @Dependency(\.secureStorage) private var secureStorage
+
+  deinit {
+    eventChannel.finish()
+  }
 
   func deleteToken() async {
     try? await secureStorage.clear()

@@ -1,22 +1,30 @@
 import AuthenticationServices
-import FactoryKit
+import Dependencies
+
+private enum Constants {
+  static let oauthURL = "https://id.twitch.tv/oauth2/authorize"
+  static let clientID = "9bjmgzgap1vqh4ou8611ndjrg5vae6"
+  static let redirectURI = "https://tridentapp.dev/oauth"
+  static let responseType = "token"
+  static let hostName = "tridentapp.dev"
+}
 
 final class Authenticator: NSObject, ASWebAuthenticationPresentationContextProviding {
   private let scopes = ["chat:read", "chat:edit", "user:read:follows"]
-  private let authProvider = Container.shared.authProvider().twitch
   private var session: ASWebAuthenticationSession?
+  @Dependency(\.authProvider.twitch) private var authProvider
 
   @discardableResult func logIn() async throws -> AuthToken {
-    guard var comps = URLComponents(string: "https://id.twitch.tv/oauth2/authorize") else {
+    guard var comps = URLComponents(string: Constants.oauthURL) else {
       throw OAuthError.couldNotStart
     }
 
     let identifier = UUID().uuidString
 
     comps.queryItems = [
-      .init(name: "client_id", value: "9bjmgzgap1vqh4ou8611ndjrg5vae6"),
-      .init(name: "redirect_uri", value: "https://tridentapp.dev/oauth"),
-      .init(name: "response_type", value: "token"),
+      .init(name: "client_id", value: Constants.clientID),
+      .init(name: "redirect_uri", value: Constants.redirectURI),
+      .init(name: "response_type", value: Constants.responseType),
       .init(name: "scope", value: scopes.joined(separator: " ")),
       .init(name: "state", value: identifier)
     ]
@@ -30,7 +38,7 @@ final class Authenticator: NSObject, ASWebAuthenticationPresentationContextProvi
 
       let s = ASWebAuthenticationSession(
         url: authURL,
-        callback: .https(host: "tridentapp.dev", path: "/oauth")
+        callback: .https(host: Constants.hostName, path: "/oauth")
       ) { callbackURL, error in
         defer { self.session = nil }
 

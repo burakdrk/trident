@@ -1,7 +1,11 @@
-import FactoryKit
+import Dependencies
 import SwiftUI
 
-struct AuthState: StoreState {
+private enum Constants {
+  static let sleepInterval: Duration = .seconds(3_600)
+}
+
+struct AuthState: Equatable {
   enum Phase { case loading, loggedOut, loggedIn }
 
   var phase = Phase.loading
@@ -12,26 +16,28 @@ struct AuthState: StoreState {
   }
 }
 
-struct AuthDependencies: StoreDependencies {
+@MainActor
+struct AuthDependencies {
+  @Dependency(\.authProvider.twitch) var authProvider
+  @Dependency(\.continuousClock) var clock
   let authenticator = Authenticator()
-  let authProvider = Container.shared.authProvider().twitch
 }
 
 typealias AuthStore = Store<AuthState, AuthDependencies>
 
 extension AuthStore {
-  @MainActor static let shared = AuthStore()
+  static let shared = AuthStore(initialState: .init(), dependencies: .init())
 
   func logIn() async {
     update {
       $0.isBusy = true
       $0.errorMessage = nil
     }
-    deps.authenticator.cancelLogIn()
+    dependencies.authenticator.cancelLogIn()
     defer { update { $0.isBusy = false } }
 
     do {
-      try await deps.authenticator.logIn()
+      try await dependencies.authenticator.logIn()
     } catch OAuthError.canceled {
       update { $0.errorMessage = "Log in canceled." }
     } catch {
@@ -40,22 +46,22 @@ extension AuthStore {
   }
 
   func logOut() async {
-    await deps.authProvider.deleteToken()
+    await dependencies.authProvider.deleteToken()
   }
 
-  func startHourlyValidation(interval: Duration = .seconds(3_600)) async {
+  func startHourlyValidation() async {
     while !Task.isCancelled {
-      try? await Task.sleep(for: interval)
-      _ = try? await deps.authProvider.validateSession()
+      try? await dependencies.clock.sleep(for: Constants.sleepInterval)
+      _ = try? await dependencies.authProvider.validateSession(token: nil)
     }
   }
 
   func loadSession() async {
-    await deps.authProvider.loadSession()
+    await dependencies.authProvider.loadSession()
   }
 
   func startEventListener() async {
-    for await e in deps.authProvider.events {
+    for await e in dependencies.authProvider.eventChannel {
       switch e {
       case .loggedIn:
         update { $0.phase = .loggedIn }

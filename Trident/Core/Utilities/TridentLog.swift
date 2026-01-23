@@ -9,4 +9,7 @@ enum TridentLog {
 
   /// All logs related to tracking and analytics.
   static let statistics = Logger(subsystem: subsystem, category: "statistics")
+
+  /// Logs for the UI state
+  static let stores = Logger(subsystem: subsystem, category: "stores")
 }

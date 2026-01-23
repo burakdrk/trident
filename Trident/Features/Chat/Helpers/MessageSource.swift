@@ -1,8 +1,7 @@
 import Collections
 import UIKit
 
-@MainActor
-final class MessageSource {
+struct MessageSource: Equatable {
   private var messages: Deque<ChatMessage> = []
   private(set) var snapshot: NSDiffableDataSourceSnapshot<Int, ChatMessage>
   var capacity: Int
@@ -21,7 +20,7 @@ final class MessageSource {
     self.capacity = capacity
   }
 
-  func add(_ newMessages: [ChatMessage], fittingWidth: CGFloat?) {
+  mutating func add(_ newMessages: [ChatMessage], fittingWidth: CGFloat?) {
     defer { updateID = UUID() }
 
     for newMessage in newMessages {

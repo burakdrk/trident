@@ -20,12 +20,10 @@
 		EC9086722E6516F600F84318 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EC9086712E6516F600F84318 /* SDWebImage */; };
 		EC9086742E65191100F84318 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EC9086732E65191100F84318 /* SDWebImage */; };
 		ECBA79822E4AE1E20079A562 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ECBA79812E4AE1E20079A562 /* Alamofire */; };
-		ECE380272E5BCB1200D37047 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = ECE380262E5BCB1200D37047 /* FactoryKit */; };
-		ECE380292E5BCB2300D37047 /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = ECE380282E5BCB2300D37047 /* FactoryKit */; };
+		ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = ECD71B2E2F09B55B0096B19B /* Dependencies */; };
 		ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC352E36016300CF0AFE /* Apollo */; };
 		ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC3C2E37006300CF0AFE /* Supabase */; };
 		ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = ECEA81E22E388945002AA253 /* SimpleKeychain */; };
-		ECFAEA5B2E6AC9D7000FCBAE /* Difference in Frameworks */ = {isa = PBXBuildFile; productRef = ECFAEA5A2E6AC9D7000FCBAE /* Difference */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,7 +88,6 @@
 			files = (
 				ECBA79822E4AE1E20079A562 /* Alamofire in Frameworks */,
 				EC6D60702E410BE9007DA5D9 /* Collections in Frameworks */,
-				ECE380292E5BCB2300D37047 /* FactoryKit in Frameworks */,
 				EC9086742E65191100F84318 /* SDWebImage in Frameworks */,
 				EC6D60742E410BF4007DA5D9 /* TwitchIRC in Frameworks */,
 				EC72B6D52E3F18200011F8E0 /* SimpleKeychain in Frameworks */,
@@ -105,11 +102,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */,
-				ECFAEA5B2E6AC9D7000FCBAE /* Difference in Frameworks */,
 				EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */,
-				ECE380272E5BCB1200D37047 /* FactoryKit in Frameworks */,
 				EC9086722E6516F600F84318 /* SDWebImage in Frameworks */,
 				EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */,
+				ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */,
 				ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */,
 				ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */,
 				ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */,
@@ -183,7 +179,6 @@
 				EC6D60732E410BF4007DA5D9 /* TwitchIRC */,
 				ECBA79812E4AE1E20079A562 /* Alamofire */,
 				EC5A10BB2E5AE131001FE869 /* AsyncAlgorithms */,
-				ECE380282E5BCB2300D37047 /* FactoryKit */,
 				EC9086732E65191100F84318 /* SDWebImage */,
 			);
 			productName = Trident;
@@ -215,9 +210,8 @@
 				EC6D606A2E410B98007DA5D9 /* Collections */,
 				EC75289D2E4AD8E600065981 /* Alamofire */,
 				EC5A10B92E5AE121001FE869 /* AsyncAlgorithms */,
-				ECE380262E5BCB1200D37047 /* FactoryKit */,
 				EC9086712E6516F600F84318 /* SDWebImage */,
-				ECFAEA5A2E6AC9D7000FCBAE /* Difference */,
+				ECD71B2E2F09B55B0096B19B /* Dependencies */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -254,7 +248,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					EC7631CF2E30B41A00A86ABD = {
 						CreatedOnToolsVersion = 16.4;
@@ -282,9 +276,8 @@
 				EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				EC5A10B82E5AE121001FE869 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
-				ECE380252E5BCB1200D37047 /* XCRemoteSwiftPackageReference "Factory" */,
 				EC9086702E6516F600F84318 /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				ECFAEA592E6AC9D7000FCBAE /* XCRemoteSwiftPackageReference "Difference" */,
+				ECD71B2D2F09B55B0096B19B /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EC7631D12E30B41A00A86ABD /* Products */;
@@ -513,7 +506,9 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -570,7 +565,9 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -597,7 +594,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -637,7 +634,7 @@
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -807,12 +804,12 @@
 				kind = branch;
 			};
 		};
-		ECE380252E5BCB1200D37047 /* XCRemoteSwiftPackageReference "Factory" */ = {
+		ECD71B2D2F09B55B0096B19B /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hmlongco/Factory";
+			repositoryURL = "https://github.com/pointfreeco/swift-dependencies";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.5.3;
+				minimumVersion = 1.10.0;
 			};
 		};
 		ECE8DC342E36016300CF0AFE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
@@ -837,14 +834,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.3.0;
-			};
-		};
-		ECFAEA592E6AC9D7000FCBAE /* XCRemoteSwiftPackageReference "Difference" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/krzysztofzablocki/Difference.git";
-			requirement = {
-				branch = master;
-				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -915,15 +904,10 @@
 			package = EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		ECE380262E5BCB1200D37047 /* FactoryKit */ = {
+		ECD71B2E2F09B55B0096B19B /* Dependencies */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = ECE380252E5BCB1200D37047 /* XCRemoteSwiftPackageReference "Factory" */;
-			productName = FactoryKit;
-		};
-		ECE380282E5BCB2300D37047 /* FactoryKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ECE380252E5BCB1200D37047 /* XCRemoteSwiftPackageReference "Factory" */;
-			productName = FactoryKit;
+			package = ECD71B2D2F09B55B0096B19B /* XCRemoteSwiftPackageReference "swift-dependencies" */;
+			productName = Dependencies;
 		};
 		ECE8DC352E36016300CF0AFE /* Apollo */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -939,11 +923,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ECEA81E12E388945002AA253 /* XCRemoteSwiftPackageReference "SimpleKeychain" */;
 			productName = SimpleKeychain;
-		};
-		ECFAEA5A2E6AC9D7000FCBAE /* Difference */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ECFAEA592E6AC9D7000FCBAE /* XCRemoteSwiftPackageReference "Difference" */;
-			productName = Difference;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,5 +1,5 @@
 {
-  "originHash" : "7e1a4ca6935e8f260cef8639f7ff4e595ffd8731f5144eefc08c56b520eed6df",
+  "originHash" : "13582c193a29a080cd6f7570058acf9261c03a5420ad1404106fd50d80bc76bd",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -20,21 +20,12 @@
       }
     },
     {
-      "identity" : "difference",
+      "identity" : "combine-schedulers",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/krzysztofzablocki/Difference.git",
+      "location" : "https://github.com/pointfreeco/combine-schedulers",
       "state" : {
-        "branch" : "master",
-        "revision" : "1deadf0ef4215797e4a00567894462c22824a105"
-      }
-    },
-    {
-      "identity" : "factory",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/hmlongco/Factory",
-      "state" : {
-        "revision" : "ccc898f21992ebc130bc04cc197460a5ae230bcf",
-        "version" : "2.5.3"
+        "revision" : "fd16d76fd8b9a976d88bfb6cacc05ca8d19c91b6",
+        "version" : "1.1.0"
       }
     },
     {
@@ -119,12 +110,30 @@
       }
     },
     {
+      "identity" : "swift-dependencies",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-dependencies",
+      "state" : {
+        "revision" : "a10f9feeb214bc72b5337b6ef6d5a029360db4cc",
+        "version" : "1.10.0"
+      }
+    },
+    {
       "identity" : "swift-http-types",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-http-types.git",
       "state" : {
         "revision" : "a0a57e949a8903563aba4615869310c0ebf14c03",
         "version" : "1.4.0"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax",
+      "state" : {
+        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
+        "version" : "602.0.0"
       }
     },
     {

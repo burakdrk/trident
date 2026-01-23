@@ -1,4 +1,4 @@
-import FactoryKit
+import Dependencies
 import Foundation
 import SimpleKeychain
 
@@ -15,8 +15,8 @@ struct SecureStorage {
   }
 }
 
-private extension SecureStorage {
-  static var live: Self {
+extension SecureStorage: DependencyKey {
+  static var liveValue: Self {
     let keychain = SimpleKeychain(accessibility: .afterFirstUnlockThisDeviceOnly)
 
     return Self { key in
@@ -44,7 +44,7 @@ private extension SecureStorage {
     }
   }
 
-  static var mock: Self {
+  static var testValue: Self {
     let storage = MemoryStorage()
 
     return Self { key in
@@ -57,11 +57,9 @@ private extension SecureStorage {
   }
 }
 
-extension Container {
-  var secureStorage: Factory<SecureStorage> {
-    self { SecureStorage.live }
-      .cached
-      .onTest { SecureStorage.mock }
-      .onPreview { SecureStorage.mock }
+extension DependencyValues {
+  var secureStorage: SecureStorage {
+    get { self[SecureStorage.self] }
+    set { self[SecureStorage.self] = newValue }
   }
 }
