@@ -8,18 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		EC5A10BA2E5AE121001FE869 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = EC5A10B92E5AE121001FE869 /* AsyncAlgorithms */; };
-		EC5A10BC2E5AE131001FE869 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = EC5A10BB2E5AE131001FE869 /* AsyncAlgorithms */; };
 		EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D60542E407FBD007DA5D9 /* TwitchIRC */; };
 		EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D606A2E410B98007DA5D9 /* Collections */; };
-		EC6D60702E410BE9007DA5D9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D606F2E410BE9007DA5D9 /* Collections */; };
-		EC6D60742E410BF4007DA5D9 /* TwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D60732E410BF4007DA5D9 /* TwitchIRC */; };
-		EC72B6D52E3F18200011F8E0 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6CB2E3F18200011F8E0 /* SimpleKeychain */; };
-		EC72B6D62E3F18200011F8E0 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C92E3F18200011F8E0 /* Supabase */; };
-		EC72B6D72E3F18200011F8E0 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = EC72B6C72E3F18200011F8E0 /* Apollo */; };
 		EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EC75289D2E4AD8E600065981 /* Alamofire */; };
 		EC9086722E6516F600F84318 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EC9086712E6516F600F84318 /* SDWebImage */; };
-		EC9086742E65191100F84318 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EC9086732E65191100F84318 /* SDWebImage */; };
-		ECBA79822E4AE1E20079A562 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = ECBA79812E4AE1E20079A562 /* Alamofire */; };
 		ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = ECD71B2E2F09B55B0096B19B /* Dependencies */; };
 		ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC352E36016300CF0AFE /* Apollo */; };
 		ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC3C2E37006300CF0AFE /* Supabase */; };
@@ -37,7 +29,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		EC72B6DC2E3F18200011F8E0 /* TridentPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TridentPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC7631D02E30B41A00A86ABD /* Trident.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trident.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC7631DD2E30B41B00A86ABD /* TridentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TridentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -50,26 +41,13 @@
 			);
 			target = EC7631CF2E30B41A00A86ABD /* Trident */;
 		};
-		ECC89F082E6E77E9008AAB61 /* Exceptions for "Trident" folder in "TridentPlus" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = EC72B6C62E3F18200011F8E0 /* TridentPlus */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		EC72B6E02E3F1E760011F8E0 /* TridentPlus */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TridentPlus;
-			sourceTree = "<group>";
-		};
 		EC7631D22E30B41A00A86ABD /* Trident */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				ECC89F072E6E77E9008AAB61 /* Exceptions for "Trident" folder in "Trident" target */,
-				ECC89F082E6E77E9008AAB61 /* Exceptions for "Trident" folder in "TridentPlus" target */,
 			);
 			path = Trident;
 			sourceTree = "<group>";
@@ -82,21 +60,6 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		EC72B6D22E3F18200011F8E0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				ECBA79822E4AE1E20079A562 /* Alamofire in Frameworks */,
-				EC6D60702E410BE9007DA5D9 /* Collections in Frameworks */,
-				EC9086742E65191100F84318 /* SDWebImage in Frameworks */,
-				EC6D60742E410BF4007DA5D9 /* TwitchIRC in Frameworks */,
-				EC72B6D52E3F18200011F8E0 /* SimpleKeychain in Frameworks */,
-				EC72B6D62E3F18200011F8E0 /* Supabase in Frameworks */,
-				EC72B6D72E3F18200011F8E0 /* Apollo in Frameworks */,
-				EC5A10BC2E5AE131001FE869 /* AsyncAlgorithms in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		EC7631CD2E30B41A00A86ABD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -126,7 +89,6 @@
 		EC7631C72E30B41A00A86ABD = {
 			isa = PBXGroup;
 			children = (
-				EC72B6E02E3F1E760011F8E0 /* TridentPlus */,
 				EC7631D22E30B41A00A86ABD /* Trident */,
 				EC7631E02E30B41B00A86ABD /* TridentTests */,
 				ECBA79802E4AE1E20079A562 /* Frameworks */,
@@ -139,7 +101,6 @@
 			children = (
 				EC7631D02E30B41A00A86ABD /* Trident.app */,
 				EC7631DD2E30B41B00A86ABD /* TridentTests.xctest */,
-				EC72B6DC2E3F18200011F8E0 /* TridentPlus.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -154,37 +115,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EC72B6C62E3F18200011F8E0 /* TridentPlus */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = EC72B6D92E3F18200011F8E0 /* Build configuration list for PBXNativeTarget "TridentPlus" */;
-			buildPhases = (
-				EC72B6D12E3F18200011F8E0 /* Sources */,
-				EC72B6D22E3F18200011F8E0 /* Frameworks */,
-				EC72B6D82E3F18200011F8E0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				EC72B6E02E3F1E760011F8E0 /* TridentPlus */,
-				EC7631D22E30B41A00A86ABD /* Trident */,
-			);
-			name = TridentPlus;
-			packageProductDependencies = (
-				EC72B6C72E3F18200011F8E0 /* Apollo */,
-				EC72B6C92E3F18200011F8E0 /* Supabase */,
-				EC72B6CB2E3F18200011F8E0 /* SimpleKeychain */,
-				EC6D606F2E410BE9007DA5D9 /* Collections */,
-				EC6D60732E410BF4007DA5D9 /* TwitchIRC */,
-				ECBA79812E4AE1E20079A562 /* Alamofire */,
-				EC5A10BB2E5AE131001FE869 /* AsyncAlgorithms */,
-				EC9086732E65191100F84318 /* SDWebImage */,
-			);
-			productName = Trident;
-			productReference = EC72B6DC2E3F18200011F8E0 /* TridentPlus.app */;
-			productType = "com.apple.product-type.application";
-		};
 		EC7631CF2E30B41A00A86ABD /* Trident */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EC7631F12E30B41B00A86ABD /* Build configuration list for PBXNativeTarget "Trident" */;
@@ -285,20 +215,12 @@
 			projectRoot = "";
 			targets = (
 				EC7631CF2E30B41A00A86ABD /* Trident */,
-				EC72B6C62E3F18200011F8E0 /* TridentPlus */,
 				EC7631DC2E30B41B00A86ABD /* TridentTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		EC72B6D82E3F18200011F8E0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		EC7631CE2E30B41A00A86ABD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -337,13 +259,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		EC72B6D12E3F18200011F8E0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		EC7631CC2E30B41A00A86ABD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -369,84 +284,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		EC72B6DA2E3F18200011F8E0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P8P545YJ97;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Trident+";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 0.1.0;
-				OTHER_SWIFT_FLAGS = "-DPLUS";
-				PRODUCT_BUNDLE_IDENTIFIER = dev.tridentapp.TridentPlus;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		EC72B6DB2E3F18200011F8E0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P8P545YJ97;
-				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Trident+";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 0.1.0;
-				OTHER_SWIFT_FLAGS = "-DPLUS";
-				PRODUCT_BUNDLE_IDENTIFIER = dev.tridentapp.TridentPlus;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		EC7631EF2E30B41B00A86ABD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -701,15 +538,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EC72B6D92E3F18200011F8E0 /* Build configuration list for PBXNativeTarget "TridentPlus" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EC72B6DA2E3F18200011F8E0 /* Debug */,
-				EC72B6DB2E3F18200011F8E0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		EC7631CB2E30B41A00A86ABD /* Build configuration list for PBXProject "Trident" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -762,30 +590,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.2.1;
-			};
-		};
-		EC72B6C82E3F18200011F8E0 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.23.0;
-			};
-		};
-		EC72B6CA2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supabase/supabase-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.5.1;
-			};
-		};
-		EC72B6CC2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "SimpleKeychain" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/auth0/SimpleKeychain";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
 			};
 		};
 		EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
@@ -844,11 +648,6 @@
 			package = EC5A10B82E5AE121001FE869 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
 			productName = AsyncAlgorithms;
 		};
-		EC5A10BB2E5AE131001FE869 /* AsyncAlgorithms */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC5A10B82E5AE121001FE869 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
-			productName = AsyncAlgorithms;
-		};
 		EC6D60542E407FBD007DA5D9 /* TwitchIRC */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EC6D60532E407FBD007DA5D9 /* XCRemoteSwiftPackageReference "TwitchIRC" */;
@@ -859,31 +658,6 @@
 			package = EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = Collections;
 		};
-		EC6D606F2E410BE9007DA5D9 /* Collections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = Collections;
-		};
-		EC6D60732E410BF4007DA5D9 /* TwitchIRC */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC6D60532E407FBD007DA5D9 /* XCRemoteSwiftPackageReference "TwitchIRC" */;
-			productName = TwitchIRC;
-		};
-		EC72B6C72E3F18200011F8E0 /* Apollo */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC72B6C82E3F18200011F8E0 /* XCRemoteSwiftPackageReference "apollo-ios" */;
-			productName = Apollo;
-		};
-		EC72B6C92E3F18200011F8E0 /* Supabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC72B6CA2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Supabase;
-		};
-		EC72B6CB2E3F18200011F8E0 /* SimpleKeychain */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC72B6CC2E3F18200011F8E0 /* XCRemoteSwiftPackageReference "SimpleKeychain" */;
-			productName = SimpleKeychain;
-		};
 		EC75289D2E4AD8E600065981 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */;
@@ -893,16 +667,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC9086702E6516F600F84318 /* XCRemoteSwiftPackageReference "SDWebImage" */;
 			productName = SDWebImage;
-		};
-		EC9086732E65191100F84318 /* SDWebImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC9086702E6516F600F84318 /* XCRemoteSwiftPackageReference "SDWebImage" */;
-			productName = SDWebImage;
-		};
-		ECBA79812E4AE1E20079A562 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
 		};
 		ECD71B2E2F09B55B0096B19B /* Dependencies */ = {
 			isa = XCSwiftPackageProductDependency;
