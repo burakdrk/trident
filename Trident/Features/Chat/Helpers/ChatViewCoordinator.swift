@@ -1,4 +1,3 @@
-import Models
 import UIKit
 
 final class ChatViewCoordinator: NSObject, UITableViewDelegate {

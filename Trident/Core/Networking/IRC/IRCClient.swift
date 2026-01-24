@@ -1,6 +1,5 @@
 import Dependencies
 import Foundation
-import Models
 import TwitchIRC
 
 private enum Constants {
@@ -172,6 +171,7 @@ actor IRCClient: IRCStreaming {
         default:
           continuation.yield(.message(msg))
         }
+
       } else {
         continuation.yield(.message(msg))
       }

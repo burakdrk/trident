@@ -1,5 +1,4 @@
 import Foundation
-import Models
 
 /// A service that fetches emotes from the BetterTTV (BTTV) API.
 struct BTTVService: ThirdPartyAssetService {

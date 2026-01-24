@@ -2,7 +2,6 @@ import Alamofire
 import AsyncAlgorithms
 import Dependencies
 import Foundation
-import Models
 
 actor TwitchAuthProvider: AuthProviding {
   let eventChannel = AsyncChannel<AuthEvent>()

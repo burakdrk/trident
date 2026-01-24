@@ -1,22 +1,22 @@
 import Foundation
 
-public struct User: Identifiable, Hashable, Sendable {
-  public let id: String
-  public let loginName: String
-  public let displayName: String
-  public let isLoggedIn: Bool // Whether this user is the logged-in user
-  public let avatarURL: URL
-  public var viewCount: Int = 0
+struct User: Identifiable, Hashable, Sendable {
+  let id: String
+  let loginName: String
+  let displayName: String
+  let isLoggedIn: Bool // Whether this user is the logged-in user
+  let avatarURL: URL
+  var viewCount: Int = 0
 
-  public static func == (lhs: Self, rhs: Self) -> Bool { lhs.id == rhs.id }
+  static func == (lhs: Self, rhs: Self) -> Bool { lhs.id == rhs.id }
 }
 
 extension User: Mockable {
-  public static var mock: User {
+  static var mock: User {
     mockList[0]
   }
 
-  public static var mockList: [User] {
+  static var mockList: [User] {
     [
       User(
         id: "22484632",

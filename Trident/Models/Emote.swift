@@ -1,14 +1,13 @@
 import Foundation
-import Utilities
 
-public struct Emote: Identifiable, Hashable, Sendable, Equatable {
-  public enum Category: String, Sendable {
+struct Emote: Identifiable, Hashable, Sendable, Equatable {
+  enum Category: String, Sendable {
     case global = "Global"
     case channel = "Channel"
     case unknown
   }
 
-  public enum Source: String, Sendable {
+  enum Source: String, Sendable {
     case twitch
     case bttv
     case ffz
@@ -24,37 +23,19 @@ public struct Emote: Identifiable, Hashable, Sendable, Equatable {
     }
   }
 
-  public let name: String
-  public let sourceID: String
-  public let category: Category
-  public let source: Source
-  public let overlay: Bool
-  public var width = 28
-  public var height = 28
+  let name: String
+  let sourceID: String
+  let category: Category
+  let source: Source
+  let overlay: Bool
+  var width = 28
+  var height = 28
 
-  public init(
-    name: String,
-    sourceID: String,
-    category: Category,
-    source: Source,
-    overlay: Bool,
-    width: Int = 28,
-    height: Int = 28
-  ) {
-    self.name = name
-    self.sourceID = sourceID
-    self.category = category
-    self.source = source
-    self.overlay = overlay
-    self.width = width
-    self.height = height
-  }
-
-  public var id: String {
+  var id: String {
     source.rawValue + "_" + sourceID
   }
 
-  public var url: URL {
+  var url: URL {
     switch source {
     case .bttv:
       URL.make("\(source.baseURL)\(sourceID)/2x.webp")
@@ -67,7 +48,7 @@ public struct Emote: Identifiable, Hashable, Sendable, Equatable {
     }
   }
 
-  public func size(
+  func size(
     multiplier: CGFloat = 1.0
   ) -> CGSize {
     var w = width
@@ -80,18 +61,18 @@ public struct Emote: Identifiable, Hashable, Sendable, Equatable {
     return CGSize(width: CGFloat(w) * multiplier, height: CGFloat(h) * multiplier)
   }
 
-  public func hash(into hasher: inout Hasher) {
+  func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
 
-  public static func == (lhs: Emote, rhs: Emote) -> Bool {
+  static func == (lhs: Emote, rhs: Emote) -> Bool {
     lhs.id == rhs.id
   }
 }
 
 // MARK: - Mock Data
 
-public extension Emote {
+extension Emote {
   static var mockOverlay: Emote {
     .init(
       name: "RainTime",
@@ -123,7 +104,7 @@ public extension Emote {
 
 // MARK: - Outliers
 
-public extension Emote {
+extension Emote {
   /// Maps ID to w,h
   static let twitchOutliers = [
     "555555635": (21, 18), /* ;p */

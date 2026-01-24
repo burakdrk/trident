@@ -1,5 +1,4 @@
 import Dependencies
-import Models
 import SwiftUI
 
 struct StreamState: Equatable {

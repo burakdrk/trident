@@ -1,6 +1,6 @@
 import Foundation
 
-public extension URL {
+extension URL {
   /// Only use this for hardcoded URLs.
   static func make(_ str: String) -> URL {
     guard let url = URL(string: str) else {
