@@ -1,8 +1,6 @@
-import Collections
 import Dependencies
-import Observation
+import Foundation
 import TwitchIRC
-import UIKit
 
 private enum Constants {
   static let maxMessages = 500
@@ -69,8 +67,6 @@ extension ChatStore {
 //          if recentIDs.contains(pm.id) {
 //            continue
 //          }
-
-      print(pm.channel)
 
       await dependencies.buffer.add(
         ChatMessage(pm: pm, thirdPartyEmotes: state.tpEmotes),

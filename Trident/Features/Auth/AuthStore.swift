@@ -72,12 +72,13 @@ extension AuthStore {
   }
 }
 
-struct AuthKey: @MainActor EnvironmentKey {
-  @MainActor static var defaultValue = AuthStore.shared
+@MainActor
+private struct AuthKey: EnvironmentKey {
+  static var defaultValue = AuthStore.shared
 }
 
+@MainActor
 extension EnvironmentValues {
-  @MainActor
   var auth: AuthStore {
     get { self[AuthKey.self] }
     set { self[AuthKey.self] = newValue }

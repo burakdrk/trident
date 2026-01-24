@@ -14,10 +14,12 @@ final class AppRouter {
     partialResult[tab] = []
   }
 
-  private nonisolated init() {}
+  private init() {}
+
+  static let shared = AppRouter()
 
   /// Push a route to specified tab.
-  func push(to tab: AppTab, _ r: some Routable) {
+  func push(to tab: AppTab, _ r: some RoutableView) {
     var newPath = _path[tab, default: []]
     newPath.append(AnyRoute(r))
     _path[tab] = newPath
@@ -48,7 +50,7 @@ final class AppRouter {
   }
 
   /// Present an app-level view.
-  func present(_ presentable: Presentable, _ r: some Routable) {
+  func present(_ presentable: Presentable, _ r: some RoutableView) {
     switch presentable {
     case .sheet:
       presentedSheet = AnyRoute(r)
@@ -70,10 +72,15 @@ final class AppRouter {
 
 // MARK: - Environment
 
-extension AppRouter {
-  nonisolated static let shared = AppRouter()
+@MainActor
+private enum AppRouterKey: EnvironmentKey {
+  static var defaultValue = AppRouter.shared
 }
 
+@MainActor
 extension EnvironmentValues {
-  @Entry var router = AppRouter.shared
+  var router: AppRouter {
+    get { self[AppRouterKey.self] }
+    set { self[AppRouterKey.self] = newValue }
+  }
 }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-protocol Routable: View, Hashable, Identifiable {}
+protocol Routable: Hashable, Identifiable {}
 
 extension Routable where ID: Hashable {
   static func == (lhs: Self, rhs: Self) -> Bool {
@@ -22,8 +22,9 @@ extension Routable where ID: Hashable {
   }
 }
 
-@MainActor
-struct AnyRoute: @MainActor Hashable, @MainActor Identifiable {
+typealias RoutableView = Routable & View
+
+struct AnyRoute: Hashable, Identifiable {
   /// ID for equality check and hashable conformance.
   let id: AnyHashable
 
@@ -34,7 +35,7 @@ struct AnyRoute: @MainActor Hashable, @MainActor Identifiable {
   private let _equals: (AnyRoute) -> Bool
   private let internalRoute: Any
 
-  init<T: Routable>(_ route: T) {
+  init<T: RoutableView>(_ route: T) {
     _destinationView = { AnyView(route) } // Type-erased route
     internalRoute = route // Actual route
 

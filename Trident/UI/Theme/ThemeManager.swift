@@ -10,11 +10,11 @@ final class ThemeManager {
   @ObservationIgnored private let themeKey = "theme.choice.v1"
   @ObservationIgnored private let accentKey = "theme.accentChoice.v1"
 
-  private nonisolated init() {
-    Task { @MainActor in
-      loadDefaults()
-    }
+  private init() {
+    loadDefaults()
   }
+
+  static let shared = ThemeManager()
 
   func setTheme(_ new: ThemeChoice) {
     theme = new
@@ -39,10 +39,15 @@ final class ThemeManager {
 
 // MARK: - Environment
 
-extension ThemeManager {
-  nonisolated static let shared = ThemeManager()
+@MainActor
+private enum ThemeManagerKey: EnvironmentKey {
+  static var defaultValue = ThemeManager.shared
 }
 
+@MainActor
 extension EnvironmentValues {
-  @Entry var themeManager = ThemeManager.shared
+  var themeManager: ThemeManager {
+    get { self[ThemeManagerKey.self] }
+    set { self[ThemeManagerKey.self] = newValue }
+  }
 }
