@@ -1,5 +1,6 @@
 import AuthenticationServices
 import Dependencies
+import Models
 
 private enum Constants {
   static let oauthURL = "https://id.twitch.tv/oauth2/authorize"

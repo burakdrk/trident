@@ -1,5 +1,6 @@
 import Collections
 import Foundation
+import Models
 
 actor MessageBuffer {
   private var buffer: [ChatMessage] = []

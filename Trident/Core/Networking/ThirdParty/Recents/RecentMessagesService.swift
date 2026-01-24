@@ -1,4 +1,5 @@
 import Foundation
+import Models
 import TwitchIRC
 
 private enum Constants {
@@ -10,7 +11,7 @@ private enum Constants {
 }
 
 struct RecentMessagesService: Sendable {
-  func fetch(for channel: String, emotes: [String: Emote]) async -> ([ChatMessage], Set<String>) {
+  func fetch(for channel: String, emotes: [String: Models.Emote]) async -> ([ChatMessage], Set<String>) {
     let urlString = "\(Constants.baseAPIURL)/\(channel)"
 
     let res = try? await AF

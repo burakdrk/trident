@@ -1,5 +1,6 @@
 import Dependencies
 import Foundation
+import Models
 import SimpleKeychain
 
 struct SecureStorage {
@@ -8,9 +9,6 @@ struct SecureStorage {
   var clear: @Sendable () async throws -> Void
 
   enum Keys: String {
-    #if PLUS
-    case gqlAccessToken
-    #endif
     case helixAcessToken
   }
 }

@@ -1,28 +1,28 @@
 import Foundation
 
-struct Badge: Identifiable, Hashable, Sendable {
-  enum Category: String, Sendable {
+public struct Badge: Identifiable, Hashable, Sendable {
+  public enum Category: String, Sendable {
     case global = "Global"
     case channel = "Channel"
     case unknown
   }
 
-  enum Source: String, Sendable {
+  public enum Source: String, Sendable {
     case twitch = "https://static-cdn.jtvnw.net/emoticons/v2/"
     case bttv = "https://cdn.betterttv.net/badges/"
     case ffz = "https://cdn.frankerfacez.com/badge/"
     case seventv = "https://cdn.7tv.app/badges/"
   }
 
-  let name: String
-  let id: String
-  let category: Category
-  let source: Source
-  let overlay: Bool
-  var width = 28
-  var height = 28
+  public let name: String
+  public let id: String
+  public let category: Category
+  public let source: Source
+  public let overlay: Bool
+  public var width = 28
+  public var height = 28
 
-  var url: URL {
+  public var url: URL {
     switch source {
     case .bttv:
       URL.make("\(source.rawValue)\(id)")
@@ -35,21 +35,21 @@ struct Badge: Identifiable, Hashable, Sendable {
     }
   }
 
-  func size(
+  public func size(
     multiplier: CGFloat = 1.0
   ) -> CGSize {
     let multiplier = multiplier * 1.25 // Baseline multiplier for better visibility
     return CGSize(width: CGFloat(width) * multiplier, height: CGFloat(height) * multiplier)
   }
 
-  static func == (lhs: Badge, rhs: Badge) -> Bool {
+  public static func == (lhs: Badge, rhs: Badge) -> Bool {
     lhs.id == rhs.id && lhs.source == rhs.source
   }
 }
 
 // MARK: - Mock Data
 
-extension Badge {
+public extension Badge {
   static var mockOverlay: Badge {
     .init(
       name: "RainTime",

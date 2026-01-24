@@ -11,10 +11,9 @@
 		EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D60542E407FBD007DA5D9 /* TwitchIRC */; };
 		EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D606A2E410B98007DA5D9 /* Collections */; };
 		EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EC75289D2E4AD8E600065981 /* Alamofire */; };
+		EC79A8D62F2348FA00BF66EB /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = EC79A8D52F2348FA00BF66EB /* Models */; };
 		EC9086722E6516F600F84318 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EC9086712E6516F600F84318 /* SDWebImage */; };
 		ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = ECD71B2E2F09B55B0096B19B /* Dependencies */; };
-		ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC352E36016300CF0AFE /* Apollo */; };
-		ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = ECE8DC3C2E37006300CF0AFE /* Supabase */; };
 		ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = ECEA81E22E388945002AA253 /* SimpleKeychain */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +33,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		EC79A8D42F23479300BF66EB /* Exceptions for "Packages" folder in "Trident" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Core/Models,
+				Core/Utilities,
+			);
+			target = EC7631CF2E30B41A00A86ABD /* Trident */;
+		};
 		ECC89F072E6E77E9008AAB61 /* Exceptions for "Trident" folder in "Trident" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -57,6 +64,14 @@
 			path = TridentTests;
 			sourceTree = "<group>";
 		};
+		EC79A7F32F2341FB00BF66EB /* Packages */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EC79A8D42F23479300BF66EB /* Exceptions for "Packages" folder in "Trident" target */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,14 +79,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC79A8D62F2348FA00BF66EB /* Models in Frameworks */,
 				EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */,
 				EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */,
 				EC9086722E6516F600F84318 /* SDWebImage in Frameworks */,
 				EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */,
 				ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */,
 				ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */,
-				ECE8DC3D2E37006300CF0AFE /* Supabase in Frameworks */,
-				ECE8DC362E36016300CF0AFE /* Apollo in Frameworks */,
 				EC5A10BA2E5AE121001FE869 /* AsyncAlgorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -89,6 +103,7 @@
 		EC7631C72E30B41A00A86ABD = {
 			isa = PBXGroup;
 			children = (
+				EC79A7F32F2341FB00BF66EB /* Packages */,
 				EC7631D22E30B41A00A86ABD /* Trident */,
 				EC7631E02E30B41B00A86ABD /* TridentTests */,
 				ECBA79802E4AE1E20079A562 /* Frameworks */,
@@ -130,11 +145,10 @@
 			);
 			fileSystemSynchronizedGroups = (
 				EC7631D22E30B41A00A86ABD /* Trident */,
+				EC79A7F32F2341FB00BF66EB /* Packages */,
 			);
 			name = Trident;
 			packageProductDependencies = (
-				ECE8DC352E36016300CF0AFE /* Apollo */,
-				ECE8DC3C2E37006300CF0AFE /* Supabase */,
 				ECEA81E22E388945002AA253 /* SimpleKeychain */,
 				EC6D60542E407FBD007DA5D9 /* TwitchIRC */,
 				EC6D606A2E410B98007DA5D9 /* Collections */,
@@ -142,6 +156,7 @@
 				EC5A10B92E5AE121001FE869 /* AsyncAlgorithms */,
 				EC9086712E6516F600F84318 /* SDWebImage */,
 				ECD71B2E2F09B55B0096B19B /* Dependencies */,
+				EC79A8D52F2348FA00BF66EB /* Models */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -199,8 +214,6 @@
 			mainGroup = EC7631C72E30B41A00A86ABD;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				ECE8DC342E36016300CF0AFE /* XCRemoteSwiftPackageReference "apollo-ios" */,
-				ECE8DC3B2E37006300CF0AFE /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				ECEA81E12E388945002AA253 /* XCRemoteSwiftPackageReference "SimpleKeychain" */,
 				EC6D60532E407FBD007DA5D9 /* XCRemoteSwiftPackageReference "TwitchIRC" */,
 				EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */,
@@ -616,22 +629,6 @@
 				minimumVersion = 1.10.0;
 			};
 		};
-		ECE8DC342E36016300CF0AFE /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.23.0;
-			};
-		};
-		ECE8DC3B2E37006300CF0AFE /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supabase/supabase-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.5.1;
-			};
-		};
 		ECEA81E12E388945002AA253 /* XCRemoteSwiftPackageReference "SimpleKeychain" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/auth0/SimpleKeychain";
@@ -663,6 +660,10 @@
 			package = EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
+		EC79A8D52F2348FA00BF66EB /* Models */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Models;
+		};
 		EC9086712E6516F600F84318 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EC9086702E6516F600F84318 /* XCRemoteSwiftPackageReference "SDWebImage" */;
@@ -672,16 +673,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ECD71B2D2F09B55B0096B19B /* XCRemoteSwiftPackageReference "swift-dependencies" */;
 			productName = Dependencies;
-		};
-		ECE8DC352E36016300CF0AFE /* Apollo */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ECE8DC342E36016300CF0AFE /* XCRemoteSwiftPackageReference "apollo-ios" */;
-			productName = Apollo;
-		};
-		ECE8DC3C2E37006300CF0AFE /* Supabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ECE8DC3B2E37006300CF0AFE /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Supabase;
 		};
 		ECEA81E22E388945002AA253 /* SimpleKeychain */ = {
 			isa = XCSwiftPackageProductDependency;

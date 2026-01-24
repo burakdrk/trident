@@ -1,5 +1,6 @@
 import Collections
 import Dependencies
+import Models
 import Observation
 import TwitchIRC
 import UIKit
@@ -14,7 +15,7 @@ struct ChatState: Equatable {
   var isPaused = false
   var newMessageCount = 0
   var messages = MessageSource(capacity: Constants.maxMessages)
-  var tpEmotes: [String: Emote] = [:]
+  var tpEmotes: [String: Models.Emote] = [:]
   var lastError: String?
 }
 
@@ -38,7 +39,19 @@ extension ChatStore {
   }
 
   func startReading() async {
-    do {
+    let stream = await dependencies.chatClient.subscribe(to: dependencies.channel)
+
+    for try await message in stream {
+      if Task.isCancelled { break }
+
+      switch message {
+      case let .message(msg):
+        await handleIRCMessages(msg)
+      case let .status(status):
+        handleStatusMessages(status)
+      }
+    }
+
 //      let (recents, recentIDs) = await dependencies.recentsService.fetch(
 //        for: dependencies.channel.loginName,
 //        emotes: state.tpEmotes
@@ -46,36 +59,19 @@ extension ChatStore {
 //      update {
 //        $0.messages.add(recents.reversed(), fittingWidth: $0.fittingWidth)
 //      }
-      let stream = await dependencies.chatClient.subscribe(to: dependencies.channel)
-
-      for try await message in stream {
-        if Task.isCancelled { break }
-
-        switch message {
-        case let .message(msg):
-          await handleIRCMessages(msg)
-        case let .status(status):
-          handleStatusMessages(status)
-        }
-      }
-    } catch {
-      update { $0.lastError = String(describing: error) }
-    }
   }
 
   private func handleIRCMessages(_ msg: IncomingMessage) async {
     switch msg {
     case let .privateMessage(pm):
-//          if recentIDs.contains(pm.id) {
-//            continue
-//          }
-
-      print(pm.channel)
-
       await dependencies.buffer.add(
         ChatMessage(pm: pm, thirdPartyEmotes: state.tpEmotes),
         paused: state.isPaused
       )
+
+    //          if recentIDs.contains(pm.id) {
+    //            continue
+    //          }
     default: break
     }
   }

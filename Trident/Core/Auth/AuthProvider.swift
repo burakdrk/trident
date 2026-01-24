@@ -1,5 +1,6 @@
 import AsyncAlgorithms
 import Dependencies
+import Models
 
 enum AuthEvent {
   case loggedOut

@@ -1,4 +1,5 @@
 import Foundation
+import Models
 
 /// A service that fetches emotes from the SevenTV (7TV) API.
 struct SevenTVService: ThirdPartyAssetService {

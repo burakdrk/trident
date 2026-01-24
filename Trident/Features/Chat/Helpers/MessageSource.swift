@@ -1,4 +1,5 @@
 import Collections
+import Models
 import UIKit
 
 struct MessageSource: Equatable {

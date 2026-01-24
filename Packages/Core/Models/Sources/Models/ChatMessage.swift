@@ -1,26 +1,27 @@
 import Foundation
 import TwitchIRC
+import Utilities
 
-struct ChatMessage: Identifiable, Hashable, Sendable {
-  struct Author: Hashable, Sendable {
-    let displayName: String
-    let colorHex: String
-    let badges: [String]
+public struct ChatMessage: Identifiable, Hashable, Sendable {
+  public struct Author: Hashable, Sendable {
+    public let displayName: String
+    public let colorHex: String
+    public let badges: [String]
   }
 
-  enum Inline: Hashable, Sendable {
+  public enum Inline: Hashable, Sendable {
     case text(String)
     case emote([Emote]) // Array for overlay (zero-width) emotes
   }
 
-  let id: String
-  let inlines: [Inline]
-  let author: Author
-  let timestamp: Date
-  let rawText: String
-  let historical: Bool
+  public let id: String
+  public let inlines: [Inline]
+  public let author: Author
+  public let timestamp: Date
+  public let rawText: String
+  public let historical: Bool
 
-  init(pm: PrivateMessage, thirdPartyEmotes: [String: Emote], historical: Bool = false) {
+  public init(pm: PrivateMessage, thirdPartyEmotes: [String: Emote], historical: Bool = false) {
     let normalized = (pm.color.isEmpty || pm.color == "#000000") ? "#808080" : pm.color
 
     id = pm.id
@@ -35,11 +36,11 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
     )
   }
 
-  func hash(into hasher: inout Hasher) {
+  public func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
 
-  static func == (lhs: Self, rhs: Self) -> Bool {
+  public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.id == rhs.id
   }
 }
@@ -60,13 +61,13 @@ extension ChatMessage {
       let emote = twitchEmotes[part] ?? thirdPartyEmotes[part]
 
       if let emote {
-        if emote.overlay, !inlines.isEmpty, case .emote(let lastEmotes) = inlines.last {
+        if emote.overlay, !inlines.isEmpty, case let .emote(lastEmotes) = inlines.last {
           inlines[inlines.count - 1] = .emote(lastEmotes + [emote])
         } else {
           inlines.append(.emote([emote]))
         }
       } else {
-        if !inlines.isEmpty, case .text(let lastText) = inlines.last {
+        if !inlines.isEmpty, case let .text(lastText) = inlines.last {
           inlines[inlines.count - 1] = .text(lastText + " " + part)
         } else {
           inlines.append(.text(part))
@@ -81,9 +82,29 @@ extension ChatMessage {
   }
 }
 
+// MARK: - IRC Helper
+
+private extension TwitchIRC.PrivateMessage {
+  func parseEmotesToDict() -> [String: Emote] {
+    var uniqueTwitchEmotes: [String: Emote] = [:]
+
+    for item in parseEmotes().unique(by: \.id) {
+      uniqueTwitchEmotes[item.name] = Emote(
+        name: item.name,
+        sourceID: item.id,
+        category: .unknown,
+        source: .twitch,
+        overlay: false
+      )
+    }
+
+    return uniqueTwitchEmotes
+  }
+}
+
 // MARK: - Mock Data
 
-extension ChatMessage {
+public extension ChatMessage {
   static var mock: ChatMessage {
     let string = """
     @badge-info=;
@@ -102,7 +123,7 @@ extension ChatMessage {
     """
 
     let messages = IncomingMessage.parse(ircOutput: string)
-    guard case .privateMessage(let pm) = messages.first?.message as? IncomingMessage else {
+    guard case let .privateMessage(pm) = messages.first?.message as? IncomingMessage else {
       return ChatMessage(pm: PrivateMessage(), thirdPartyEmotes: [:])
     }
 

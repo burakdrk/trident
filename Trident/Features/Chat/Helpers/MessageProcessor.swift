@@ -1,3 +1,4 @@
+import Models
 import UIKit
 
 enum MessageProcessor {
@@ -40,10 +41,10 @@ enum MessageProcessor {
     // Message body
     for inline in message.inlines {
       switch inline {
-      case .emote(let emote):
+      case let .emote(emote):
         let att = EmoteAttachment(emote, historical: message.historical)
         out.append(NSAttributedString(attachment: att))
-      case .text(let text):
+      case let .text(text):
         out.append(NSAttributedString(string: text, attributes: attrs))
       }
     }

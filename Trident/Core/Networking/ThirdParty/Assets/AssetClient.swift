@@ -1,4 +1,5 @@
 import Dependencies
+import Models
 
 struct AssetClient: Sendable {
   var emotes: @Sendable (_ channelID: String?) async -> [String: Emote]
