@@ -8,9 +8,6 @@ struct SecureStorage {
   var clear: @Sendable () async throws -> Void
 
   enum Keys: String {
-    #if PLUS
-    case gqlAccessToken
-    #endif
     case helixAcessToken
   }
 }

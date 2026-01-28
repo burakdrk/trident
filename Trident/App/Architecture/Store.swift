@@ -22,7 +22,7 @@ final class Store<State: Equatable, Dependencies>: Equatable {
   ) -> Binding<T> {
     Binding(
       get: { self.state[keyPath: keyPath] },
-      set: { self.state[keyPath: keyPath] = $0; action?($0) }
+      set: { newValue in self.update { $0[keyPath: keyPath] = newValue }; action?(newValue) }
     )
   }
 

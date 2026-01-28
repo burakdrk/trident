@@ -9,8 +9,11 @@ struct ChatMessage: Identifiable, Hashable, Sendable {
   }
 
   enum Inline: Hashable, Sendable {
+    /// Text part of the message
     case text(String)
-    case emote([Emote]) // Array for overlay (zero-width) emotes
+
+    /// Emotes in the message, an array for overlay (zero-width) emotes
+    case emote([Emote])
   }
 
   let id: String
@@ -60,13 +63,13 @@ extension ChatMessage {
       let emote = twitchEmotes[part] ?? thirdPartyEmotes[part]
 
       if let emote {
-        if emote.overlay, !inlines.isEmpty, case .emote(let lastEmotes) = inlines.last {
+        if emote.overlay, !inlines.isEmpty, case let .emote(lastEmotes) = inlines.last {
           inlines[inlines.count - 1] = .emote(lastEmotes + [emote])
         } else {
           inlines.append(.emote([emote]))
         }
       } else {
-        if !inlines.isEmpty, case .text(let lastText) = inlines.last {
+        if !inlines.isEmpty, case let .text(lastText) = inlines.last {
           inlines[inlines.count - 1] = .text(lastText + " " + part)
         } else {
           inlines.append(.text(part))
@@ -102,7 +105,7 @@ extension ChatMessage {
     """
 
     let messages = IncomingMessage.parse(ircOutput: string)
-    guard case .privateMessage(let pm) = messages.first?.message as? IncomingMessage else {
+    guard case let .privateMessage(pm) = messages.first?.message as? IncomingMessage else {
       return ChatMessage(pm: PrivateMessage(), thirdPartyEmotes: [:])
     }
 

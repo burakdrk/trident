@@ -171,7 +171,6 @@ actor IRCClient: IRCStreaming {
         default:
           continuation.yield(.message(msg))
         }
-
       } else {
         continuation.yield(.message(msg))
       }

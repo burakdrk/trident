@@ -29,10 +29,10 @@ struct StreamView: RoutableView {
       guard let channel = streamManager.visibleChannel else { return }
       await streamManager.loadStream(for: channel)
     }
-    .navigationTransition(.zoom(
-      sourceID: streamManager.visibleChannel ?? initialChannel,
-      in: animation
-    ))
+    .navigationTransition(
+      .zoom(
+        sourceID: streamManager.visibleChannel ?? initialChannel, in: animation
+      ))
   }
 
   @ViewBuilder

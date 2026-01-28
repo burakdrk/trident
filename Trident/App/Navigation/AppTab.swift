@@ -6,6 +6,7 @@ enum AppTab: CaseIterable, Hashable {
   case user
   case search
 
+  @MainActor
   var destinationView: some View {
     AppTabContent(appTab: self)
   }
@@ -43,25 +44,33 @@ struct AppTabContent: View {
   let appTab: AppTab
 
   var body: some View {
-    NavigationStack(path: router.path(for: appTab)) {
-      Group {
-        switch appTab {
-        case .following:
-          FollowList()
-        case .explore:
-          EmptyView()
-        case .user:
-          EmptyView()
-        case .search:
-          SearchView()
+    @Bindable var router = router
+
+    if appTab == .following {
+      FollowingExperienceView(experience: router.followingExperience)
+    } else {
+      NavigationStack(path: router.path(for: appTab)) {
+        Group {
+          switch appTab {
+          case .following:
+            EmptyView()
+          case .explore:
+            EmptyView()
+          case .user:
+            EmptyView()
+          case .search:
+            SearchView()
+          }
         }
+        .navigationDestination(for: AnyRoute.self) { route in
+          route.destinationView()
+        }
+        .fullScreenCover(item: $router.presentedCover) { $0.destinationView() }
+        .sheet(item: $router.presentedSheet) { $0.destinationView() }
+        .toolbarBackground(.thinMaterial, for: .tabBar)
+        .toolbarBackgroundVisibility(.visible, for: .tabBar)
+        .containerBackground(.clear, for: .navigation)
       }
-      .navigationDestination(for: AnyRoute.self) { route in
-        route.destinationView()
-      }
-      .toolbarBackground(.thinMaterial, for: .tabBar)
-      .toolbarBackgroundVisibility(.visible, for: .tabBar)
-      .containerBackground(.clear, for: .navigation)
     }
   }
 }

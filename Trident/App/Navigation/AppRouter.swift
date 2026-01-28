@@ -14,6 +14,8 @@ final class AppRouter {
     partialResult[tab] = []
   }
 
+  var followingExperience = FollowingExperience()
+
   private init() {}
 
   static let shared = AppRouter()
