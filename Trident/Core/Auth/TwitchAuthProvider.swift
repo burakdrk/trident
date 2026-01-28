@@ -3,6 +3,7 @@ import AsyncAlgorithms
 import DataModels
 import Dependencies
 import Foundation
+import Utilities
 
 actor TwitchAuthProvider: AuthProviding {
   let eventChannel = AsyncChannel<AuthEvent>()

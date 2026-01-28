@@ -1,4 +1,4 @@
-extension Array {
+public extension Array {
   func unique<T: Hashable>(by keyPath: KeyPath<Element, T>) -> [Element] {
     var seen = Set<T>()
     var uniqueElements: [Element] = []

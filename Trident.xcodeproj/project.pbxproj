@@ -14,6 +14,7 @@
 		EC9086722E6516F600F84318 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EC9086712E6516F600F84318 /* SDWebImage */; };
 		ECCCE59C2F29B29500A66132 /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE59B2F29B29500A66132 /* CasePaths */; };
 		ECCCE5A82F29E08A00A66132 /* DataModels in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE5A72F29E08A00A66132 /* DataModels */; };
+		ECCCE5AA2F29E42200A66132 /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE5A92F29E42200A66132 /* Utilities */; };
 		ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = ECD71B2E2F09B55B0096B19B /* Dependencies */; };
 		ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = ECEA81E22E388945002AA253 /* SimpleKeychain */; };
 /* End PBXBuildFile section */
@@ -83,6 +84,7 @@
 				EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */,
 				EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */,
 				EC9086722E6516F600F84318 /* SDWebImage in Frameworks */,
+				ECCCE5AA2F29E42200A66132 /* Utilities in Frameworks */,
 				EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */,
 				ECCCE5A82F29E08A00A66132 /* DataModels in Frameworks */,
 				ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */,
@@ -160,6 +162,7 @@
 				ECD71B2E2F09B55B0096B19B /* Dependencies */,
 				ECCCE59B2F29B29500A66132 /* CasePaths */,
 				ECCCE5A72F29E08A00A66132 /* DataModels */,
+				ECCCE5A92F29E42200A66132 /* Utilities */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -688,6 +691,10 @@
 		ECCCE5A72F29E08A00A66132 /* DataModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DataModels;
+		};
+		ECCCE5A92F29E42200A66132 /* Utilities */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Utilities;
 		};
 		ECD71B2E2F09B55B0096B19B /* Dependencies */ = {
 			isa = XCSwiftPackageProductDependency;

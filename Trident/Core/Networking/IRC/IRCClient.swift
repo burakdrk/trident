@@ -2,6 +2,7 @@ import DataModels
 import Dependencies
 import Foundation
 import TwitchIRC
+import Utilities
 
 private enum Constants {
   static let wsUrl = "wss://irc-ws.chat.twitch.tv:443"

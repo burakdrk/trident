@@ -1,6 +1,6 @@
 import Foundation
 
-extension Date {
+public extension Date {
   init?(iso8601String: String) {
     let formatter = ISO8601DateFormatter()
     formatter.formatOptions = [.withInternetDateTime]

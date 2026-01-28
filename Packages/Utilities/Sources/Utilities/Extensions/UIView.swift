@@ -1,6 +1,6 @@
 import UIKit
 
-extension UIView {
+public extension UIView {
   /// Adds a subview and sets its constraints to fill the parent view.
   /// - Parameter subview: The view to add as a subview.
   func addAndFillSubview(_ subview: UIView) {

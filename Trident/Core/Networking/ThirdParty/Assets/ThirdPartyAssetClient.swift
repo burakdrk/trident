@@ -1,6 +1,7 @@
 import Collections
 import DataModels
 import Foundation
+import Utilities
 
 actor ThirdPartyAssetClient {
   private let services: [any ThirdPartyAssetService]

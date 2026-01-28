@@ -32,9 +32,9 @@ actor MessageBuffer {
   }
 
   func flush() -> [ChatMessage] {
-    let batch = buffer.drain()
-    let pauseBatch = pauseBuffer.drain()
-
-    return pauseBatch + batch
+    let batch = buffer + pauseBuffer
+    buffer.removeAll()
+    pauseBuffer.removeAll()
+    return batch
   }
 }

@@ -1,6 +1,6 @@
 import UIKit
 
-extension NSAttributedString {
+public extension NSAttributedString {
   func sizeFittingWidth(_ w: CGFloat) -> CGSize {
     let textStorage = NSTextStorage(attributedString: self)
     let size = CGSize(width: w, height: CGFloat.greatestFiniteMagnitude)
