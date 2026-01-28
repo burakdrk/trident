@@ -2,20 +2,20 @@ import Foundation
 
 /// https://www.swiftbysundell.com/articles/caching-in-swift/
 
-final class Cache<Key: Hashable, Value> {
+public final class Cache<Key: Hashable, Value> {
   private let wrapped = NSCache<WrappedKey, Entry>()
 
-  func insert(_ value: Value, forKey key: Key) {
+  public func insert(_ value: Value, forKey key: Key) {
     let entry = Entry(value: value)
     wrapped.setObject(entry, forKey: WrappedKey(key))
   }
 
-  func value(forKey key: Key) -> Value? {
+  public func value(forKey key: Key) -> Value? {
     let entry = wrapped.object(forKey: WrappedKey(key))
     return entry?.value
   }
 
-  func removeValue(forKey key: Key) {
+  public func removeValue(forKey key: Key) {
     wrapped.removeObject(forKey: WrappedKey(key))
   }
 }
@@ -46,7 +46,7 @@ private extension Cache {
   }
 }
 
-extension Cache {
+public extension Cache {
   subscript(key: Key) -> Value? {
     get { value(forKey: key) }
     set {

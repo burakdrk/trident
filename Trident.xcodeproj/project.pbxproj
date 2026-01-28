@@ -10,13 +10,12 @@
 		EC5A10BA2E5AE121001FE869 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = EC5A10B92E5AE121001FE869 /* AsyncAlgorithms */; };
 		EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D60542E407FBD007DA5D9 /* TwitchIRC */; };
 		EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = EC6D606A2E410B98007DA5D9 /* Collections */; };
-		EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EC75289D2E4AD8E600065981 /* Alamofire */; };
 		EC9086722E6516F600F84318 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EC9086712E6516F600F84318 /* SDWebImage */; };
 		ECCCE59C2F29B29500A66132 /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE59B2F29B29500A66132 /* CasePaths */; };
 		ECCCE5A82F29E08A00A66132 /* DataModels in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE5A72F29E08A00A66132 /* DataModels */; };
 		ECCCE5AA2F29E42200A66132 /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE5A92F29E42200A66132 /* Utilities */; };
+		ECCCE5AD2F29ECEE00A66132 /* TridentCore in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE5AC2F29ECEE00A66132 /* TridentCore */; };
 		ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = ECD71B2E2F09B55B0096B19B /* Dependencies */; };
-		ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = ECEA81E22E388945002AA253 /* SimpleKeychain */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +45,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				DataModels,
+				TridentCore,
 				Utilities,
 			);
 			target = EC7631CF2E30B41A00A86ABD /* Trident */;
@@ -81,15 +81,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */,
 				EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */,
 				EC9086722E6516F600F84318 /* SDWebImage in Frameworks */,
 				ECCCE5AA2F29E42200A66132 /* Utilities in Frameworks */,
 				EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */,
+				ECCCE5AD2F29ECEE00A66132 /* TridentCore in Frameworks */,
 				ECCCE5A82F29E08A00A66132 /* DataModels in Frameworks */,
 				ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */,
 				ECCCE59C2F29B29500A66132 /* CasePaths in Frameworks */,
-				ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */,
 				EC5A10BA2E5AE121001FE869 /* AsyncAlgorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,16 +152,15 @@
 			);
 			name = Trident;
 			packageProductDependencies = (
-				ECEA81E22E388945002AA253 /* SimpleKeychain */,
 				EC6D60542E407FBD007DA5D9 /* TwitchIRC */,
 				EC6D606A2E410B98007DA5D9 /* Collections */,
-				EC75289D2E4AD8E600065981 /* Alamofire */,
 				EC5A10B92E5AE121001FE869 /* AsyncAlgorithms */,
 				EC9086712E6516F600F84318 /* SDWebImage */,
 				ECD71B2E2F09B55B0096B19B /* Dependencies */,
 				ECCCE59B2F29B29500A66132 /* CasePaths */,
 				ECCCE5A72F29E08A00A66132 /* DataModels */,
 				ECCCE5A92F29E42200A66132 /* Utilities */,
+				ECCCE5AC2F29ECEE00A66132 /* TridentCore */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -220,10 +218,8 @@
 			mainGroup = EC7631C72E30B41A00A86ABD;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				ECEA81E12E388945002AA253 /* XCRemoteSwiftPackageReference "SimpleKeychain" */,
 				EC6D60532E407FBD007DA5D9 /* XCRemoteSwiftPackageReference "TwitchIRC" */,
 				EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				EC5A10B82E5AE121001FE869 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
 				EC9086702E6516F600F84318 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				ECD71B2D2F09B55B0096B19B /* XCRemoteSwiftPackageReference "swift-dependencies" */,
@@ -615,14 +611,6 @@
 				minimumVersion = 1.2.1;
 			};
 		};
-		EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.10.2;
-			};
-		};
 		EC9086702E6516F600F84318 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dreampiggy/SDWebImage";
@@ -647,14 +635,6 @@
 				minimumVersion = 1.10.0;
 			};
 		};
-		ECEA81E12E388945002AA253 /* XCRemoteSwiftPackageReference "SimpleKeychain" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/auth0/SimpleKeychain";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -672,11 +652,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EC6D60692E410B98007DA5D9 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = Collections;
-		};
-		EC75289D2E4AD8E600065981 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EC75289C2E4AD8E600065981 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
 		};
 		EC9086712E6516F600F84318 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -696,15 +671,14 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Utilities;
 		};
+		ECCCE5AC2F29ECEE00A66132 /* TridentCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TridentCore;
+		};
 		ECD71B2E2F09B55B0096B19B /* Dependencies */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = ECD71B2D2F09B55B0096B19B /* XCRemoteSwiftPackageReference "swift-dependencies" */;
 			productName = Dependencies;
-		};
-		ECEA81E22E388945002AA253 /* SimpleKeychain */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ECEA81E12E388945002AA253 /* XCRemoteSwiftPackageReference "SimpleKeychain" */;
-			productName = SimpleKeychain;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

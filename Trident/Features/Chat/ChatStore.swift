@@ -1,6 +1,7 @@
 import DataModels
 import Dependencies
 import Foundation
+import TridentCore
 import TwitchIRC
 
 private enum Constants {

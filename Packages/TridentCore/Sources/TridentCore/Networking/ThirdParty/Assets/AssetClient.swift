@@ -1,12 +1,12 @@
 import DataModels
 import Dependencies
 
-struct AssetClient: Sendable {
-  var emotes: @Sendable (_ channelID: String?) async -> [String: Emote]
+public struct AssetClient: Sendable {
+  public var emotes: @Sendable (_ channelID: String?) async -> [String: Emote]
 }
 
 extension AssetClient: DependencyKey {
-  static var liveValue: Self {
+  public static var liveValue: Self {
     let client = ThirdPartyAssetClient(services: [
       FFZService(),
       BTTVService(),
@@ -21,7 +21,7 @@ extension AssetClient: DependencyKey {
   }
 }
 
-extension DependencyValues {
+public extension DependencyValues {
   var assetClient: AssetClient {
     get { self[AssetClient.self] }
     set { self[AssetClient.self] = newValue }

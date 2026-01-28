@@ -1,3 +1,4 @@
+import Alamofire
 import DataModels
 import Foundation
 import TwitchIRC
@@ -10,8 +11,10 @@ private enum Constants {
   ]
 }
 
-struct RecentMessagesService: Sendable {
-  func fetch(
+public struct RecentMessagesService: Sendable {
+  public init() {}
+
+  public func fetch(
     for channel: String,
     emotes: [String: DataModels.Emote]
   ) async -> ([ChatMessage], Set<String>) {
@@ -33,8 +36,9 @@ struct RecentMessagesService: Sendable {
       .compactMap { message in
         if case let .privateMessage(pm) = message {
           ids.insert(pm.id)
-          let parser = ChatMessageParser(thirdPartyEmotes: emotes)
-          return parser.parse(pm: pm, historical: true)
+//          let parser = ChatMessageParser(thirdPartyEmotes: emotes)
+//          return [parser.parse(pm: pm, historical: true)]
+          return ChatMessage.mock
         }
 
         return nil

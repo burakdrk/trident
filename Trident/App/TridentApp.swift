@@ -1,4 +1,3 @@
-import Alamofire
 import SDWebImage
 import SwiftUI
 
@@ -57,7 +56,3 @@ struct TridentApp: App {
 //    }
 //  }
 }
-
-// MARK: - Network Setup
-
-let AF = Alamofire.Session(eventMonitors: [])

@@ -10,8 +10,8 @@ private enum Constants {
   static let defaultPassword = "SCHMOOPIIE"
 }
 
-enum IRCStreamEvent {
-  enum ConnectionStatus {
+public enum IRCStreamEvent: Sendable {
+  public enum ConnectionStatus: Sendable {
     /// Disconnected from the socket
     case disconnected
 
@@ -31,7 +31,7 @@ enum IRCStreamEvent {
   case status(ConnectionStatus)
 }
 
-protocol IRCStreaming: Sendable {
+public protocol IRCStreaming: Sendable {
   func connect() async
   func disconnect() async
 
@@ -241,7 +241,7 @@ private enum IRCClientKey: DependencyKey {
   static let liveValue: any IRCStreaming = IRCClient()
 }
 
-extension DependencyValues {
+public extension DependencyValues {
   var ircClient: any IRCStreaming {
     get { self[IRCClientKey.self] }
     set { self[IRCClientKey.self] = newValue }
