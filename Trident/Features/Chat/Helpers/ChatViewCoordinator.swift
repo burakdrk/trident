@@ -1,3 +1,4 @@
+import DataModels
 import UIKit
 
 final class ChatViewCoordinator: NSObject, UITableViewDelegate {

@@ -1,4 +1,5 @@
 import Collections
+import DataModels
 import Foundation
 
 actor ThirdPartyAssetClient {

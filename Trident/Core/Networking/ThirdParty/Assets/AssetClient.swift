@@ -1,3 +1,4 @@
+import DataModels
 import Dependencies
 
 struct AssetClient: Sendable {

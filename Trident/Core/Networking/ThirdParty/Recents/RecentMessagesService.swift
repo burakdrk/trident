@@ -1,3 +1,4 @@
+import DataModels
 import Foundation
 import TwitchIRC
 
@@ -10,7 +11,10 @@ private enum Constants {
 }
 
 struct RecentMessagesService: Sendable {
-  func fetch(for channel: String, emotes: [String: Emote]) async -> ([ChatMessage], Set<String>) {
+  func fetch(
+    for channel: String,
+    emotes: [String: DataModels.Emote]
+  ) async -> ([ChatMessage], Set<String>) {
     let urlString = "\(Constants.baseAPIURL)/\(channel)"
 
     let res = try? await AF
@@ -29,7 +33,8 @@ struct RecentMessagesService: Sendable {
       .compactMap { message in
         if case let .privateMessage(pm) = message {
           ids.insert(pm.id)
-          return ChatMessage(pm: pm, thirdPartyEmotes: emotes, historical: true)
+          let parser = ChatMessageParser(thirdPartyEmotes: emotes)
+          return parser.parse(pm: pm, historical: true)
         }
 
         return nil

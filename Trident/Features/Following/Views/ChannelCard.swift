@@ -1,3 +1,4 @@
+import DataModels
 import SwiftUI
 
 struct ChannelCard: View {

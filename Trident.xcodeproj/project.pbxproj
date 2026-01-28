@@ -13,6 +13,7 @@
 		EC75289E2E4AD8E600065981 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EC75289D2E4AD8E600065981 /* Alamofire */; };
 		EC9086722E6516F600F84318 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = EC9086712E6516F600F84318 /* SDWebImage */; };
 		ECCCE59C2F29B29500A66132 /* CasePaths in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE59B2F29B29500A66132 /* CasePaths */; };
+		ECCCE5A82F29E08A00A66132 /* DataModels in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE5A72F29E08A00A66132 /* DataModels */; };
 		ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = ECD71B2E2F09B55B0096B19B /* Dependencies */; };
 		ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = ECEA81E22E388945002AA253 /* SimpleKeychain */; };
 /* End PBXBuildFile section */
@@ -40,6 +41,14 @@
 			);
 			target = EC7631CF2E30B41A00A86ABD /* Trident */;
 		};
+		ECCCE5A32F29D54600A66132 /* Exceptions for "Packages" folder in "Trident" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DataModels,
+				Utilities,
+			);
+			target = EC7631CF2E30B41A00A86ABD /* Trident */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -56,6 +65,14 @@
 			path = TridentTests;
 			sourceTree = "<group>";
 		};
+		ECCCE5A12F29D50000A66132 /* Packages */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				ECCCE5A32F29D54600A66132 /* Exceptions for "Packages" folder in "Trident" target */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +84,7 @@
 				EC6D606B2E410B98007DA5D9 /* Collections in Frameworks */,
 				EC9086722E6516F600F84318 /* SDWebImage in Frameworks */,
 				EC6D60552E407FBD007DA5D9 /* TwitchIRC in Frameworks */,
+				ECCCE5A82F29E08A00A66132 /* DataModels in Frameworks */,
 				ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */,
 				ECCCE59C2F29B29500A66132 /* CasePaths in Frameworks */,
 				ECEA81E32E388945002AA253 /* SimpleKeychain in Frameworks */,
@@ -87,6 +105,7 @@
 		EC7631C72E30B41A00A86ABD = {
 			isa = PBXGroup;
 			children = (
+				ECCCE5A12F29D50000A66132 /* Packages */,
 				EC7631D22E30B41A00A86ABD /* Trident */,
 				EC7631E02E30B41B00A86ABD /* TridentTests */,
 				ECBA79802E4AE1E20079A562 /* Frameworks */,
@@ -128,6 +147,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				EC7631D22E30B41A00A86ABD /* Trident */,
+				ECCCE5A12F29D50000A66132 /* Packages */,
 			);
 			name = Trident;
 			packageProductDependencies = (
@@ -139,6 +159,7 @@
 				EC9086712E6516F600F84318 /* SDWebImage */,
 				ECD71B2E2F09B55B0096B19B /* Dependencies */,
 				ECCCE59B2F29B29500A66132 /* CasePaths */,
+				ECCCE5A72F29E08A00A66132 /* DataModels */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -663,6 +684,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ECCCE59A2F29B29500A66132 /* XCRemoteSwiftPackageReference "swift-case-paths" */;
 			productName = CasePaths;
+		};
+		ECCCE5A72F29E08A00A66132 /* DataModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DataModels;
 		};
 		ECD71B2E2F09B55B0096B19B /* Dependencies */ = {
 			isa = XCSwiftPackageProductDependency;

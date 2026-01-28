@@ -1,18 +1,25 @@
 import Foundation
 
-struct Channel: Identifiable, Hashable, Sendable {
-  let id: String
-  let loginName: String
-  let displayName: String
-  let avatarURL: URL
+public struct Channel: Identifiable, Hashable, Sendable {
+  public let id: String
+  public let loginName: String
+  public let displayName: String
+  public let avatarURL: URL
 
-  static func == (lhs: Self, rhs: Self) -> Bool { lhs.id == rhs.id }
+  public init(id: String, loginName: String, displayName: String, avatarURL: URL) {
+    self.id = id
+    self.loginName = loginName
+    self.displayName = displayName
+    self.avatarURL = avatarURL
+  }
+
+  public static func == (lhs: Self, rhs: Self) -> Bool { lhs.id == rhs.id }
 }
 
 extension Channel: Mockable {
-  static let mock: Channel = mockList[0]
+  public static let mock: Channel = mockList[0]
 
-  static var mockList: [Channel] {
+  public static var mockList: [Channel] {
     [
       Channel(
         id: "22484632",

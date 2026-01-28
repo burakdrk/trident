@@ -1,3 +1,4 @@
+import DataModels
 import Dependencies
 import Foundation
 import TwitchIRC
@@ -12,7 +13,7 @@ struct ChatState: Equatable {
   var isPaused = false
   var newMessageCount = 0
   var messages = MessageSource(capacity: Constants.maxMessages)
-  var tpEmotes: [String: Emote] = [:]
+  var tpEmotes: [String: DataModels.Emote] = [:]
   var lastError: String?
 }
 
@@ -68,8 +69,10 @@ extension ChatStore {
 //            continue
 //          }
 
+      let parser = ChatMessageParser(thirdPartyEmotes: state.tpEmotes)
+
       await dependencies.buffer.add(
-        ChatMessage(pm: pm, thirdPartyEmotes: state.tpEmotes),
+        parser.parse(pm: pm),
         paused: state.isPaused
       )
     default: break

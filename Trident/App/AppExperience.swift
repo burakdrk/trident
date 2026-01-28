@@ -1,4 +1,5 @@
 import CasePaths
+import DataModels
 import Foundation
 import SwiftUI
 

@@ -1,12 +1,12 @@
 import Foundation
 
-protocol Mockable {
+public protocol Mockable {
   associatedtype MockType
 
   static var mock: MockType { get }
   static var mockList: [MockType] { get }
 }
 
-extension Mockable {
+public extension Mockable {
   static var mockList: [MockType] { [] }
 }

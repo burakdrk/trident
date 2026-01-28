@@ -1,3 +1,4 @@
+import DataModels
 import Foundation
 
 /// A service that fetches emotes from the SevenTV (7TV) API.
