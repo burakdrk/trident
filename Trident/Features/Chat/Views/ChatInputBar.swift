@@ -8,7 +8,7 @@ struct ChatInputBar: View {
   @Environment(\.theme) private var theme
   @Environment(\.auth) private var auth
 
-  var onSend: @MainActor () async throws -> Void
+  var onSend: () async throws -> Void
 
   var body: some View {
     HStack(alignment: .center, spacing: 8) {

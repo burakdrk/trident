@@ -1,6 +1,5 @@
 import SwiftUI
 
-@MainActor
 @Observable @dynamicMemberLookup
 final class Store<State: Equatable, Dependencies>: Equatable {
   private(set) var state: State

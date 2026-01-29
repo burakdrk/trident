@@ -16,7 +16,6 @@ struct AuthState: Equatable {
   }
 }
 
-@MainActor
 struct AuthDependencies {
   @Dependency(\.authProvider.twitch) var authProvider
   @Dependency(\.continuousClock) var clock
@@ -72,12 +71,10 @@ extension AuthStore {
   }
 }
 
-@MainActor
 private struct AuthKey: EnvironmentKey {
   static var defaultValue = AuthStore.shared
 }
 
-@MainActor
 extension EnvironmentValues {
   var auth: AuthStore {
     get { self[AuthKey.self] }

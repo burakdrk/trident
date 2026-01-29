@@ -43,12 +43,10 @@ extension StreamStore {
   }
 }
 
-@MainActor
 private enum StreamStoreKey: EnvironmentKey {
   static var defaultValue = StreamStore.shared
 }
 
-@MainActor
 extension EnvironmentValues {
   var streamManager: StreamStore {
     get { self[StreamStoreKey.self] }

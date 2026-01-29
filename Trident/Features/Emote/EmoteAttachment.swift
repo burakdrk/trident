@@ -2,7 +2,7 @@ import DataModels
 import UIKit
 import UniformTypeIdentifiers
 
-final class EmoteAttachment: NSTextAttachment {
+final nonisolated class EmoteAttachment: NSTextAttachment {
   let emote: [Emote]
   let multiplier: CGFloat
   let historical: Bool

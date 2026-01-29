@@ -1,6 +1,5 @@
 import SwiftUI
 
-@MainActor
 @Observable
 final class ThemeManager {
   var theme: ThemeChoice = .system
@@ -39,12 +38,10 @@ final class ThemeManager {
 
 // MARK: - Environment
 
-@MainActor
 private enum ThemeManagerKey: EnvironmentKey {
   static var defaultValue = ThemeManager.shared
 }
 
-@MainActor
 extension EnvironmentValues {
   var themeManager: ThemeManager {
     get { self[ThemeManagerKey.self] }

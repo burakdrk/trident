@@ -1,7 +1,7 @@
 import SDWebImage
 import SwiftUI
 
-struct ChatRootView: RoutableView {
+struct ChatRootView: @MainActor RoutableView {
   @Environment(\.router) private var router
   @Environment(\.streamManager) private var streamManager
 

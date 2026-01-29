@@ -1,6 +1,5 @@
 import SwiftUI
 
-@MainActor
 @Observable
 final class AppRouter {
   enum Presentable {
@@ -74,12 +73,10 @@ final class AppRouter {
 
 // MARK: - Environment
 
-@MainActor
 private enum AppRouterKey: EnvironmentKey {
   static var defaultValue = AppRouter.shared
 }
 
-@MainActor
 extension EnvironmentValues {
   var router: AppRouter {
     get { self[AppRouterKey.self] }

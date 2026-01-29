@@ -18,7 +18,7 @@ extension ChatInputStore {
     update { $0.text = text }
   }
 
-  func sendIfNeeded(_ action: @Sendable () async throws -> Void) {
+  func sendIfNeeded(_ action: () async throws -> Void) {
     guard
       !state.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
       !state.isSending else { return }

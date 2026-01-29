@@ -38,7 +38,6 @@ protocol DestinationProviding: Hashable {
 //  var selectedTab: Destination = .following(.init())
 // }
 
-@MainActor
 @Observable
 final class FollowingExperience {
   enum Path: Hashable {

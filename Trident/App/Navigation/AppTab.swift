@@ -6,7 +6,6 @@ enum AppTab: CaseIterable, Hashable {
   case user
   case search
 
-  @MainActor
   var destinationView: some View {
     AppTabContent(appTab: self)
   }

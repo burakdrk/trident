@@ -1,7 +1,7 @@
 import SDWebImage
 import UIKit
 
-final class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
+final nonisolated class EmoteAttachmentViewProvider: NSTextAttachmentViewProvider {
   override func loadView() {
     guard let textAttachment = textAttachment as? EmoteAttachment else { return }
     let emote = textAttachment.emote

@@ -1,7 +1,6 @@
 import SwiftUI
 import UIKit
 
-@MainActor
 private enum HapticFeedbackGenerator {
   static let impactLightFeedbackGenerator = UIImpactFeedbackGenerator(
     style: .light
@@ -34,26 +33,24 @@ extension HapticFeedbackProvider {
   }
 
   static func hapticFeedback(_ style: HapticFeedbackStyle) {
-    Task { @MainActor in
-      switch style {
-      case .impactLight:
-        HapticFeedbackGenerator.impactLightFeedbackGenerator.impactOccurred()
-      case .impactMedium:
-        HapticFeedbackGenerator.impactMediumFeedbackGenerator.impactOccurred()
-      case .impactHeavy:
-        HapticFeedbackGenerator.impactHeavyFeedbackGenerator.impactOccurred()
-      case .selection:
-        HapticFeedbackGenerator.selectionFeedbackGenerator.selectionChanged()
-      case .notifySuccess:
-        HapticFeedbackGenerator.notificationFeedbackGenerator
-          .notificationOccurred(.success)
-      case .notifyWarning:
-        HapticFeedbackGenerator.notificationFeedbackGenerator
-          .notificationOccurred(.warning)
-      case .notifyError:
-        HapticFeedbackGenerator.notificationFeedbackGenerator
-          .notificationOccurred(.error)
-      }
+    switch style {
+    case .impactLight:
+      HapticFeedbackGenerator.impactLightFeedbackGenerator.impactOccurred()
+    case .impactMedium:
+      HapticFeedbackGenerator.impactMediumFeedbackGenerator.impactOccurred()
+    case .impactHeavy:
+      HapticFeedbackGenerator.impactHeavyFeedbackGenerator.impactOccurred()
+    case .selection:
+      HapticFeedbackGenerator.selectionFeedbackGenerator.selectionChanged()
+    case .notifySuccess:
+      HapticFeedbackGenerator.notificationFeedbackGenerator
+        .notificationOccurred(.success)
+    case .notifyWarning:
+      HapticFeedbackGenerator.notificationFeedbackGenerator
+        .notificationOccurred(.warning)
+    case .notifyError:
+      HapticFeedbackGenerator.notificationFeedbackGenerator
+        .notificationOccurred(.error)
     }
   }
 }

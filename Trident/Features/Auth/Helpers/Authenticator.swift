@@ -58,7 +58,7 @@ final class Authenticator: NSObject, ASWebAuthenticationPresentationContextProvi
           return
         }
 
-        Task { @MainActor in
+        Task {
           do {
             let authToken = try await self.authProvider.validateSession(token: token)
             cont.resume(returning: authToken)

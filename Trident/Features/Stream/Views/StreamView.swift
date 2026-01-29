@@ -1,7 +1,7 @@
 import DataModels
 import SwiftUI
 
-struct StreamView: RoutableView {
+struct StreamView: @MainActor RoutableView {
   let initialChannel: Channel
   let channels: [Channel]
   let animation: Namespace.ID
