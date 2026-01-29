@@ -1,5 +1,4 @@
 import DataModels
-import Dependencies
 import Foundation
 import TridentCore
 import TwitchIRC
@@ -18,9 +17,10 @@ struct ChatState: Equatable {
   var lastError: String?
 }
 
+typealias ChatExternalDependencies = IRCClientDependency
+
 struct ChatDependencies {
-  @Dependency(\.continuousClock) var clock
-  @Dependency(\.ircClient) var chatClient
+  let externalDependencies: ChatExternalDependencies
   let channel: Channel
   let buffer = MessageBuffer(pauseMax: Constants.maxMessages)
   let recentsService = RecentMessagesService()
@@ -46,7 +46,8 @@ extension ChatStore {
 //      update {
 //        $0.messages.add(recents.reversed(), fittingWidth: $0.fittingWidth)
 //      }
-      let stream = await dependencies.chatClient.subscribe(to: dependencies.channel)
+      let stream = await dependencies.externalDependencies.ircClient
+        .subscribe(to: dependencies.channel)
 
       for try await message in stream {
         if Task.isCancelled { break }
@@ -84,7 +85,7 @@ extension ChatStore {
 
   func startRendering() async {
     while !Task.isCancelled {
-      try? await dependencies.clock.sleep(for: Constants.batchSpeed)
+      try? await Task.sleep(for: Constants.batchSpeed)
       let pending = await dependencies.buffer.pendingMessages
       update { $0.newMessageCount = pending }
 

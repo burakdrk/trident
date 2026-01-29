@@ -1,5 +1,4 @@
 import DataModels
-import Dependencies
 import Foundation
 import TwitchIRC
 import Utilities
@@ -44,10 +43,11 @@ public protocol IRCStreaming: Sendable {
   func part(from channel: Channel) async throws
 }
 
-actor IRCClient: IRCStreaming {
-  @Dependency(\.uuid) private var uuidGenerator
-  @Dependency(\.urlSession) private var urlSession
+public protocol IRCClientDependency {
+  var ircClient: any IRCStreaming { get }
+}
 
+actor IRCClient: IRCStreaming {
   private var websocket: URLSessionWebSocketTask?
   private var subscribers: [
     UUID: (channel: Channel?, continuation: AsyncStream<IRCStreamEvent>.Continuation)
@@ -65,7 +65,7 @@ actor IRCClient: IRCStreaming {
 
     broadcastStatus(.connecting)
 
-    websocket = urlSession.webSocketTask(with: URL.make(Constants.wsUrl))
+    websocket = URLSession.shared.webSocketTask(with: URL.make(Constants.wsUrl))
     websocket?.resume()
 
     do {
@@ -93,7 +93,7 @@ actor IRCClient: IRCStreaming {
   // MARK: - Subscriptions
 
   func subscribe(to channel: Channel? = nil) -> AsyncStream<IRCStreamEvent> {
-    let id = uuidGenerator()
+    let id = UUID()
 
     return AsyncStream { continuation in
       self.addSubscriber(id: id, channel: channel, continuation: continuation)
@@ -232,18 +232,5 @@ private extension IRCClient {
   func authenticate() async throws {
     try await sendMsg(.pass(pass: Constants.defaultPassword))
     try await sendMsg(.nick(name: Constants.defaultUsername))
-  }
-}
-
-// MARK: - Dependency Registration
-
-private enum IRCClientKey: DependencyKey {
-  static let liveValue: any IRCStreaming = IRCClient()
-}
-
-public extension DependencyValues {
-  var ircClient: any IRCStreaming {
-    get { self[IRCClientKey.self] }
-    set { self[IRCClientKey.self] = newValue }
   }
 }

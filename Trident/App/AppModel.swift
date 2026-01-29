@@ -39,6 +39,15 @@ protocol DestinationProviding: Hashable {
 // }
 
 @Observable
+final class AppModel<Dependencies> {
+  private let dependencies: Dependencies
+
+  init(dependencies: Dependencies) {
+    self.dependencies = dependencies
+  }
+}
+
+@Observable
 final class FollowingExperience {
   enum Path: Hashable {
     case channel(Channel)

@@ -19,7 +19,9 @@ let package = Package(
     .target(
       name: "Utilities",
       swiftSettings: [
-        .swiftLanguageMode(.v6)
+        .swiftLanguageMode(.v6),
+        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+        .enableUpcomingFeature("InferIsolatedConformances")
       ]
     )
   ]

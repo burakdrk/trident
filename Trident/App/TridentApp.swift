@@ -41,18 +41,4 @@ struct TridentApp: App {
       }
     }
   }
-
-//  private var contentView2: some View {
-//    TabView(selection: $appRouter.selectedTab) {
-//      Tab(
-//        tab.name,
-//        systemImage: tab.imageName(),
-//        value: tab,
-//        role: tab == .search ? .search : nil
-//      ) {
-//        tab.destinationView
-//          .background(BackgroundHelper())
-//      }
-//    }
-//  }
 }

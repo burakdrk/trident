@@ -25,7 +25,9 @@ let package = Package(
         .product(name: "Utilities", package: "Utilities")
       ],
       swiftSettings: [
-        .swiftLanguageMode(.v6)
+        .swiftLanguageMode(.v6),
+        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+        .enableUpcomingFeature("InferIsolatedConformances")
       ]
     ),
     .testTarget(
