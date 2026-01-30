@@ -1,12 +1,11 @@
 import Alamofire
 import AsyncAlgorithms
 import DataModels
+import Dependencies
 import Foundation
 import Utilities
 
-typealias TwitchAuthProviderDependencies = TokenStorageManagingDependency
-
-actor TwitchAuthProvider<Dependencies: TwitchAuthProviderDependencies>: AuthProviding {
+actor TwitchAuthProvider: AuthProviding {
   let eventChannel = AsyncChannel<AuthEvent>()
 
   private var storedToken: AuthToken? {
@@ -30,18 +29,14 @@ actor TwitchAuthProvider<Dependencies: TwitchAuthProviderDependencies>: AuthProv
     return storedToken
   }
 
-  private let dependencies: Dependencies
-
-  init(dependencies: Dependencies) {
-    self.dependencies = dependencies
-  }
+  @Dependency(\.secureStorage) private var secureStorage
 
   deinit {
     eventChannel.finish()
   }
 
   func deleteToken() async {
-    try? await dependencies.tokenStorage.clear()
+    try? await secureStorage.clear()
     storedToken = nil
   }
 
@@ -49,8 +44,7 @@ actor TwitchAuthProvider<Dependencies: TwitchAuthProviderDependencies>: AuthProv
   func loadSession() async {
     TridentLog.main.info("Loading Twitch session\("")")
 
-    guard let keychainToken = await dependencies.tokenStorage.load(.helixAcessToken),
-          !keychainToken.isExpired
+    guard let keychainToken = await secureStorage.load(.helixAcessToken), !keychainToken.isExpired
     else {
       storedToken = nil
       return
@@ -94,7 +88,7 @@ actor TwitchAuthProvider<Dependencies: TwitchAuthProviderDependencies>: AuthProv
       expiresAt: Date.now.addingTimeInterval(TimeInterval(expiresIn))
     )
 
-    try? await dependencies.tokenStorage.save(authToken, to: .helixAcessToken)
+    try? await secureStorage.save(authToken, .helixAcessToken)
 
     storedToken = authToken
     return authToken
