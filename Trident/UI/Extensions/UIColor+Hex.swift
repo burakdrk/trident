@@ -1,7 +1,7 @@
 import UIKit
 
 public extension UIColor {
-  convenience init?(hex: String) {
+  convenience nonisolated init?(hex: String) {
     let red: CGFloat
     let green: CGFloat
     let blue: CGFloat

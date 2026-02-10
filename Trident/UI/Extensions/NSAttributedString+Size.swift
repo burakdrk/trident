@@ -1,7 +1,7 @@
 import UIKit
 
 public extension NSAttributedString {
-  func sizeFittingWidth(_ w: CGFloat) -> CGSize {
+  nonisolated func sizeFittingWidth(_ w: CGFloat) -> CGSize {
     let textStorage = NSTextStorage(attributedString: self)
     let size = CGSize(width: w, height: CGFloat.greatestFiniteMagnitude)
     let boundingRect = CGRect(origin: .zero, size: size)

@@ -1,11 +1,11 @@
 import DataModels
 import UIKit
 
-enum MessageProcessor {
-  static func makeAttributedString(
+nonisolated enum MessageProcessor {
+  @concurrent static func makeAttributedString(
     for message: ChatMessage,
     font: UIFont
-  ) -> NSAttributedString {
+  ) async -> NSAttributedString {
     let out = NSMutableAttributedString()
     let alpha = message.historical ? 0.5 : 1.0
 
@@ -14,7 +14,8 @@ enum MessageProcessor {
       .foregroundColor: UIColor.label.withAlphaComponent(alpha)
     ]
 
-    // Timestamp
+    // MARK: - Timestamp
+
     let smallFont = UIFont.systemFont(ofSize: font.pointSize * 0.7)
     out.append(NSAttributedString(
       string: message.timestamp.formattedTime + " ",
@@ -25,7 +26,8 @@ enum MessageProcessor {
       ]
     ))
 
-    // Display name
+    // MARK: - Display name
+
     out.append(
       NSAttributedString(
         string: message.author.displayName,
@@ -38,7 +40,8 @@ enum MessageProcessor {
     )
     out.append(NSAttributedString(string: ": ", attributes: attrs))
 
-    // Message body
+    // MARK: - Message body
+
     for inline in message.inlines {
       switch inline {
       case let .emote(emote):
@@ -62,15 +65,5 @@ enum MessageProcessor {
     }
 
     return out
-  }
-
-  static func calculateHeight(
-    for attributedString: NSAttributedString,
-    fittingWidth width: CGFloat
-  ) -> CGFloat {
-    let verticalPadding: CGFloat = 8
-    let rect = attributedString.sizeFittingWidth(width)
-
-    return ceil(rect.height) + verticalPadding
   }
 }

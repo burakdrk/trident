@@ -22,10 +22,10 @@ struct AuthDependencies {
   let authenticator = Authenticator()
 }
 
-typealias AuthStore = Store<AuthState, AuthDependencies>
+typealias AuthModel = ViewModel<AuthState, NoIntent, AuthDependencies>
 
-extension AuthStore {
-  static let shared = AuthStore(initialState: .init(), dependencies: .init())
+extension AuthModel {
+  static let shared = AuthModel(initialState: .init(), dependencies: .init())
 
   func logIn() async {
     update {
@@ -60,7 +60,7 @@ extension AuthStore {
   }
 
   func startEventListener() async {
-    for await e in dependencies.authProvider.eventChannel {
+    for await e in await dependencies.authProvider.eventChannel {
       switch e {
       case .loggedIn:
         update { $0.phase = .loggedIn }
@@ -72,5 +72,5 @@ extension AuthStore {
 }
 
 extension EnvironmentValues {
-  @Entry var auth = AuthStore.shared
+  @Entry var auth = AuthModel.shared
 }

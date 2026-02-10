@@ -6,7 +6,7 @@ actor ThirdPartyAssetClient {
   private let services: [any ThirdPartyAssetService]
 
   /// Registry that maps channel IDs to a list of emotes.
-  private let channelEmoteCache = Cache<String, [Emote]>()
+  private let channelEmoteCache = Cache<Channel.ID, [Emote]>()
   private var globalEmoteCache: [Emote]?
 
   /// Service order matters for precedence in case of emote name collisions.
@@ -15,7 +15,7 @@ actor ThirdPartyAssetClient {
   }
 
   /// Retrieves a dictionary of unique emotes from all configured services, keyed by emote name.
-  func emotes(for channelID: String?) async -> [String: Emote] {
+  func emotes(for channelID: Channel.ID?) async -> [Channel.ID: Emote] {
     async let g = getGlobalEmotes()
     async let c = getChannelEmotes(for: channelID)
     let (allGlobal, allChannel) = await (g, c)
@@ -45,7 +45,7 @@ private extension ThirdPartyAssetClient {
     return tmp
   }
 
-  func getChannelEmotes(for channelID: String?) async -> [Emote] {
+  func getChannelEmotes(for channelID: Channel.ID?) async -> [Emote] {
     guard let channelID else { return [] }
 
     if let cache = channelEmoteCache[channelID] {

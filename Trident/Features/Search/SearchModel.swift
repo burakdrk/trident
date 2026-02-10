@@ -9,9 +9,9 @@ struct SearchDependencies {
   let changes = AsyncChannel<String>()
 }
 
-typealias SearchStore = Store<SearchState, SearchDependencies>
+typealias SearchModel = ViewModel<SearchState, NoIntent, SearchDependencies>
 
-extension SearchStore {
+extension SearchModel {
   func startDebounceTask() async {
     for await value in dependencies.changes.debounce(for: .milliseconds(500)).removeDuplicates() {
       if Task.isCancelled { break }

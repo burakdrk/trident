@@ -1,5 +1,10 @@
 import UIKit
 
+private enum Constants {
+  static let verticalInset: CGFloat = 4
+  static let horizontalInset: CGFloat = 5
+}
+
 final class MessageCell: UITableViewCell {
   static let reuseID = "MessageCellId"
 
@@ -29,7 +34,12 @@ final class MessageCell: UITableViewCell {
     textView.dataDetectorTypes = [.link]
     textView.isScrollEnabled = false
     textView.backgroundColor = .clear
-    textView.textContainerInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+    textView.textContainerInset = UIEdgeInsets(
+      top: Constants.verticalInset,
+      left: Constants.horizontalInset,
+      bottom: Constants.verticalInset,
+      right: Constants.horizontalInset
+    )
     textView.textContainer.lineFragmentPadding = .zero
 
     contentView.addSubview(textView)
@@ -41,16 +51,4 @@ final class MessageCell: UITableViewCell {
       textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0)
     ])
   }
-}
-
-// MARK: - Preview
-
-#Preview(traits: .sizeThatFitsLayout) {
-  let cell = MessageCell(style: .default, reuseIdentifier: MessageCell.reuseID)
-  cell.textView.attributedText = MessageProcessor.makeAttributedString(
-    for: .mock,
-    font: .systemFont(ofSize: 20)
-  )
-  cell.bounds = CGRect(x: 0, y: -400, width: 0, height: 0)
-  return cell
 }

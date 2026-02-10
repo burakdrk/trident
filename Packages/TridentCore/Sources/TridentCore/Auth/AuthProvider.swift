@@ -7,7 +7,7 @@ public enum AuthEvent: Sendable {
   case loggedIn
 }
 
-public protocol AuthProviding: Sendable {
+public protocol AuthProviding: Actor {
   var eventChannel: AsyncChannel<AuthEvent> { get }
 
   func loadSession() async

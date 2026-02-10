@@ -1,6 +1,6 @@
 import Foundation
 
-public struct WeakBox<T: AnyObject> {
+public struct WeakBox<T: AnyObject>: @unchecked Sendable {
   public weak var value: T?
 
   public init(value: T) {

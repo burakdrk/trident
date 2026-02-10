@@ -1,5 +1,5 @@
 {
-  "originHash" : "ac7dddd291766545cbca65f3535ce740e26981caf917fdafddf00847d605d98b",
+  "originHash" : "57431c904540d4bd17cf8f5a033f661169651df7f46bd088369d2cdab08fb3d7",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
         "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "bluruikit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/TimOliver/BlurUIKit",
+      "state" : {
+        "revision" : "33b96edb4ce7719e3980c964ac6218f01cc8951d",
+        "version" : "1.2.3"
       }
     },
     {

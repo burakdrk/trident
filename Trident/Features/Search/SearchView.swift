@@ -1,9 +1,8 @@
 import SwiftUI
 
 struct SearchView: View {
-  @State private var store = SearchStore(initialState: .init(), dependencies: .init())
+  @State private var store = SearchModel(initialState: .init(), dependencies: .init())
 
-  @Environment(\.router) private var router
   @Environment(\.auth) private var auth
 
   var body: some View {

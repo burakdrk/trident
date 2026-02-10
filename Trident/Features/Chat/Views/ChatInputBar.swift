@@ -1,14 +1,14 @@
 import SwiftUI
 
 struct ChatInputBar: View {
-  @State private var store = ChatInputStore(initialState: .init(), dependencies: .init())
-  @FocusState private var isKeyboardActive: Bool
-
   @Environment(\.accent) private var accent
   @Environment(\.theme) private var theme
   @Environment(\.auth) private var auth
 
-  var onSend: () async throws -> Void
+  @State private var store = ChatInputModel(initialState: .init(), dependencies: .init())
+  @FocusState private var isKeyboardActive: Bool
+
+  let onSend: () async throws -> Void
 
   var body: some View {
     HStack(alignment: .center, spacing: 8) {
@@ -45,14 +45,8 @@ struct ChatInputBar: View {
     }
     .padding(.horizontal, 12)
     .padding(.vertical, 10)
-    .apply {
-      if #available(iOS 26.0, *) {
-        $0.glassEffect()
-          .padding(.horizontal, 16)
-      } else {
-        $0.background(.ultraThinMaterial)
-      }
-    }
+    .glassEffect()
+    .padding(.horizontal, 16)
   }
 }
 

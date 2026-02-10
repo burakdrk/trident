@@ -16,6 +16,7 @@
 		ECCCE5AA2F29E42200A66132 /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE5A92F29E42200A66132 /* Utilities */; };
 		ECCCE5AD2F29ECEE00A66132 /* TridentCore in Frameworks */ = {isa = PBXBuildFile; productRef = ECCCE5AC2F29ECEE00A66132 /* TridentCore */; };
 		ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = ECD71B2E2F09B55B0096B19B /* Dependencies */; };
+		ECDF9AC32F32ECEB0086C0F6 /* BlurUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = ECDF9AC22F32ECEB0086C0F6 /* BlurUIKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +90,7 @@
 				ECCCE5A82F29E08A00A66132 /* DataModels in Frameworks */,
 				ECD71B2F2F09B55B0096B19B /* Dependencies in Frameworks */,
 				ECCCE59C2F29B29500A66132 /* CasePaths in Frameworks */,
+				ECDF9AC32F32ECEB0086C0F6 /* BlurUIKit in Frameworks */,
 				EC5A10BA2E5AE121001FE869 /* AsyncAlgorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -161,6 +163,7 @@
 				ECCCE5A72F29E08A00A66132 /* DataModels */,
 				ECCCE5A92F29E42200A66132 /* Utilities */,
 				ECCCE5AC2F29ECEE00A66132 /* TridentCore */,
+				ECDF9AC22F32ECEB0086C0F6 /* BlurUIKit */,
 			);
 			productName = Trident;
 			productReference = EC7631D02E30B41A00A86ABD /* Trident.app */;
@@ -224,6 +227,7 @@
 				EC9086702E6516F600F84318 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				ECD71B2D2F09B55B0096B19B /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 				ECCCE59A2F29B29500A66132 /* XCRemoteSwiftPackageReference "swift-case-paths" */,
+				ECDF9AC12F32ECEB0086C0F6 /* XCRemoteSwiftPackageReference "BlurUIKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EC7631D12E30B41A00A86ABD /* Products */;
@@ -637,6 +641,14 @@
 				minimumVersion = 1.10.0;
 			};
 		};
+		ECDF9AC12F32ECEB0086C0F6 /* XCRemoteSwiftPackageReference "BlurUIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TimOliver/BlurUIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -681,6 +693,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ECD71B2D2F09B55B0096B19B /* XCRemoteSwiftPackageReference "swift-dependencies" */;
 			productName = Dependencies;
+		};
+		ECDF9AC22F32ECEB0086C0F6 /* BlurUIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ECDF9AC12F32ECEB0086C0F6 /* XCRemoteSwiftPackageReference "BlurUIKit" */;
+			productName = BlurUIKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

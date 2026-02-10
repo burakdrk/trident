@@ -1,58 +1,53 @@
-import Collections
 import SwiftUI
-import UIKit
 
-struct ChatView: UIViewRepresentable {
-  let store: ChatStore
-  let bottomInset: CGFloat
+struct ChatView: View {
+  @Environment(\.safeAreaInsets) private var safeAreaInsets
 
-  func makeUIView(context: Context) -> UITableView {
-    let view = UITableView()
-    view.register(MessageCell.self, forCellReuseIdentifier: MessageCell.reuseID)
-    view.separatorStyle = .none
-    view.contentInsetAdjustmentBehavior = .never
-    view.backgroundColor = UIColor(context.environment.theme.bg)
-    view.delegate = context.coordinator
-    context.coordinator.configureDataSource(view)
-    return view
-  }
+  let model: ChatModel
 
-  func updateUIView(_ uiView: UITableView, context: Context) {
-    if context.coordinator.lastFittingWidth != uiView.bounds.width {
-      store.setFittingWidth(uiView.bounds.width)
-      context.coordinator.lastFittingWidth = uiView.bounds.width
-    }
-
-    if context.coordinator.lastBottomInset != bottomInset {
-      uiView.contentInset = UIEdgeInsets(
-        top: uiView.safeAreaInsets.top,
-        left: 0,
-        bottom: bottomInset + 8,
-        right: 0
+  var body: some View {
+    ZStack {
+      ChatViewController.SwiftUIView(
+        model: model
       )
-      uiView.verticalScrollIndicatorInsets.bottom = bottomInset - uiView.safeAreaInsets.bottom
-      context.coordinator.lastBottomInset = bottomInset
-    }
 
-    if context.coordinator.lastIsPaused != store.state.isPaused {
-      context.coordinator.scrollToBottom(uiView, animated: true)
-      context.coordinator.lastIsPaused = store.state.isPaused
-    }
+      VStack {
+        Spacer()
 
-    if context.coordinator.lastUpdateID != store.messages.updateID {
-      context.coordinator.dataSource?.apply(
-        store.messages.snapshot,
-        animatingDifferences: false
-      ) {
-        DispatchQueue.main.async {
-          context.coordinator.scrollToBottom(uiView, animated: false)
-          context.coordinator.lastUpdateID = store.messages.updateID
+        ZStack {
+          HStack {
+            Spacer()
+
+            sendButton
+              .padding(.trailing)
+          }
+
+          scrollButton
         }
       }
+      .padding(safeAreaInsets)
+      .padding(.bottom)
+    }
+    .task { await model.startReading() }
+    .task { await model.startRendering() }
+  }
+
+  private var scrollButton: some View {
+    ScrollButton(
+      newMessageCount: model.newMessageCount,
+      isVisible: model.isPaused
+    ) {
+      model.setIsPaused(false)
+      model.emit(.scrollToBottom)
     }
   }
 
-  func makeCoordinator() -> ChatViewCoordinator {
-    ChatViewCoordinator(store: store)
+  private var sendButton: some View {
+    Button {
+      print("Sending")
+    } label: {
+      Image(systemName: "arrow.down.circle.fill")
+    }
+    .buttonStyle(.primary(shape: .circle))
   }
 }

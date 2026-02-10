@@ -29,10 +29,6 @@ let package = Package(
         .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
         .enableUpcomingFeature("InferIsolatedConformances")
       ]
-    ),
-    .testTarget(
-      name: "DataModelsTests",
-      dependencies: ["DataModels"]
     )
   ]
 )

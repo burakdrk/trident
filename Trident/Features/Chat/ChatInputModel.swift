@@ -7,9 +7,9 @@ struct ChatInputState: Equatable {
 
 struct ChatInputDependencies {}
 
-typealias ChatInputStore = Store<ChatInputState, ChatInputDependencies>
+typealias ChatInputModel = ViewModel<ChatInputState, NoIntent, ChatInputDependencies>
 
-extension ChatInputStore {
+extension ChatInputModel {
   func reset() {
     update { $0.text = "" }
   }

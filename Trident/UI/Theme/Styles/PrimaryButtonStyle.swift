@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PrimaryButtonStyle: ButtonStyle {
-  enum SelectedShape { case capsule, rect }
+  enum SelectedShape { case capsule, rect, circle }
 
   @Environment(\.accent) private var accent
   @Environment(\.themeManager) private var themeManager
@@ -12,10 +12,13 @@ struct PrimaryButtonStyle: ButtonStyle {
   var gradient: Bool
 
   var clipShape: AnyShape {
-    if shape == .rect {
-      AnyShape(RoundedRectangle(cornerRadius: 8, style: .circular))
-    } else {
+    switch shape {
+    case .capsule:
       AnyShape(Capsule())
+    case .rect:
+      AnyShape(RoundedRectangle(cornerRadius: 8, style: .circular))
+    case .circle:
+      AnyShape(Circle())
     }
   }
 
@@ -33,26 +36,11 @@ struct PrimaryButtonStyle: ButtonStyle {
       .font(.callout.bold())
       .foregroundStyle(.white)
       .padding(12)
-      .apply {
-        if #available(iOS 26.0, *) {
-          $0.background(themeManager.theme == .light ?
-            accent.color.opacity(0.9) : accent.color.opacity(0.6)
-          )
-          .clipShape(clipShape)
-          .glassEffect(.regular.interactive(), in: clipShape)
-        } else {
-          $0.background(gradient ?
-            AnyShapeStyle(backgroundColor.gradient) :
-            AnyShapeStyle(backgroundColor)
-          )
-          .clipShape(clipShape)
-          .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-          .animation(
-            .easeInOut(duration: 0.15),
-            value: configuration.isPressed
-          )
-        }
-      }
+      .background(themeManager.theme == .light ?
+        accent.color.opacity(0.9) : accent.color.opacity(0.6)
+      )
+      .clipShape(clipShape)
+      .glassEffect(.regular.interactive(), in: clipShape)
   }
 }
 

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct FollowList: View {
   @Environment(\.router) private var router
-  @Namespace var animation
+  @Namespace private var animation
 
   let model: FollowListModel
 
@@ -12,7 +12,10 @@ struct FollowList: View {
         ForEach(model.channels) { channel in
           ChannelCard(channel: channel)
             .onTapGesture {
-              router.followingExperience.openStream(initialChannel: channel, animation: animation)
+              router.openStream(
+                initialChannel: channel,
+                animation: animation
+              )
             }
             .matchedTransitionSource(id: channel, in: animation)
         }

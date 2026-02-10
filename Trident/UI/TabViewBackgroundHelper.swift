@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct BackgroundHelper: UIViewControllerRepresentable {
+struct TabViewBackgroundHelper: UIViewControllerRepresentable {
   @Environment(\.theme) private var theme
 
   final class HelperVC: UIViewController {
