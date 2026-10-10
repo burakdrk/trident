@@ -1,6 +1,10 @@
 import Foundation
 import Utilities
 
+/// Emotes keyed by the word that triggers them in chat, which is what message parsing looks up.
+/// Not by `Emote.id`.
+public typealias EmotesByName = [String: Emote]
+
 public struct Emote: Identifiable, Hashable, Sendable, Equatable {
   public enum Category: String, Sendable {
     case global = "Global"

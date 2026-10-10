@@ -6,9 +6,9 @@ import Utilities
 /// Turns Twitch chat lines into `ChatMessage`s, resolving emotes (Twitch's own first, then the
 /// third party ones by name).
 public struct ChatMessageParser: Sendable {
-  let thirdPartyEmotes: [String: DataModels.Emote]
+  let thirdPartyEmotes: EmotesByName
 
-  public init(thirdPartyEmotes: [String: DataModels.Emote]) {
+  public init(thirdPartyEmotes: EmotesByName) {
     self.thirdPartyEmotes = thirdPartyEmotes
   }
 
@@ -30,7 +30,7 @@ public struct ChatMessageParser: Sendable {
 
   private func tokenize(
     body: String,
-    twitchEmotes: [String: DataModels.Emote]
+    twitchEmotes: EmotesByName
   ) -> [ChatMessage.Inline] {
     let chunks = body.split { $0.isWhitespace }
     var inlines: [ChatMessage.Inline] = []
@@ -62,8 +62,8 @@ public struct ChatMessageParser: Sendable {
 }
 
 private extension TwitchIRC.PrivateMessage {
-  func parseEmotesToDict() -> [String: DataModels.Emote] {
-    var uniqueTwitchEmotes: [String: DataModels.Emote] = [:]
+  func parseEmotesToDict() -> EmotesByName {
+    var uniqueTwitchEmotes: EmotesByName = [:]
 
     for item in parseEmotes().unique(by: \.id) {
       uniqueTwitchEmotes[item.name] = Emote(

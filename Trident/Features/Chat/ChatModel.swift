@@ -34,7 +34,7 @@ final class ChatModel: HashableObject {
   private(set) var isPaused = false
   private(set) var newMessageCount = 0
   private(set) var connection = Connection.connecting
-  private(set) var tpEmotes: [DataModels.Emote.ID: DataModels.Emote]
+  private(set) var tpEmotes: EmotesByName
   var fittingWidth: CGFloat? {
     didSet {
       if oldValue != fittingWidth {
@@ -54,7 +54,7 @@ final class ChatModel: HashableObject {
   @ObservationIgnored private var hasBeenLive = false
   let channel: Channel
 
-  init(for channel: Channel, tpEmotes: [DataModels.Emote.ID: DataModels.Emote] = [:]) {
+  init(for channel: Channel, tpEmotes: EmotesByName = [:]) {
     self.channel = channel
     self.tpEmotes = tpEmotes
     parser = ChatMessageParser(thirdPartyEmotes: tpEmotes)

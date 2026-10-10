@@ -20,7 +20,7 @@ public struct RecentMessagesService: Sendable {
   /// is perfectly usable without it.
   public func fetch(
     for channel: String,
-    emotes: [String: DataModels.Emote]
+    emotes: EmotesByName
   ) async -> [ChatMessage] {
     let urlString = "\(Constants.baseAPIURL)/\(channel)"
 
@@ -35,7 +35,7 @@ public struct RecentMessagesService: Sendable {
   }
 
   /// - Parameter lines: Raw IRC lines in the order the service returns them (oldest first).
-  static func parse(lines: [String], emotes: [String: DataModels.Emote]) -> [ChatMessage] {
+  static func parse(lines: [String], emotes: EmotesByName) -> [ChatMessage] {
     let parser = ChatMessageParser(thirdPartyEmotes: emotes)
 
     return lines
@@ -57,13 +57,13 @@ public struct RecentMessagesClient: Sendable {
   /// The channel's recent chat, oldest first.
   public var fetch: @Sendable (
     _ channel: String,
-    _ emotes: [String: DataModels.Emote]
+    _ emotes: EmotesByName
   ) async -> [ChatMessage]
 
   public init(
     fetch: @escaping @Sendable (
       _ channel: String,
-      _ emotes: [String: DataModels.Emote]
+      _ emotes: EmotesByName
     ) async -> [ChatMessage]
   ) {
     self.fetch = fetch
