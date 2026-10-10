@@ -5,17 +5,19 @@ struct ChatInputBar: View {
   @Environment(\.theme) private var theme
   @Environment(\.auth) private var auth
 
-  @State private var store = ChatInputModel(initialState: .init(), dependencies: .init())
+  @State private var model = ChatInputModel()
   @FocusState private var isKeyboardActive: Bool
 
   let onSend: () async throws -> Void
 
   var body: some View {
+    @Bindable var model = model
+
     HStack(alignment: .center, spacing: 8) {
       // Input
       TextField(
-        auth.state.isAuthenticated ? "Enter message" : "Log in to send a message",
-        text: .init { store.state.text } set: { store.setText($0) },
+        auth.isAuthenticated ? "Enter message" : "Log in to send a message",
+        text: $model.text,
         axis: .vertical
       )
       .submitScope()
@@ -27,26 +29,24 @@ struct ChatInputBar: View {
       .padding(12)
       .background(theme.bgElev, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
       .themedForeground()
-      .disabled(!auth.state.isAuthenticated)
+      .disabled(!auth.isAuthenticated)
 
       // Send
       Button {
-        store.sendIfNeeded(onSend)
+        model.send(onSend)
       } label: {
         Image(systemName: "paperplane.fill")
           .font(.system(size: 22, weight: .semibold))
           .rotationEffect(.degrees(45))
       }
-      .disabled(store.state.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || store
-        .state
-        .isSending
-      )
+      .disabled(!model.canSend)
       .padding(.horizontal, 2)
     }
     .padding(.horizontal, 12)
     .padding(.vertical, 10)
     .glassEffect()
     .padding(.horizontal, 16)
+    .onDisappear { model.cancelSend() }
   }
 }
 

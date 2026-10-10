@@ -1,26 +1,26 @@
 import SwiftUI
 
 struct SearchView: View {
-  @State private var store = SearchModel(initialState: .init(), dependencies: .init())
+  @State private var model = SearchModel()
 
   @Environment(\.auth) private var auth
 
   var body: some View {
+    @Bindable var model = model
+
     Button {
-      // router.push(to: .search, ChatRootView(channelName: store.state.query.lowercased()))
+      // router.push(to: .search, ChatRootView(channelName: model.query.lowercased()))
     } label: {
-      Text("Go to \(store.state.query)")
+      Text("Go to \(model.query)")
     }
     .navigationTitle("Search")
     .searchable(
-      text: store.binding(\.searchText) { newValue in
-        Task { await store.dependencies.changes.send(newValue) }
-      },
-      prompt: auth.state.phase == .loggedIn ? "Search..." : "Enter a channel to join"
+      text: $model.searchText,
+      prompt: auth.phase == .loggedIn ? "Search..." : "Enter a channel to join"
     )
     .autocorrectionDisabled()
     .textInputAutocapitalization(.never)
     .onSubmit(of: .search) {}
-    .task { await store.startDebounceTask() }
+    .task(id: model.searchText) { await model.updateQuery() }
   }
 }

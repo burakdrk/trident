@@ -13,7 +13,7 @@ private enum Constants {
 }
 
 @Observable
-final class ChatModel: HashableObject, @MainActor IntentEmitting {
+final class ChatModel: HashableObject {
   // MARK: - State
 
   private(set) var messages: Deque<ChatMessage> = []
@@ -29,15 +29,6 @@ final class ChatModel: HashableObject, @MainActor IntentEmitting {
       }
     }
   }
-
-  // MARK: - Intent
-
-  enum Intent {
-    case scrollToBottom
-    case applySnapshot
-  }
-
-  var intent: Intent?
 
   // MARK: - Dependencies
 
@@ -110,20 +101,22 @@ final class ChatModel: HashableObject, @MainActor IntentEmitting {
       let batch = await buffer.flush()
       if !batch.isEmpty {
         await add(batch)
-        emit(.applySnapshot)
       }
     }
   }
 
   private func add(_ newMessages: [ChatMessage]) async {
+    // Build the strings before touching `messages`: the view re-renders when `messages` changes,
+    // and a cell must never show up without its string.
     for msg in newMessages {
-      messages.prepend(msg)
-
-      let attrString = await MessageProcessor.makeAttributedString(
+      cachedAttributedString[msg.id] = await MessageProcessor.makeAttributedString(
         for: msg,
         font: UIFont.systemFont(ofSize: 16)
       )
-      cachedAttributedString[msg.id] = attrString
+    }
+
+    for msg in newMessages {
+      messages.prepend(msg)
     }
 
     // Compute deletes if overflow

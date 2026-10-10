@@ -38,7 +38,6 @@ struct ChatView: View {
       isVisible: model.isPaused
     ) {
       model.setIsPaused(false)
-      model.emit(.scrollToBottom)
     }
   }
 

@@ -5,7 +5,7 @@ private struct AuthBoundaryModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     Group {
-      switch auth.state.phase {
+      switch auth.phase {
       case .loggedIn:
         content
           .transition(.opacity)
@@ -16,7 +16,7 @@ private struct AuthBoundaryModifier: ViewModifier {
         ProgressView().controlSize(.large)
       }
     }
-    .animation(.easeInOut, value: auth.state.phase)
+    .animation(.easeInOut, value: auth.phase)
   }
 }
 
