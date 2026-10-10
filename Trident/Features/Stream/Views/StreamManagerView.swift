@@ -29,8 +29,36 @@ struct StreamManagerView: View {
   private func renderStream(for channel: Channel) -> some View {
     if let chatModel = streamManager.activeChannels[channel] {
       StreamView(model: chatModel)
+    } else if let failure = streamManager.loadFailures[channel] {
+      LoadFailureView(channel: channel, message: failure)
     } else {
       Text("Loading...")
+    }
+  }
+}
+
+private struct LoadFailureView: View {
+  @Environment(\.streamManager) private var streamManager
+
+  let channel: Channel
+  let message: String
+
+  /// Bumped by the button. Changing the id restarts the task, which is how a retry runs inside
+  /// the view's lifetime.
+  @State private var attempt = 0
+
+  var body: some View {
+    VStack(spacing: 12) {
+      Text("Couldn't open \(channel.displayName)").font(.headline)
+      Text(message).font(.footnote).foregroundStyle(.secondary)
+
+      Button("Try again") { attempt += 1 }
+        .buttonStyle(.primary(color: .twitchPurple))
+    }
+    .padding()
+    .task(id: attempt) {
+      guard attempt > 0 else { return }
+      await streamManager.loadStream(for: channel)
     }
   }
 }

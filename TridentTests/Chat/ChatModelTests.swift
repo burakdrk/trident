@@ -6,28 +6,6 @@ import Testing
 import TridentCore
 import TwitchIRC
 
-/// An IRC client that does nothing but hand the model the events a test pushes.
-private actor FakeIRCClient: IRCStreaming {
-  private var continuation: AsyncStream<IRCStreamEvent>.Continuation?
-  private(set) var subscriptions = 0
-
-  func connect() async {}
-  func disconnect() async {}
-  func join(to channel: Channel) async throws {}
-  func part(from channel: Channel) async throws {}
-
-  func subscribe(to channel: Channel?) -> AsyncStream<IRCStreamEvent> {
-    subscriptions += 1
-    let (stream, continuation) = AsyncStream.makeStream(of: IRCStreamEvent.self)
-    self.continuation = continuation
-    return stream
-  }
-
-  func emit(_ event: IRCStreamEvent) {
-    continuation?.yield(event)
-  }
-}
-
 @MainActor
 @Suite(.timeLimit(.minutes(1)))
 struct ChatModelTests {

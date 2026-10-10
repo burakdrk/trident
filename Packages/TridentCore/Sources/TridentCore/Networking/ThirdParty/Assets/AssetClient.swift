@@ -3,6 +3,10 @@ import Dependencies
 
 public struct AssetClient: Sendable {
   public var emotes: @Sendable (_ channelID: Channel.ID?) async -> [Emote.ID: Emote]
+
+  public init(emotes: @escaping @Sendable (_ channelID: Channel.ID?) async -> [Emote.ID: Emote]) {
+    self.emotes = emotes
+  }
 }
 
 extension AssetClient: DependencyKey {

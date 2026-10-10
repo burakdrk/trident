@@ -4,7 +4,6 @@ import SwiftUI
 
 private enum Constants {
   static let pollInterval: Duration = .seconds(10)
-  static let idleTimeoutSeconds: TimeInterval = 10 // 5 * 60
 }
 
 @Observable
@@ -14,10 +13,13 @@ final class StreamManagerModel {
   private(set) var activeChannels: [Channel: ChatModel] = [:]
   private(set) var invisibleSince: [Channel: Date] = [:]
   private(set) var favoriteChannels: [Channel] = Channel.mockList
-  private(set) var lastError: String?
+
+  /// Why a channel couldn't be loaded, until a later load succeeds.
+  private(set) var loadFailures: [Channel: String] = [:]
+
   var visibleChannel: Channel? {
     didSet {
-      if let old = oldValue, old != visibleChannel { invisibleSince[old] = Date.now }
+      if let old = oldValue, old != visibleChannel { invisibleSince[old] = now }
       if let visibleChannel { invisibleSince[visibleChannel] = nil }
     }
   }
@@ -27,24 +29,41 @@ final class StreamManagerModel {
   @ObservationIgnored @Dependency(\.ircClient) private var chatClient
   @ObservationIgnored @Dependency(\.assetClient) private var assetClient
   @ObservationIgnored @Dependency(\.continuousClock) private var clock
+  @ObservationIgnored @Dependency(\.date.now) private var now
+
+  @ObservationIgnored private var loading: Set<Channel> = []
+  @ObservationIgnored private let idleTimeout: TimeInterval
+
+  /// How long a channel's chat stays loaded after it scrolls out of view.
+  static let defaultIdleTimeout: TimeInterval = 5 * 60
 
   static let shared = StreamManagerModel()
-  private init() {}
+
+  init(idleTimeout: TimeInterval = StreamManagerModel.defaultIdleTimeout) {
+    self.idleTimeout = idleTimeout
+  }
 
   // MARK: - Actions
 
   func loadStream(for channel: Channel) async {
-    guard activeChannels[channel] == nil else { return }
+    // Scrolling back and forth restarts the caller's task. Without this a second load would
+    // replace the chat the first one just created.
+    guard activeChannels[channel] == nil, loading.insert(channel).inserted else { return }
+    defer { loading.remove(channel) }
+
+    loadFailures[channel] = nil
+
+    await chatClient.connect()
 
     do {
-      await chatClient.connect()
       try await chatClient.join(to: channel)
-      let tpEmotes = await assetClient.emotes(channel.id)
-
-      activeChannels[channel] = ChatModel(for: channel, tpEmotes: tpEmotes)
     } catch {
-      lastError = error.localizedDescription
+      loadFailures[channel] = error.localizedDescription
+      return
     }
+
+    let tpEmotes = await assetClient.emotes(channel.id)
+    activeChannels[channel] = ChatModel(for: channel, tpEmotes: tpEmotes)
   }
 
   func startIdleStreamCleanup() async {
@@ -55,7 +74,7 @@ final class StreamManagerModel {
       let channelsToUnload: [Channel] = invisibleSince.compactMap { channel, since in
         guard channel != visibleChannel else { return nil }
         guard activeChannels[channel] != nil else { return nil }
-        guard Date.now.timeIntervalSince(since) >= Constants.idleTimeoutSeconds else { return nil }
+        guard now.timeIntervalSince(since) >= idleTimeout else { return nil }
         return channel
       }
 
