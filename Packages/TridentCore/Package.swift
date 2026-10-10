@@ -48,7 +48,7 @@ let package = Package(
         "TridentCore",
         .product(name: "DataModels", package: "DataModels"),
         .product(name: "Dependencies", package: "swift-dependencies"),
-        .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
+        .product(name: "TwitchIRC", package: "TwitchIRC")
       ]
     )
   ]

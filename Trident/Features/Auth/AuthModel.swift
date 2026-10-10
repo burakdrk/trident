@@ -52,6 +52,7 @@ final class AuthModel {
   }
 
   // MARK: - Lifecycle
+
   // Long-running work tied to the app's lifetime; called from `.task` in `TridentApp`.
 
   func loadSession() async {

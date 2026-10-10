@@ -5,9 +5,10 @@ import TwitchIRC
 import Utilities
 
 private enum Constants {
-  static let wsUrl = "wss://irc-ws.chat.twitch.tv:443"
   static let defaultUsername = "justinfan28264"
   static let defaultPassword = "SCHMOOPIIE"
+  static let handshakeTimeout: Duration = .seconds(10)
+  static let maxBackoffSeconds = 30
 }
 
 public enum IRCStreamEvent: Sendable {
@@ -24,6 +25,8 @@ public enum IRCStreamEvent: Sendable {
     /// Logged in successfully
     case authenticated
 
+    /// The connection failed or dropped. The client keeps trying to reconnect unless
+    /// `disconnect()` was called.
     case failed(Error)
   }
 
@@ -32,62 +35,194 @@ public enum IRCStreamEvent: Sendable {
 }
 
 public protocol IRCStreaming: Sendable {
+  /// Starts connecting and keeps the connection alive, reconnecting with backoff when it drops,
+  /// until `disconnect()` is called.
   func connect() async
   func disconnect() async
 
-  /// Returns a new stream for a specific client.
+  /// Returns a new stream for a specific client. The current connection status is delivered first.
   /// - Parameter channel: If provided, only messages for this channel will be yielded.
   /// - Returns: An `AsyncStream` of `IRCStreamEvent`s.
   func subscribe(to channel: Channel?) async -> AsyncStream<IRCStreamEvent>
 
+  /// Marks the channel as wanted. It's joined right away when connected, and rejoined after every
+  /// reconnect, so it's fine to call before `connect()` finishes.
   func join(to channel: Channel) async throws
+
+  /// The opposite of `join(to:)`.
   func part(from channel: Channel) async throws
 }
 
 actor IRCClient: IRCStreaming {
   @Dependency(\.uuid) private var uuidGenerator
-  @Dependency(\.urlSession) private var urlSession
+  @Dependency(\.continuousClock) private var clock
+  @Dependency(\.ircSocketFactory) private var socketFactory
 
-  private var websocket: URLSessionWebSocketTask?
+  private var socket: (any IRCSocket)?
+  private var receiveTask: Task<Void, Never>?
+  private var reconnectTask: Task<Void, Never>?
+  private var reconnectID: UUID?
+
   private var subscribers: [
     UUID: (channel: Channel?, continuation: AsyncStream<IRCStreamEvent>.Continuation)
   ] = [:]
-  private var joinedChannels: Set<String> = []
+
+  /// Channels the app wants to be in, independent of the state of the connection.
+  private var desiredChannels: Set<String> = []
+
+  /// True between `connect()` and `disconnect()`. Decides whether a dropped connection is retried.
+  private var wantsConnection = false
   private var currentStatus: IRCStreamEvent.ConnectionStatus = .disconnected
 
-  // MARK: - WebSocket Connection
+  private var isConnected: Bool {
+    switch currentStatus {
+    case .connected, .authenticated: socket != nil
+    default: false
+    }
+  }
+
+  private var isAuthenticated: Bool {
+    if case .authenticated = currentStatus { true } else { false }
+  }
+
+  // MARK: - Connection
 
   func connect() async {
+    wantsConnection = true
+
+    // A reconnect loop is already working on it.
+    guard reconnectTask == nil else { return }
+
     switch currentStatus {
     case .disconnected, .failed: break
     default: return
     }
 
-    broadcastStatus(.connecting)
-
-    websocket = urlSession.webSocketTask(with: URL.make(Constants.wsUrl))
-    websocket?.resume()
-
-    do {
-      try await requestCapabilities()
-      try await authenticate()
-    } catch {
-      broadcastStatus(.failed(error))
-      return
+    if await !openConnection() {
+      startReconnecting()
     }
-
-    startReceiving()
-    broadcastStatus(.connected)
   }
 
   func disconnect() {
     TridentLog.main.info("Closing IRC connection")
-    websocket?.cancel(with: .goingAway, reason: nil)
-    websocket = nil
+
+    wantsConnection = false
+    reconnectTask?.cancel()
+    reconnectTask = nil
+    reconnectID = nil
+    receiveTask?.cancel()
+    receiveTask = nil
+    socket?.close()
+    socket = nil
+
     broadcastStatus(.disconnected)
 
     // We do NOT finish the subscriber streams here.
     // We keep them open so the UI doesn't break, allowing for reconnection.
+  }
+
+  /// Opens a socket and logs in. Returns false if that failed or `disconnect()` got in the way.
+  private func openConnection() async -> Bool {
+    broadcastStatus(.connecting)
+
+    let socket = socketFactory.make()
+    self.socket = socket
+
+    do {
+      try await withHandshakeTimeout(closing: socket) {
+        try await Self.handshake(on: socket)
+      }
+    } catch {
+      // `disconnect()` already took care of everything.
+      guard self.socket === socket else { return false }
+
+      TridentLog.main.error("IRC handshake failed: \(error.localizedDescription)")
+      socket.close()
+      self.socket = nil
+      broadcastStatus(.failed(error))
+      return false
+    }
+
+    guard self.socket === socket else { return false }
+
+    broadcastStatus(.connected)
+    startReceiving(on: socket)
+
+    for channel in desiredChannels.sorted() {
+      try? await send(.join(to: channel))
+    }
+
+    return true
+  }
+
+  private func startReceiving(on socket: any IRCSocket) {
+    receiveTask?.cancel()
+
+    receiveTask = Task { [weak self] in
+      do {
+        while !Task.isCancelled {
+          let text = try await socket.receive()
+          guard let self else { return }
+          await handle(text, from: socket)
+        }
+      } catch {
+        await self?.connectionLost(error, on: socket)
+      }
+    }
+  }
+
+  private func connectionLost(_ error: Error, on socket: any IRCSocket) {
+    // Ignore leftovers from a socket we already replaced or closed on purpose.
+    guard self.socket === socket else { return }
+
+    TridentLog.main.error("IRC connection lost: \(error.localizedDescription)")
+
+    socket.close()
+    self.socket = nil
+    receiveTask?.cancel()
+    receiveTask = nil
+
+    broadcastStatus(.failed(error))
+    startReconnecting()
+  }
+
+  // MARK: - Reconnecting
+
+  static func backoff(forAttempt attempt: Int) -> Duration {
+    .seconds(min(Constants.maxBackoffSeconds, 1 << min(attempt, 5)))
+  }
+
+  private func startReconnecting() {
+    guard wantsConnection, reconnectTask == nil else { return }
+
+    let id = uuidGenerator()
+    reconnectID = id
+    reconnectTask = Task { await self.reconnect(id: id) }
+  }
+
+  private func reconnect(id: UUID) async {
+    // `disconnect()` + `connect()` may have started a newer loop while this one was winding down.
+    defer {
+      if reconnectID == id {
+        reconnectID = nil
+        reconnectTask = nil
+      }
+    }
+
+    var attempt = 0
+
+    while wantsConnection {
+      do {
+        try await clock.sleep(for: Self.backoff(forAttempt: attempt))
+      } catch {
+        return
+      }
+
+      guard wantsConnection, reconnectID == id else { return }
+      if await openConnection() { return }
+
+      attempt += 1
+    }
   }
 
   // MARK: - Subscriptions
@@ -113,56 +248,63 @@ actor IRCClient: IRCStreaming {
     continuation: AsyncStream<IRCStreamEvent>.Continuation
   ) {
     subscribers[id] = (channel, continuation)
+    continuation.yield(.status(currentStatus))
   }
 
   private func removeSubscriber(id: UUID) {
     subscribers.removeValue(forKey: id)
   }
 
-  // MARK: - Twitch Broadcast Logic
+  // MARK: - Channels
 
-  private func startReceiving() {
-    Task { [weak self] in
-      var isAlive = true
+  func join(to channel: Channel) async throws {
+    guard desiredChannels.insert(channel.loginName).inserted else { return }
+    guard isConnected else { return } // Joined once the connection is up.
 
-      while isAlive {
-        guard let self else { break }
-
-        do {
-          let messages = try await receiveMsg()
-
-          // Broadcast to all valid subscribers
-          for msg in messages {
-            await broadcast(msg)
-          }
-        } catch {
-          TridentLog.main.error("Socket error: \(error)")
-          isAlive = false
-          await broadcastStatus(.failed(error))
-        }
-      }
+    do {
+      try await send(.join(to: channel.loginName))
+    } catch {
+      desiredChannels.remove(channel.loginName)
+      throw error
     }
   }
 
-  private func broadcast(_ msg: IncomingMessage) {
-    // Handle internal logic for stuff like pings, joins etc.
-    switch msg {
-    case .ping:
-      Task { try? await sendMsg(.pong) }
-    case let .join(join):
-      joinedChannels.insert(join.channel)
-    case let .part(part):
-      joinedChannels.remove(part.channel)
-    case let .connectionNotice(notice):
-      broadcastStatus(.authenticated)
+  func part(from channel: Channel) async throws {
+    guard desiredChannels.remove(channel.loginName) != nil else { return }
+    guard isConnected else { return }
 
-      TridentLog.main
-        .info("Logged into IRC with \(notice.userLogin), message from Twitch: \(notice.message)")
-    default: break
+    // If this fails the connection is going down, and a new one won't rejoin the channel anyway.
+    try? await send(.part(from: channel.loginName))
+  }
+
+  // MARK: - Incoming
+
+  private func handle(_ text: String, from socket: any IRCSocket) async {
+    guard self.socket === socket else { return }
+
+    for msg in IncomingMessage.parse(ircOutput: text).compactMap(\.message) {
+      switch msg {
+      case .ping:
+        try? await send(.pong)
+      case let .connectionNotice(notice):
+        guard !isAuthenticated else { break }
+        broadcastStatus(.authenticated)
+
+        TridentLog.main
+          .info("Logged into IRC with \(notice.userLogin), message from Twitch: \(notice.message)")
+      case .reconnect:
+        connectionLost(IRCError.serverRequestedReconnect, on: socket)
+        return
+      default: break
+      }
+
+      route(msg)
     }
+  }
 
-    // If a channel filter is provided, return chat messages only meant for that channel
-    // (This will still return all non-chat messages)
+  /// If a channel filter is provided, return chat messages only meant for that channel
+  /// (This will still return all non-chat messages)
+  private func route(_ msg: IncomingMessage) {
     for (_, (filterChannel, continuation)) in subscribers {
       if let filterChannel {
         switch msg {
@@ -178,35 +320,14 @@ actor IRCClient: IRCStreaming {
       }
     }
   }
-
-  func join(to channel: Channel) async throws {
-    guard !joinedChannels.contains(channel.loginName) else { return }
-    try await sendMsg(.join(to: channel.loginName))
-  }
-
-  func part(from channel: Channel) async throws {
-    guard joinedChannels.contains(channel.loginName) else { return }
-    try await sendMsg(.part(from: channel.loginName))
-  }
 }
 
 // MARK: - Helpers
 
 private extension IRCClient {
-  func sendMsg(_ twitchMessage: OutgoingMessage) async throws {
-    guard let websocket else { return }
-    try await websocket.send(.string(twitchMessage.serialize()))
-  }
-
-  func receiveMsg() async throws -> [IncomingMessage] {
-    guard let websocket else { return [] }
-
-    let result = try await websocket.receive()
-    if case let .string(msgStr) = result {
-      return IncomingMessage.parse(ircOutput: msgStr).compactMap(\.message)
-    } else {
-      return []
-    }
+  func send(_ twitchMessage: OutgoingMessage) async throws {
+    guard let socket, isConnected else { throw IRCError.notConnected }
+    try await socket.send(twitchMessage.serialize())
   }
 
   /// Broadcasts status messages to all subscribers
@@ -217,21 +338,40 @@ private extension IRCClient {
     }
   }
 
-  func requestCapabilities() async throws {
-    try await sendMsg(.capabilities([.tags, .commands]))
+  /// Races `work` against the handshake timeout. The socket is closed when the timeout wins, which
+  /// is what unblocks a `receive()` that would otherwise keep the work from ever finishing.
+  func withHandshakeTimeout(
+    closing socket: any IRCSocket,
+    _ work: @Sendable @escaping () async throws -> Void
+  ) async throws {
+    let clock = clock
 
-    let success = try await receiveMsg().contains {
-      if case .capabilities = $0 { true } else { false }
-    }
+    try await withThrowingTaskGroup(of: Void.self) { group in
+      group.addTask { try await work() }
+      group.addTask {
+        try await clock.sleep(for: Constants.handshakeTimeout)
+        socket.close()
+        throw IRCError.timedOut
+      }
 
-    if !success {
-      throw IRCError.failedToConnect
+      defer { group.cancelAll() }
+      try await group.next()
     }
   }
 
-  func authenticate() async throws {
-    try await sendMsg(.pass(pass: Constants.defaultPassword))
-    try await sendMsg(.nick(name: Constants.defaultUsername))
+  static func handshake(on socket: any IRCSocket) async throws {
+    try await socket.send(OutgoingMessage.capabilities([.tags, .commands]).serialize())
+
+    let acknowledged = try await IncomingMessage.parse(ircOutput: socket.receive())
+      .compactMap(\.message)
+      .contains {
+        if case .capabilities = $0 { true } else { false }
+      }
+
+    guard acknowledged else { throw IRCError.failedToConnect }
+
+    try await socket.send(OutgoingMessage.pass(pass: Constants.defaultPassword).serialize())
+    try await socket.send(OutgoingMessage.nick(name: Constants.defaultUsername).serialize())
   }
 }
 

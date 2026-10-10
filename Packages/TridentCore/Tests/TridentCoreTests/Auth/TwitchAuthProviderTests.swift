@@ -50,7 +50,7 @@ struct TwitchAuthProviderTests {
   // MARK: - Loading
 
   @Test func loadSessionLogsInWhenStoredTokenIsValid() async {
-    let provider = makeProvider(storage: await Self.storage(holding: Self.validToken())) { _ in
+    let provider = await makeProvider(storage: Self.storage(holding: Self.validToken())) { _ in
       Self.validation
     }
 
@@ -60,7 +60,7 @@ struct TwitchAuthProviderTests {
   }
 
   @Test func loadSessionLogsOutWithoutStoredToken() async {
-    let provider = makeProvider(storage: await Self.storage(holding: nil)) { _ in
+    let provider = await makeProvider(storage: Self.storage(holding: nil)) { _ in
       Self.validation
     }
 
@@ -91,7 +91,7 @@ struct TwitchAuthProviderTests {
 
   @Test func loadSessionLogsOutWhenStoredTokenExpired() async {
     let expired = AuthToken(value: "old", expiresAt: .now.addingTimeInterval(-1))
-    let provider = makeProvider(storage: await Self.storage(holding: expired)) { _ in
+    let provider = await makeProvider(storage: Self.storage(holding: expired)) { _ in
       Self.validation
     }
 
@@ -104,7 +104,7 @@ struct TwitchAuthProviderTests {
 
   @Test func failedCheckDoesNotLogOutAnActiveSession() async throws {
     let isOffline = LockIsolated(false)
-    let provider = makeProvider(storage: await Self.storage(holding: nil)) { _ in
+    let provider = await makeProvider(storage: Self.storage(holding: nil)) { _ in
       if isOffline.value { throw URLError(.notConnectedToInternet) }
       return Self.validation
     }
@@ -122,7 +122,7 @@ struct TwitchAuthProviderTests {
 
   @Test func rejectedTokenLogsOutAnActiveSession() async throws {
     let isRejected = LockIsolated(false)
-    let provider = makeProvider(storage: await Self.storage(holding: nil)) { _ in
+    let provider = await makeProvider(storage: Self.storage(holding: nil)) { _ in
       if isRejected.value { throw AuthError.invalidToken }
       return Self.validation
     }
@@ -140,7 +140,7 @@ struct TwitchAuthProviderTests {
 
   @Test func eventsArriveInTheOrderStateChanged() async throws {
     let isRejected = LockIsolated(false)
-    let provider = makeProvider(storage: await Self.storage(holding: nil)) { _ in
+    let provider = await makeProvider(storage: Self.storage(holding: nil)) { _ in
       if isRejected.value { throw AuthError.invalidToken }
       return Self.validation
     }
@@ -158,7 +158,7 @@ struct TwitchAuthProviderTests {
   }
 
   @Test func repeatedValidationEmitsOnlyOnChange() async throws {
-    let provider = makeProvider(storage: await Self.storage(holding: nil)) { _ in
+    let provider = await makeProvider(storage: Self.storage(holding: nil)) { _ in
       Self.validation
     }
 
@@ -171,7 +171,7 @@ struct TwitchAuthProviderTests {
   }
 
   @Test func loggingInDoesNotWaitForAListener() async throws {
-    let provider = makeProvider(storage: await Self.storage(holding: nil)) { _ in
+    let provider = await makeProvider(storage: Self.storage(holding: nil)) { _ in
       Self.validation
     }
 
