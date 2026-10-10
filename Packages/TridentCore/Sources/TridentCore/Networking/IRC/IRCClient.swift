@@ -345,17 +345,25 @@ private extension IRCClient {
     _ work: @Sendable @escaping () async throws -> Void
   ) async throws {
     let clock = clock
+    let didTimeOut = LockIsolated(false)
 
-    try await withThrowingTaskGroup(of: Void.self) { group in
-      group.addTask { try await work() }
-      group.addTask {
-        try await clock.sleep(for: Constants.handshakeTimeout)
-        socket.close()
-        throw IRCError.timedOut
+    do {
+      try await withThrowingTaskGroup(of: Void.self) { group in
+        group.addTask { try await work() }
+        group.addTask {
+          try await clock.sleep(for: Constants.handshakeTimeout)
+          didTimeOut.setValue(true)
+          socket.close()
+          throw IRCError.timedOut
+        }
+
+        defer { group.cancelAll() }
+        try await group.next()
       }
-
-      defer { group.cancelAll() }
-      try await group.next()
+    } catch {
+      // Closing the socket makes `work` fail as well, and which of the two errors comes out first
+      // is a race. If the timeout fired, that's the reason.
+      throw didTimeOut.value ? IRCError.timedOut : error
     }
   }
 

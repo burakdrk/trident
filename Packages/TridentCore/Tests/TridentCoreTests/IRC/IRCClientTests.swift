@@ -68,16 +68,23 @@ struct IRCClientTests {
     let connecting = Task { await client.connect() }
     await waitUntil("first socket") { harness.sockets.count == 1 }
 
-    await harness
-      .advance(until: { recorder.statuses.contains(.failed(IRCError.timedOut.errorDescription)) })
+    let timedOut = RecordedStatus.failed(IRCError.timedOut.errorDescription)
+    await harness.advance(by: .seconds(1), until: { recorder.statuses.contains(timedOut) })
     await connecting.value
 
-    #expect(recorder.statuses.contains(.failed(IRCError.timedOut.errorDescription)))
+    #expect(recorder.statuses.contains(timedOut))
     #expect(harness.sockets.value[0].isClosed.value)
 
-    // And it keeps trying.
-    await harness.advance(until: { harness.sockets.count == 2 })
-    #expect(harness.sockets.count == 2)
+    // It keeps trying, and every attempt that gets no answer is reported as a timeout, not as the
+    // socket error that closing it causes.
+    await harness.advance(by: .seconds(1), until: { harness.sockets.count == 3 })
+    await harness.advance(by: .seconds(1), until: {
+      recorder.statuses.count(where: { if case .failed = $0 { true } else { false } }) >= 2
+    })
+
+    let failures = recorder.statuses.filter { if case .failed = $0 { true } else { false } }
+    #expect(harness.sockets.count >= 3)
+    #expect(failures.allSatisfy { $0 == timedOut })
   }
 
   // MARK: - Reconnecting
