@@ -12,6 +12,8 @@ struct ChatView: View {
       )
 
       VStack {
+        connectionBanner
+
         Spacer()
 
         ZStack {
@@ -32,6 +34,18 @@ struct ChatView: View {
     .task { await model.startRendering() }
   }
 
+  @ViewBuilder
+  private var connectionBanner: some View {
+    switch model.connection {
+    case .live:
+      EmptyView()
+    case .connecting:
+      ConnectionBanner(title: "Connecting…")
+    case .reconnecting:
+      ConnectionBanner(title: "Reconnecting…")
+    }
+  }
+
   private var scrollButton: some View {
     ScrollButton(
       newMessageCount: model.newMessageCount,
@@ -48,5 +62,20 @@ struct ChatView: View {
       Image(systemName: "arrow.down.circle.fill")
     }
     .buttonStyle(.primary(shape: .circle))
+  }
+}
+
+private struct ConnectionBanner: View {
+  let title: LocalizedStringKey
+
+  var body: some View {
+    HStack(spacing: 8) {
+      ProgressView()
+      Text(title).font(.footnote)
+    }
+    .padding(.horizontal, 12)
+    .padding(.vertical, 8)
+    .glassEffect()
+    .transition(.opacity)
   }
 }

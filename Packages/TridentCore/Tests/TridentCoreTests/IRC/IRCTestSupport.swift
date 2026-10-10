@@ -201,8 +201,30 @@ extension Channel {
   }
 }
 
-func privateMessage(in channel: String, text: String = "hello") -> String {
-  "@badge-info=;badges=;color=#0D4200;display-name=ronni;emotes=;id=\(UUID().uuidString);mod=0;"
+func privateMessage(
+  in channel: String,
+  text: String = "hello",
+  id: String = UUID().uuidString,
+  color: String = "#0D4200",
+  emotes: String = "",
+  badges: String = ""
+) -> String {
+  "@badge-info=;badges=\(badges);color=\(color);display-name=ronni;emotes=\(emotes);id=\(id);mod=0;"
     + "room-id=1337;subscriber=0;tmi-sent-ts=1507246572675;turbo=0;user-id=1337;user-type= "
     + ":ronni!ronni@ronni.tmi.twitch.tv PRIVMSG #\(channel) :\(text)\r\n"
+}
+
+/// Parses a raw line into the chat message TwitchIRC makes of it.
+func parsePrivateMessage(_ raw: String) throws -> PrivateMessage {
+  let messages = IncomingMessage.parse(ircOutput: raw).compactMap(\.message)
+
+  guard case let .privateMessage(pm)? = messages.first else {
+    throw ParseError.notAPrivateMessage(raw)
+  }
+
+  return pm
+}
+
+enum ParseError: Error {
+  case notAPrivateMessage(String)
 }

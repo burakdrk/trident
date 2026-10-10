@@ -1,11 +1,18 @@
 import DataModels
 import Foundation
 import TwitchIRC
+import Utilities
 
-struct ChatMessageParser {
+/// Turns Twitch chat lines into `ChatMessage`s, resolving emotes (Twitch's own first, then the
+/// third party ones by name).
+public struct ChatMessageParser: Sendable {
   let thirdPartyEmotes: [String: DataModels.Emote]
 
-  func parse(pm: PrivateMessage, historical: Bool = false) -> ChatMessage {
+  public init(thirdPartyEmotes: [String: DataModels.Emote]) {
+    self.thirdPartyEmotes = thirdPartyEmotes
+  }
+
+  public func parse(pm: PrivateMessage, historical: Bool = false) -> ChatMessage {
     let normalized = (pm.color.isEmpty || pm.color == "#000000") ? "#808080" : pm.color
 
     return ChatMessage(
