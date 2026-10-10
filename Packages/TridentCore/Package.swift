@@ -44,7 +44,12 @@ let package = Package(
     ),
     .testTarget(
       name: "TridentCoreTests",
-      dependencies: ["TridentCore"]
+      dependencies: [
+        "TridentCore",
+        .product(name: "DataModels", package: "DataModels"),
+        .product(name: "Dependencies", package: "swift-dependencies"),
+        .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
+      ]
     )
   ]
 )

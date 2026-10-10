@@ -59,7 +59,7 @@ final class AuthModel {
   }
 
   func startEventListener() async {
-    for await event in await authProvider.eventChannel {
+    for await event in await authProvider.events {
       switch event {
       case .loggedIn: phase = .loggedIn
       case .loggedOut: phase = .loggedOut
