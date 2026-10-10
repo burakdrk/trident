@@ -3,7 +3,7 @@ import SwiftUI
 struct ChatInputBar: View {
   @Environment(\.accent) private var accent
   @Environment(\.theme) private var theme
-  @Environment(\.auth) private var auth
+  @Environment(AuthModel.self) private var auth
 
   @State private var model = ChatInputModel()
   @FocusState private var isKeyboardActive: Bool
@@ -53,4 +53,6 @@ struct ChatInputBar: View {
 #Preview {
   ChatInputBar {}
     .applyTheme()
+    .environment(ThemeManager())
+    .environment(AuthModel())
 }

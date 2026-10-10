@@ -9,11 +9,9 @@ final class ThemeManager {
   @ObservationIgnored private let themeKey = "theme.choice.v1"
   @ObservationIgnored private let accentKey = "theme.accentChoice.v1"
 
-  private init() {
+  init() {
     loadDefaults()
   }
-
-  static let shared = ThemeManager()
 
   func setTheme(_ new: ThemeChoice) {
     theme = new
@@ -33,18 +31,5 @@ final class ThemeManager {
     if let raw = defaults.string(forKey: accentKey), let a = AccentChoice(rawValue: raw) {
       accent = a
     }
-  }
-}
-
-// MARK: - Environment
-
-private enum ThemeManagerKey: EnvironmentKey {
-  static var defaultValue = ThemeManager.shared
-}
-
-extension EnvironmentValues {
-  var themeManager: ThemeManager {
-    get { self[ThemeManagerKey.self] }
-    set { self[ThemeManagerKey.self] = newValue }
   }
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 private struct AuthBoundaryModifier: ViewModifier {
-  @Environment(\.auth) private var auth
+  @Environment(AuthModel.self) private var auth
 
   func body(content: Content) -> some View {
     Group {

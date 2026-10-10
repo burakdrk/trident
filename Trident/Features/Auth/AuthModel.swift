@@ -22,8 +22,7 @@ final class AuthModel {
   @ObservationIgnored @Dependency(\.continuousClock) private var clock
   @ObservationIgnored private let authenticator = Authenticator()
 
-  static let shared = AuthModel()
-  private init() {}
+  init() {}
 
   // MARK: - Actions
 
@@ -74,8 +73,4 @@ final class AuthModel {
       _ = try? await authProvider.validateSession(token: nil)
     }
   }
-}
-
-extension EnvironmentValues {
-  @Entry var auth = AuthModel.shared
 }

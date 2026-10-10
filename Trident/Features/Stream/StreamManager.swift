@@ -37,8 +37,6 @@ final class StreamManagerModel {
   /// How long a channel's chat stays loaded after it scrolls out of view.
   static let defaultIdleTimeout: TimeInterval = 5 * 60
 
-  static let shared = StreamManagerModel()
-
   init(idleTimeout: TimeInterval = StreamManagerModel.defaultIdleTimeout) {
     self.idleTimeout = idleTimeout
   }
@@ -86,10 +84,4 @@ final class StreamManagerModel {
       }
     }
   }
-}
-
-// MARK: - Environment
-
-extension EnvironmentValues {
-  @Entry var streamManager = StreamManagerModel.shared
 }

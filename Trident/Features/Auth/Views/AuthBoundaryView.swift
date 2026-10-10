@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AuthBoundaryView: View {
-  @Environment(\.auth) var auth
+  @Environment(AuthModel.self) var auth
 
   var body: some View {
     VStack(spacing: 16) {

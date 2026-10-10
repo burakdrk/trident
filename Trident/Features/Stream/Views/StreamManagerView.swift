@@ -2,7 +2,7 @@ import DataModels
 import SwiftUI
 
 struct StreamManagerView: View {
-  @Environment(\.streamManager) private var streamManager
+  @Environment(StreamManagerModel.self) private var streamManager
 
   var body: some View {
     @Bindable var streamManager = streamManager
@@ -38,7 +38,7 @@ struct StreamManagerView: View {
 }
 
 private struct LoadFailureView: View {
-  @Environment(\.streamManager) private var streamManager
+  @Environment(StreamManagerModel.self) private var streamManager
 
   let channel: Channel
   let message: String

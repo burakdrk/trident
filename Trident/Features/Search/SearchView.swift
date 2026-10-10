@@ -3,7 +3,7 @@ import SwiftUI
 struct SearchView: View {
   @State private var model = SearchModel()
 
-  @Environment(\.auth) private var auth
+  @Environment(AuthModel.self) private var auth
 
   var body: some View {
     @Bindable var model = model
