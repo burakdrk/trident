@@ -2,7 +2,11 @@ import DataModels
 import Dependencies
 
 public struct AssetClient: Sendable {
-  public var emotes: @Sendable (_ channelID: Channel.ID?) async -> [Emote.ID: Emote]
+  public var emotes: @Sendable (_ channelID: Channel.ID?) async -> EmotesByName
+
+  public init(emotes: @escaping @Sendable (_ channelID: Channel.ID?) async -> EmotesByName) {
+    self.emotes = emotes
+  }
 }
 
 extension AssetClient: DependencyKey {

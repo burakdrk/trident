@@ -10,10 +10,22 @@ import Utilities
 private enum Constants {
   static let maxMessages = 500
   static let batchSpeed: Duration = .milliseconds(150)
+  static let rememberedIDs = 2_000
 }
 
 @Observable
-final class ChatModel: HashableObject, @MainActor IntentEmitting {
+final class ChatModel: HashableObject {
+  /// What the chat can tell the user about its connection.
+  enum Connection: Equatable {
+    /// Never been live yet.
+    case connecting
+
+    case live
+
+    /// Was live and lost the connection. Chat resumes by itself.
+    case reconnecting
+  }
+
   // MARK: - State
 
   private(set) var messages: Deque<ChatMessage> = []
@@ -21,7 +33,8 @@ final class ChatModel: HashableObject, @MainActor IntentEmitting {
   private(set) var cachedHeights: [ChatMessage.ID: CGFloat] = [:]
   private(set) var isPaused = false
   private(set) var newMessageCount = 0
-  private(set) var tpEmotes: [DataModels.Emote.ID: DataModels.Emote]
+  private(set) var connection = Connection.connecting
+  private(set) var tpEmotes: EmotesByName
   var fittingWidth: CGFloat? {
     didSet {
       if oldValue != fittingWidth {
@@ -30,26 +43,21 @@ final class ChatModel: HashableObject, @MainActor IntentEmitting {
     }
   }
 
-  // MARK: - Intent
-
-  enum Intent {
-    case scrollToBottom
-    case applySnapshot
-  }
-
-  var intent: Intent?
-
   // MARK: - Dependencies
 
   @ObservationIgnored @Dependency(\.continuousClock) private var clock
   @ObservationIgnored @Dependency(\.ircClient) private var chatClient
+  @ObservationIgnored @Dependency(\.recentMessages) private var recentMessages
   private let buffer = MessageBuffer(pauseMax: Constants.maxMessages)
-  private let recentsService = RecentMessagesService()
+  private let parser: ChatMessageParser
+  @ObservationIgnored private var seenIDs = RecentIDs(capacity: Constants.rememberedIDs)
+  @ObservationIgnored private var hasBeenLive = false
   let channel: Channel
 
-  init(for channel: Channel, tpEmotes: [DataModels.Emote.ID: DataModels.Emote] = [:]) {
+  init(for channel: Channel, tpEmotes: EmotesByName = [:]) {
     self.channel = channel
     self.tpEmotes = tpEmotes
+    parser = ChatMessageParser(thirdPartyEmotes: tpEmotes)
   }
 
   // MARK: - Actions
@@ -58,46 +66,50 @@ final class ChatModel: HashableObject, @MainActor IntentEmitting {
     isPaused = val
   }
 
+  /// Run for as long as the chat is on screen. Safe to run again after it was cancelled: messages
+  /// missed in between are filled in from the recent messages service.
   func startReading() async {
-//      let (recents, recentIDs) = await dependencies.recentsService.fetch(
-//        for: dependencies.channel.loginName,
-//        emotes: state.tpEmotes
-//      )
-//      update {
-//        $0.messages.add(recents.reversed())
-//      }
+    // Subscribe first. Live messages queue up in the stream while the recents load, so none are
+    // lost.
     let stream = await chatClient.subscribe(to: channel)
+    await loadRecents()
 
-    for await message in stream {
+    for await event in stream {
       if Task.isCancelled { break }
 
-      switch message {
-      case let .message(msg):
-        await handleIRCMessages(msg)
+      switch event {
+      case let .message(.privateMessage(pm)):
+        await receive(pm)
+      case .message:
+        break
       case let .status(status):
-        handleStatusMessages(status)
+        handle(status)
       }
     }
   }
 
-  private func handleIRCMessages(_ msg: IncomingMessage) async {
-    switch msg {
-    case let .privateMessage(pm):
-//     if recentIDs.contains(pm.id) {
-//        continue
-//     }
+  private func loadRecents() async {
+    let recents = await recentMessages.fetch(channel.loginName, tpEmotes)
+    guard !Task.isCancelled else { return }
 
-      let parser = ChatMessageParser(thirdPartyEmotes: tpEmotes)
-
-      await buffer.add(
-        parser.parse(pm: pm),
-        paused: isPaused
-      )
-    default: break
-    }
+    let fresh = recents.filter { seenIDs.insert($0.id) }
+    await buffer.addRecents(fresh)
   }
 
-  private func handleStatusMessages(_ status: IRCStreamEvent.ConnectionStatus) {}
+  private func receive(_ pm: PrivateMessage) async {
+    guard seenIDs.insert(pm.id) else { return }
+    await buffer.add(parser.parse(pm: pm), paused: isPaused)
+  }
+
+  private func handle(_ status: IRCStreamEvent.ConnectionStatus) {
+    switch status {
+    case .authenticated:
+      hasBeenLive = true
+      connection = .live
+    case .disconnected, .connecting, .connected, .failed:
+      connection = hasBeenLive ? .reconnecting : .connecting
+    }
+  }
 
   func startRendering() async {
     while !Task.isCancelled {
@@ -110,20 +122,22 @@ final class ChatModel: HashableObject, @MainActor IntentEmitting {
       let batch = await buffer.flush()
       if !batch.isEmpty {
         await add(batch)
-        emit(.applySnapshot)
       }
     }
   }
 
   private func add(_ newMessages: [ChatMessage]) async {
+    // Build the strings before touching `messages`: the view re-renders when `messages` changes,
+    // and a cell must never show up without its string.
     for msg in newMessages {
-      messages.prepend(msg)
-
-      let attrString = await MessageProcessor.makeAttributedString(
+      cachedAttributedString[msg.id] = await MessageProcessor.makeAttributedString(
         for: msg,
         font: UIFont.systemFont(ofSize: 16)
       )
-      cachedAttributedString[msg.id] = attrString
+    }
+
+    for msg in newMessages {
+      messages.prepend(msg)
     }
 
     // Compute deletes if overflow

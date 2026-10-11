@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AuthBoundaryView: View {
-  @Environment(\.auth) var auth
+  @Environment(AuthModel.self) var auth
 
   var body: some View {
     VStack(spacing: 16) {
@@ -13,15 +13,15 @@ struct AuthBoundaryView: View {
 
       Button {
         haptics.generate(.impactLight)
-        Task { await auth.logIn() }
+        auth.logIn()
       } label: {
-        Text(auth.state.isBusy ? "Logging in…" : "Log in with Twitch")
+        Text(auth.isBusy ? "Logging in…" : "Log in with Twitch")
           .frame(maxWidth: .infinity)
       }
-      .disabled(auth.state.isBusy)
+      .disabled(auth.isBusy)
       .buttonStyle(.primary(color: .twitchPurple))
 
-      if let errorMessage = auth.state.errorMessage {
+      if let errorMessage = auth.errorMessage {
         Text(errorMessage).font(.footnote).foregroundStyle(.red).transition(.opacity)
       }
     }

@@ -1,43 +1,33 @@
-import Alamofire
-import AsyncAlgorithms
 import DataModels
 import Dependencies
 import Foundation
 import Utilities
 
 actor TwitchAuthProvider: AuthProviding {
-  let eventChannel = AsyncChannel<AuthEvent>()
+  let events: AsyncStream<AuthEvent>
 
-  private var storedToken: AuthToken? {
-    didSet {
-      Task {
-        if let storedToken, !storedToken.isExpired {
-          await eventChannel.send(.loggedIn)
-        } else {
-          await eventChannel.send(.loggedOut)
-        }
-      }
-    }
-  }
+  private let continuation: AsyncStream<AuthEvent>.Continuation
+  private var lastEvent: AuthEvent?
+  private var storedToken: AuthToken?
 
-  /// For representation of the in-memory loaded token
-  var token: AuthToken? {
-    if let storedToken, storedToken.isExpired {
-      self.storedToken = nil
-    }
-
-    return storedToken
+  var isLoggedIn: Bool {
+    storedToken.map { !$0.isExpired } ?? false
   }
 
   @Dependency(\.secureStorage) private var secureStorage
+  @Dependency(\.tokenValidator) private var tokenValidator
+
+  init() {
+    (events, continuation) = AsyncStream.makeStream(of: AuthEvent.self)
+  }
 
   deinit {
-    eventChannel.finish()
+    continuation.finish()
   }
 
   func deleteToken() async {
     try? await secureStorage.clear()
-    storedToken = nil
+    setToken(nil)
   }
 
   /// Load the token from the secure storage and validate
@@ -46,52 +36,63 @@ actor TwitchAuthProvider: AuthProviding {
 
     guard let keychainToken = await secureStorage.load(.helixAcessToken), !keychainToken.isExpired
     else {
-      storedToken = nil
+      setToken(nil)
       return
     }
 
-    _ = try? await validateSession(token: keychainToken.value)
+    do {
+      _ = try await validateSession(token: keychainToken.value)
+    } catch AuthError.invalidToken {
+      // Twitch rejected it, `validateSession` already logged out.
+    } catch {
+      // We couldn't ask (offline, Twitch down). Trust the stored token until we can.
+      TridentLog.main.warning("Could not validate Twitch session: \(error.localizedDescription)")
+      setToken(keychainToken)
+    }
   }
 
-  /// Validates session and saves token to the secure storage and memory
+  /// Validates session and saves token to the secure storage and memory.
+  ///
+  /// Only a rejection from Twitch ends the session. If the check itself fails the error is thrown
+  /// and the current session is left alone.
   func validateSession(token: String? = nil) async throws -> AuthToken {
     TridentLog.main.info("Validating Twitch session\("")")
 
     guard let tokenVal = (token ?? storedToken?.value) else {
-      storedToken = nil
+      setToken(nil)
       throw AuthError.noToken
     }
 
-    let headers: HTTPHeaders = ["Authorization": "OAuth \(tokenVal)"]
-    let req = await AF
-      .request("https://id.twitch.tv/oauth2/validate", headers: headers)
-      .serializingDecodable(RefreshResponse.self)
-      .response
+    let validation: TokenValidation
 
-    let statusCode = req.response?.statusCode ?? 401
-
-    switch statusCode {
-    case 200..<300:
-      break
-    default:
-      storedToken = nil
-      throw AuthError.invalidToken
-    }
-
-    guard let expiresIn = req.value?.expiresIn else {
-      storedToken = nil
+    do {
+      validation = try await tokenValidator.validate(tokenVal)
+    } catch AuthError.invalidToken {
+      try? await secureStorage.clear()
+      setToken(nil)
       throw AuthError.invalidToken
     }
 
     let authToken = AuthToken(
       value: tokenVal,
-      expiresAt: Date.now.addingTimeInterval(TimeInterval(expiresIn))
+      expiresAt: Date.now.addingTimeInterval(TimeInterval(validation.expiresIn))
     )
 
     try? await secureStorage.save(authToken, .helixAcessToken)
 
-    storedToken = authToken
+    setToken(authToken)
     return authToken
+  }
+
+  /// The single place the token changes, so events are emitted in the order state changes.
+  private func setToken(_ token: AuthToken?) {
+    storedToken = token
+
+    let event: AuthEvent = isLoggedIn ? .loggedIn : .loggedOut
+    guard event != lastEvent else { return }
+
+    lastEvent = event
+    continuation.yield(event)
   }
 }
 
@@ -109,21 +110,5 @@ enum AuthError: LocalizedError {
     case .noToken:
       "No token"
     }
-  }
-}
-
-// MARK: - Twitch Response
-
-private struct RefreshResponse: Codable {
-  let clientID, login: String
-  let scopes: [String]
-  let userID: String
-  let expiresIn: Int
-
-  enum CodingKeys: String, CodingKey {
-    case clientID = "client_id"
-    case login, scopes
-    case userID = "user_id"
-    case expiresIn = "expires_in"
   }
 }

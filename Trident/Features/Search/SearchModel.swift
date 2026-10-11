@@ -1,21 +1,25 @@
-import AsyncAlgorithms
+import Dependencies
+import SwiftUI
 
-struct SearchState: Equatable {
+private enum Constants {
+  static let debounce: Duration = .milliseconds(500)
+}
+
+@Observable
+final class SearchModel {
+  /// What the user is typing.
   var searchText = ""
-  var query = ""
-}
 
-struct SearchDependencies {
-  let changes = AsyncChannel<String>()
-}
+  /// `searchText`, once the user has stopped typing for a moment.
+  private(set) var query = ""
 
-typealias SearchModel = ViewModel<SearchState, NoIntent, SearchDependencies>
+  @ObservationIgnored @Dependency(\.continuousClock) private var clock
 
-extension SearchModel {
-  func startDebounceTask() async {
-    for await value in dependencies.changes.debounce(for: .milliseconds(500)).removeDuplicates() {
-      if Task.isCancelled { break }
-      update { $0.query = value }
-    }
+  /// Run with `.task(id: searchText)`. SwiftUI cancels the previous run whenever the text changes,
+  /// so only the last keystroke survives the sleep.
+  func updateQuery() async {
+    try? await clock.sleep(for: Constants.debounce)
+    guard !Task.isCancelled, query != searchText else { return }
+    query = searchText
   }
 }

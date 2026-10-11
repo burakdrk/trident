@@ -4,7 +4,7 @@ struct PrimaryButtonStyle: ButtonStyle {
   enum SelectedShape { case capsule, rect, circle }
 
   @Environment(\.accent) private var accent
-  @Environment(\.themeManager) private var themeManager
+  @Environment(ThemeManager.self) private var themeManager
   @Environment(\.isEnabled) var isEnabled
 
   var color: Color?

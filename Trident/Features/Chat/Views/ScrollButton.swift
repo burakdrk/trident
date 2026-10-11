@@ -51,6 +51,7 @@ struct ScrollButton: View {
   ScrollButton(newMessageCount: newMessageCount, isVisible: isVisible) {
     isVisible = false
   }
+  .environment(ThemeManager())
 
   Button {
     isVisible = true

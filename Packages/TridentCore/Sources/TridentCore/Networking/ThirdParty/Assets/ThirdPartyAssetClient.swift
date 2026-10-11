@@ -15,7 +15,7 @@ actor ThirdPartyAssetClient {
   }
 
   /// Retrieves a dictionary of unique emotes from all configured services, keyed by emote name.
-  func emotes(for channelID: Channel.ID?) async -> [Channel.ID: Emote] {
+  func emotes(for channelID: Channel.ID?) async -> EmotesByName {
     async let g = getGlobalEmotes()
     async let c = getChannelEmotes(for: channelID)
     let (allGlobal, allChannel) = await (g, c)

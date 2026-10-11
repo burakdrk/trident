@@ -56,13 +56,3 @@ extension AppRouter {
     }
   }
 }
-
-// MARK: - Environment
-
-extension AppRouter {
-  static let shared = AppRouter()
-}
-
-extension EnvironmentValues {
-  @Entry var router = AppRouter.shared
-}

@@ -10,6 +10,7 @@ private enum Constants {
 final class ChatViewController: UIViewController {
   private let model: ChatModel
   private var theme: ThemePalette
+  private var isPaused = false
 
   /// Needs to come from SwiftUI because the message box is pushed to the safe area, but the height
   /// doesn't propagate down to UIKit.
@@ -46,15 +47,8 @@ final class ChatViewController: UIViewController {
     configureTableView()
     configureBlur()
     setBackgroundColor()
-    applySnapshot()
+    applySnapshot(Array(model.messages))
     setInsets()
-
-    model.observeIntent { [weak self] intent in
-      switch intent {
-      case .scrollToBottom: self?.scrollToBottom(animated: true)
-      case .applySnapshot: self?.applySnapshot()
-      }
-    }
   }
 
   override func viewDidLayoutSubviews() {
@@ -76,15 +70,24 @@ final class ChatViewController: UIViewController {
     )
   }
 
-  private func applySnapshot() {
+  private func applySnapshot(_ messages: [ChatMessage]) {
     var snapshot = Snapshot()
     snapshot.appendSections([.main])
-    snapshot.appendItems(Array(model.messages))
+    snapshot.appendItems(messages)
 
     dataSource.apply(snapshot, animatingDifferences: false) {
-      guard !self.model.isPaused else { return }
+      guard !self.isPaused else { return }
       self.scrollToBottom(animated: false)
     }
+  }
+
+  /// Called by SwiftUI whenever the model's messages or pause state change.
+  func update(messages: [ChatMessage], isPaused: Bool) {
+    let didResume = self.isPaused && !isPaused
+    self.isPaused = isPaused
+
+    applySnapshot(messages)
+    if didResume { scrollToBottom(animated: true) }
   }
 
   func update(theme: ThemePalette) {
@@ -209,6 +212,7 @@ extension ChatViewController {
     }
 
     func updateUIViewController(_ uiViewController: ChatViewController, context: Context) {
+      uiViewController.update(messages: Array(model.messages), isPaused: model.isPaused)
       uiViewController.update(theme: theme)
       uiViewController.update(swiftUISafeAreaInsets: safeAreaInsets)
     }

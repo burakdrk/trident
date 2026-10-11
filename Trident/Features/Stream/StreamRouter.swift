@@ -21,7 +21,7 @@ final class StreamRouter: Identifiable {
 }
 
 struct StreamRouterView: View {
-  @Environment(\.streamManager) private var streamManager
+  @Environment(StreamManagerModel.self) private var streamManager
   @Bindable var router: StreamRouter
 
   var body: some View {

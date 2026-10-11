@@ -1,33 +1,34 @@
 import SwiftUI
 
-struct ChatInputState: Equatable {
+@Observable
+final class ChatInputModel {
   var text = ""
-  var isSending = false
-}
+  private(set) var isSending = false
 
-struct ChatInputDependencies {}
-
-typealias ChatInputModel = ViewModel<ChatInputState, NoIntent, ChatInputDependencies>
-
-extension ChatInputModel {
-  func reset() {
-    update { $0.text = "" }
+  var canSend: Bool {
+    !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isSending
   }
 
-  func setText(_ text: String) {
-    update { $0.text = text }
-  }
+  @ObservationIgnored private var sendTask: Task<Void, Never>?
 
-  func sendIfNeeded(_ action: () async throws -> Void) {
-    guard
-      !state.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-      !state.isSending else { return }
+  /// Runs `action` and clears the text when it succeeds. The text is kept on failure so the user
+  /// can retry.
+  func send(_ action: @escaping () async throws -> Void) {
+    guard canSend else { return }
+    isSending = true
 
-    Task {
-      update { $0.isSending = true }
-      defer { update { $0.isSending = false } }
-      try await Task.sleep(nanoseconds: 500_000_000)
-      reset()
+    sendTask = Task {
+      defer { isSending = false }
+
+      do {
+        try await action()
+        text = ""
+      } catch {}
     }
+  }
+
+  func cancelSend() {
+    sendTask?.cancel()
+    sendTask = nil
   }
 }

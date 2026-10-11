@@ -17,6 +17,12 @@
     "Auto-scroll" : {
 
     },
+    "Connecting…" : {
+
+    },
+    "Couldn't open %@" : {
+
+    },
     "Enter a channel to join" : {
 
     },
@@ -63,6 +69,9 @@
     "Logging in…" : {
 
     },
+    "Reconnecting…" : {
+
+    },
     "Scroll to bottom" : {
 
     },
@@ -81,6 +90,9 @@
       }
     },
     "Search..." : {
+
+    },
+    "Try again" : {
 
     },
     "Twitch Lock" : {

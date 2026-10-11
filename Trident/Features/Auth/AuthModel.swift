@@ -5,72 +5,72 @@ private enum Constants {
   static let sleepInterval: Duration = .seconds(3_600)
 }
 
-struct AuthState: Equatable {
+@Observable
+final class AuthModel {
   enum Phase { case loading, loggedOut, loggedIn }
 
-  var phase = Phase.loading
-  var isBusy = false
-  var errorMessage: String?
-  var isAuthenticated: Bool {
-    phase == .loggedIn
-  }
-}
+  // MARK: - State
 
-struct AuthDependencies {
-  @Dependency(\.authProvider.twitch) var authProvider
-  @Dependency(\.continuousClock) var clock
-  let authenticator = Authenticator()
-}
+  private(set) var phase = Phase.loading
+  private(set) var isBusy = false
+  private(set) var errorMessage: String?
+  var isAuthenticated: Bool { phase == .loggedIn }
 
-typealias AuthModel = ViewModel<AuthState, NoIntent, AuthDependencies>
+  // MARK: - Dependencies
 
-extension AuthModel {
-  static let shared = AuthModel(initialState: .init(), dependencies: .init())
+  @ObservationIgnored @Dependency(\.authProvider.twitch) private var authProvider
+  @ObservationIgnored @Dependency(\.continuousClock) private var clock
+  @ObservationIgnored private let authenticator = Authenticator()
 
-  func logIn() async {
-    update {
-      $0.isBusy = true
-      $0.errorMessage = nil
-    }
-    dependencies.authenticator.cancelLogIn()
-    defer { update { $0.isBusy = false } }
+  init() {}
 
-    do {
-      try await dependencies.authenticator.logIn()
-    } catch OAuthError.canceled {
-      update { $0.errorMessage = "Log in canceled." }
-    } catch {
-      update { $0.errorMessage = "Log in failed. Try again." }
+  // MARK: - Actions
+
+  /// Starts the OAuth flow. `isBusy` is set synchronously, so a second call while a log in is
+  /// running is ignored.
+  func logIn() {
+    guard !isBusy else { return }
+    isBusy = true
+    errorMessage = nil
+
+    Task {
+      defer { isBusy = false }
+
+      do {
+        try await authenticator.logIn()
+      } catch OAuthError.canceled {
+        errorMessage = "Log in canceled."
+      } catch {
+        errorMessage = "Log in failed. Try again."
+      }
     }
   }
 
   func logOut() async {
-    await dependencies.authProvider.deleteToken()
+    await authProvider.deleteToken()
+  }
+
+  // MARK: - Lifecycle
+
+  // Long-running work tied to the app's lifetime; called from `.task` in `TridentApp`.
+
+  func loadSession() async {
+    await authProvider.loadSession()
+  }
+
+  func startEventListener() async {
+    for await event in await authProvider.events {
+      switch event {
+      case .loggedIn: phase = .loggedIn
+      case .loggedOut: phase = .loggedOut
+      }
+    }
   }
 
   func startHourlyValidation() async {
     while !Task.isCancelled {
-      try? await dependencies.clock.sleep(for: Constants.sleepInterval)
-      _ = try? await dependencies.authProvider.validateSession(token: nil)
+      try? await clock.sleep(for: Constants.sleepInterval)
+      _ = try? await authProvider.validateSession(token: nil)
     }
   }
-
-  func loadSession() async {
-    await dependencies.authProvider.loadSession()
-  }
-
-  func startEventListener() async {
-    for await e in await dependencies.authProvider.eventChannel {
-      switch e {
-      case .loggedIn:
-        update { $0.phase = .loggedIn }
-      case .loggedOut:
-        update { $0.phase = .loggedOut }
-      }
-    }
-  }
-}
-
-extension EnvironmentValues {
-  @Entry var auth = AuthModel.shared
 }

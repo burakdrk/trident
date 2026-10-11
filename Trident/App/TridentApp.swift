@@ -3,10 +3,10 @@ import SwiftUI
 
 @main
 struct TridentApp: App {
-  @State private var appRouter = AppRouter.shared
-  @State private var themeManager = ThemeManager.shared
-  @State private var auth = AuthModel.shared
-  @State private var streamManager = StreamManagerModel.shared
+  @State private var appRouter = AppRouter()
+  @State private var themeManager = ThemeManager()
+  @State private var auth = AuthModel()
+  @State private var streamManager = StreamManagerModel()
 
   init() {
     SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
@@ -16,10 +16,10 @@ struct TridentApp: App {
     WindowGroup {
       contentView
         .applyTheme()
-        .environment(\.router, appRouter)
-        .environment(\.themeManager, themeManager)
-        .environment(\.auth, auth)
-        .environment(\.streamManager, streamManager)
+        .environment(appRouter)
+        .environment(themeManager)
+        .environment(auth)
+        .environment(streamManager)
         // Registering app-level tasks here:
         .task { await auth.startEventListener() }
         .task { await auth.loadSession() }

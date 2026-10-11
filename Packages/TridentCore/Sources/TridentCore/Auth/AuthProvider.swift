@@ -1,4 +1,3 @@
-import AsyncAlgorithms
 import DataModels
 import Dependencies
 
@@ -8,7 +7,9 @@ public enum AuthEvent: Sendable {
 }
 
 public protocol AuthProviding: Actor {
-  var eventChannel: AsyncChannel<AuthEvent> { get }
+  /// Emits whenever the logged in state changes. Never blocks the provider, and events are
+  /// buffered until someone listens.
+  var events: AsyncStream<AuthEvent> { get }
 
   func loadSession() async
   func validateSession(token: String?) async throws -> AuthToken

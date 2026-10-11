@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct FollowList: View {
-  @Environment(\.router) private var router
+  @Environment(AppRouter.self) private var router
   @Namespace private var animation
 
   let model: FollowListModel
